@@ -25,7 +25,7 @@ Entity, passenger and spawner tools use server commands. They require command pe
 4. The mod JAR should appear in `build/libs/` if the project compiles successfully.
 5. A GitHub Actions workflow is included at `.github/workflows/build.yml`. After you upload the project to a GitHub repository, open the repository Actions tab and run **Build All-Kotoff-Want** (or push a commit). When the run succeeds, open it and download the artifact named `All-Kotoff-Want-<commit>`. Inside is the installable mod JAR. If the run fails, open the failed step and copy the complete error log so the source can be corrected.
 
-The source ZIP intentionally does not bundle a Gradle wrapper JAR. This environment has only Java 21, no Gradle installation, and no network access, so I cannot run a real Gradle compile here. The build configuration uses the non-remapped Fabric Loom plugin and Loom `modImplementation` dependencies. It still needs a real build to confirm API compatibility. Do not treat this prototype as a verified working JAR yet.
+The source ZIP intentionally does not bundle a Gradle wrapper JAR. This environment has only Java 21, no Gradle installation, and no network access, so I cannot run a real Gradle compile here. The build configuration uses the non-remapped Fabric Loom plugin and standard `implementation` dependencies required for Minecraft 26.1+. It still needs a real build to confirm API compatibility. Do not treat this prototype as a verified working JAR yet.
 
 ## Status
 This is an evolving source prototype, not a tested release. I performed basic JSON and source-structure checks, but it has not been compiled against Minecraft 26.1.2 in this environment. Verify the build and test in a backup world before using it on a main save.
