@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "allkotowant",
+  "version": "${version}",
+  "name": "All-Kotoff-Want",
+  "description": "A black-and-violet item, entity, passenger and spawner editor prototype inspired by All-U-Want.",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.kotoff.allkotowant.client.AllKotoffWantClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": "26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
