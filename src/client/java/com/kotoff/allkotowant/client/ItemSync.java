@@ -15,9 +15,13 @@ final class ItemSync {
         if (client.player == null || client.gameMode == null || stack.isEmpty() || !client.player.isCreative()) {
             return false;
         }
-        int hotbarSlot = client.player.getInventory().getSelectedSlot();
-        // Creative inventory protocol maps hotbar slots to container slots 36..44.
-        client.gameMode.handleCreativeModeItemAdd(stack.copy(), hotbarSlot + 36);
+        int targetSlot = EditorContext.slot();
+        if (targetSlot < 0) {
+            int hotbarSlot = client.player.getInventory().getSelectedSlot();
+            // Creative inventory protocol maps hotbar slots to container slots 36..44.
+            targetSlot = hotbarSlot + 36;
+        }
+        client.gameMode.handleCreativeModeItemAdd(stack.copy(), targetSlot);
         return true;
     }
 

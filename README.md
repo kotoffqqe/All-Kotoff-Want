@@ -3,7 +3,7 @@
 Client-side Fabric project targeting Minecraft Java 26.1.2. Requires Java 25 and the Fabric Loader/Fabric API versions listed in `gradle.properties`. The project uses Fabric Loom 1.18.4.
 
 ## Included tools
-- **Item Workshop** (`R`): set/clear the held item's custom name; open lore, enchantment and attribute editors. Item changes now use Minecraft's normal creative inventory sync path when the player is in Creative mode.
+- **Item Workshop** (`R`): while the inventory is open, hover an inventory slot and press `R` to edit that exact stack; in the game view, `R` opens the editor for the main-hand item. The inventory screen is drawn behind the editor; open lore, enchantment and attribute editors. Item changes now use Minecraft's normal creative inventory sync path when the player is in Creative mode.
 - **Lore Editor**: edit item lore, separating multiple lines with `|` because the current editor uses a single-line input field.
 - **Enchantment Lab**: add/remove enchantments with levels up to 32767 (subject to version/game rules and server restrictions).
 - **Attribute Lab**: apply a custom pair of main-hand attack damage/speed modifiers. This replaces the stack's current attribute-modifier component; use carefully.
@@ -25,7 +25,7 @@ Entity, passenger and spawner tools use server commands. They require command pe
 4. The mod JAR should appear in `build/libs/` if the project compiles successfully.
 5. A GitHub Actions workflow is included at `.github/workflows/build.yml`. After you upload the project to a GitHub repository, open the repository Actions tab and run **Build All-Kotoff-Want** (or push a commit). When the run succeeds, open it and download the artifact named `All-Kotoff-Want-<commit>`. Inside is the installable mod JAR. If the run fails, open the failed step and copy the complete error log so the source can be corrected.
 
-The source ZIP intentionally does not bundle a Gradle wrapper JAR. This environment has only Java 21, no Gradle installation, and no network access, so I cannot run a real Gradle compile here. The build configuration uses the non-remapped Fabric Loom plugin and standard `implementation` dependencies required for Minecraft 26.1+. It still needs a real build to confirm API compatibility. Do not treat this prototype as a verified working JAR yet.
+The source ZIP intentionally does not bundle a Gradle wrapper JAR. This environment has only Java 21, no Gradle installation, and no network access, so I cannot run a real Gradle compile here. The build must be verified by GitHub Actions against Minecraft 26.1.2 before treating the new version as a tested release.
 
 ## Status
-This is an evolving source prototype, not a tested release. I performed basic JSON and source-structure checks, but it has not been compiled against Minecraft 26.1.2 in this environment. Verify the build and test in a backup world before using it on a main save.
+Version 0.3.2 fixes the decorative panel consuming mouse clicks, adds an animated accent sweep to the controls, and supports opening the editor over the inventory with the hovered slot as the target. It still needs a successful CI build and in-game testing. Test in a backup world before using it on a main save.

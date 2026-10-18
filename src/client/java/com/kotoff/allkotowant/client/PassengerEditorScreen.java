@@ -16,8 +16,9 @@ public final class PassengerEditorScreen extends Screen {
 
     @Override protected void init() {
         openedAt = System.nanoTime();
+        ButtonSkin.beginAnimation();
         int w = Math.min(420, width - 24), x = (width - w) / 2, y = (height - 220) / 2;
-        addRenderableWidget(new PanelWidget(x, y, w, 220));
+        addRenderableOnly(new PanelWidget(x, y, w, 220));
         vehicleId = new EditBox(font, x + 22, y + 62, w - 44, 22, Component.literal("Vehicle entity ID"));
         vehicleId.setMaxLength(128); vehicleId.setValue("minecraft:zombie"); addRenderableWidget(vehicleId);
         passengerId = new EditBox(font, x + 22, y + 108, w - 44, 22, Component.literal("Passenger entity ID"));
@@ -38,6 +39,7 @@ public final class PassengerEditorScreen extends Screen {
     }
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        EditorContext.renderBackdrop(this, g, mx, my, delta);
         super.extractRenderState(g, mx, my, delta);
         int w = Math.min(420, width - 24), x = (width - w) / 2, y = (height - 220) / 2;
         long elapsed = Math.max(0L, System.nanoTime() - openedAt);

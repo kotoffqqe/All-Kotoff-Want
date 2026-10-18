@@ -21,9 +21,8 @@ final class PanelWidget extends AbstractWidget {
         long elapsed = Math.max(0L, System.nanoTime() - createdAt);
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
         float eased = 1.0f - (float) Math.pow(1.0f - t, 3.0);
-        int slide = Math.round((1.0f - eased) * 12.0f);
         int x = getX();
-        int y = getY() + slide;
+        int y = getY();
         graphics.fill(x, y, x + width, y + height, PANEL);
         graphics.outline(x, y, width, height, 0xFF45305F);
         graphics.fill(x + 1, y + 1, x + width - 1, y + 4, PURPLE);

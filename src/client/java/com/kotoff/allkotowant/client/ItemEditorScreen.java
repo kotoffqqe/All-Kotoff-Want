@@ -8,7 +8,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
-/** First implementation milestone: dark-violet UI and a working main-hand custom-name editor. */
+/** Main All-Kotoff-Want item workshop. */
 public final class ItemEditorScreen extends Screen {
     private static final int PURPLE_BRIGHT = 0xFFB49AFF;
     private static final int TEXT = 0xFFF4F0FF;
@@ -16,20 +16,25 @@ public final class ItemEditorScreen extends Screen {
 
     private EditBox nameField;
     private long openedAt;
-    private String status = "Select an item in your main hand";
+    private String status = "Hover an inventory slot and press R";
+    private final net.minecraft.client.gui.screens.Screen inventoryBackdrop;
 
-    public ItemEditorScreen(Component title) {
+    public ItemEditorScreen(Component title) { this(title, null); }
+
+    public ItemEditorScreen(Component title, net.minecraft.client.gui.screens.Screen inventoryBackdrop) {
         super(title);
+        this.inventoryBackdrop = inventoryBackdrop;
     }
 
     @Override
     protected void init() {
         openedAt = System.nanoTime();
+        ButtonSkin.beginAnimation();
         int panelWidth = Math.min(430, this.width - 24);
         int left = (this.width - panelWidth) / 2;
 
         int panelTop = (this.height - 280) / 2;
-        addRenderableWidget(new PanelWidget(left, panelTop, panelWidth, 280));
+        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 280));
         int fieldWidth = panelWidth - 44;
 
         ItemStack stack = currentStack();
@@ -69,14 +74,13 @@ public final class ItemEditorScreen extends Screen {
     }
 
     private ItemStack currentStack() {
-        if (minecraft == null || minecraft.player == null) return ItemStack.EMPTY;
-        return minecraft.player.getMainHandItem();
+        return EditorContext.stack();
     }
 
     private void applyName() {
         ItemStack stack = currentStack();
         if (stack.isEmpty()) {
-            status = "Nothing in your main hand — hold an item first";
+            status = "No item in the selected slot";
             return;
         }
         String value = nameField.getValue().trim();
@@ -95,6 +99,7 @@ public final class ItemEditorScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        EditorContext.renderBackdrop(this, graphics, mouseX, mouseY, delta);
         super.extractRenderState(graphics, mouseX, mouseY, delta);
         long elapsed = Math.max(0L, System.nanoTime() - openedAt);
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
@@ -119,14 +124,18 @@ public final class ItemEditorScreen extends Screen {
         graphics.text(this.font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
         graphics.text(this.font, "ITEM WORKSHOP  /  01", x + 28, y + 30, MUTED, false);
         graphics.text(this.font, "CUSTOM NAME", x + 22, y + 61, PURPLE_BRIGHT, false);
-        graphics.text(this.font, "EDITING MAIN-HAND ITEM", x + 22, y + 222, MUTED, false);
+        graphics.text(this.font, "EDITING SELECTED INVENTORY ITEM", x + 22, y + 222, MUTED, false);
         graphics.text(this.font, status, x + 22, y + 246, TEXT, false);
         graphics.text(this.font, "R  •  OPEN EDITOR", x + 22, y + 260, MUTED, false);
     }
 
     @Override
     public void onClose() {
-        if (minecraft != null) minecraft.setScreen(null);
+        if (minecraft != null) {
+            net.minecraft.client.gui.screens.Screen backdrop = EditorContext.backdrop();
+            minecraft.setScreen(backdrop != null ? backdrop : null);
+            EditorContext.clear();
+        }
     }
 
     @Override

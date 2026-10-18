@@ -16,8 +16,9 @@ public final class SpawnerEditorScreen extends Screen {
 
     @Override protected void init() {
         openedAt = System.nanoTime();
+        ButtonSkin.beginAnimation();
         int w = Math.min(440, width - 24), x = (width - w) / 2, y = (height - 300) / 2;
-        addRenderableWidget(new PanelWidget(x, y, w, 300));
+        addRenderableOnly(new PanelWidget(x, y, w, 300));
         mobId = field(x, y + 56, w - 44, "Entity ID", "minecraft:zombie");
         delay = field(x, y + 100, (w - 52) / 2, "Delay ticks", "20");
         minDelay = field(x + 30 + (w - 52) / 2, y + 100, (w - 52) / 2, "Min delay", "200");
@@ -53,6 +54,7 @@ public final class SpawnerEditorScreen extends Screen {
     }
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        EditorContext.renderBackdrop(this, g, mx, my, delta);
         super.extractRenderState(g, mx, my, delta);
         int w = Math.min(440, width - 24), x = (width - w) / 2, y = (height - 300) / 2;
         long elapsed = Math.max(0L, System.nanoTime() - openedAt);

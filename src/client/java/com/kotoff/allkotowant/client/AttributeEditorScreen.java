@@ -29,9 +29,10 @@ public final class AttributeEditorScreen extends Screen {
     @Override
     protected void init() {
         openedAt = System.nanoTime();
+        ButtonSkin.beginAnimation();
         int w = Math.min(430, width - 24);
         int x = (width - w) / 2;
-        addRenderableWidget(new PanelWidget(x, (height - 250) / 2, w, 250));
+        addRenderableOnly(new PanelWidget(x, (height - 250) / 2, w, 250));
         damageField = new EditBox(font, x + 22, height / 2 - 42, w - 44, 22, Component.literal("Attack damage bonus"));
         damageField.setMaxLength(10);
         damageField.setValue("10");
@@ -49,7 +50,7 @@ public final class AttributeEditorScreen extends Screen {
     }
 
     private ItemStack held() {
-        return minecraft == null || minecraft.player == null ? ItemStack.EMPTY : minecraft.player.getMainHandItem();
+        return EditorContext.stack();
     }
 
     private Double parse(EditBox field) {
@@ -92,6 +93,7 @@ public final class AttributeEditorScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        EditorContext.renderBackdrop(this, graphics, mouseX, mouseY, delta);
         super.extractRenderState(graphics, mouseX, mouseY, delta);
         long elapsed = Math.max(0L, System.nanoTime() - openedAt);
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
