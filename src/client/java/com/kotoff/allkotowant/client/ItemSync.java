@@ -27,7 +27,7 @@ final class ItemSync {
 
     static String resultMessage(boolean synced) {
         return synced
-                ? "Applied and sent to server (creative mode)"
-                : "Applied locally only; creative mode/server support required to save";
+                ? UiText.t("Изменения отправлены на сервер (творческий режим)")
+                : UiText.t("Изменено только локально; для сохранения нужен творческий режим или поддержка сервера");
     }
 }

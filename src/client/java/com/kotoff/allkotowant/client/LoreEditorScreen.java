@@ -18,11 +18,11 @@ public final class LoreEditorScreen extends Screen {
     private static final int MUTED = 0xFFB4A9C9;
     private final Screen parent;
     private EditBox loreField;
-    private String status = "Separate lore lines with |";
+    private String status = UiText.t("Разделяй строки символом |");
     private long openedAt;
 
     public LoreEditorScreen(Screen parent) {
-        super(Component.literal("All-Kotoff-Want: Lore"));
+        super(Component.literal(UiText.t("All-Kotoff-Want: Описание")));
         this.parent = parent;
     }
 
@@ -39,17 +39,17 @@ public final class LoreEditorScreen extends Screen {
             ItemLore lore = stack.get(DataComponents.LORE);
             if (lore != null) existing = String.join(" | ", lore.lines().stream().map(Component::getString).toList());
         }
-        loreField = new EditBox(font, x + 22, height / 2 - 32, w - 44, 60, Component.literal("Lore"));
+        loreField = new EditBox(font, x + 22, height / 2 - 32, w - 44, 60, Component.literal(UiText.t("Описание предмета")));
         loreField.setMaxLength(1024);
         loreField.setValue(existing);
-        loreField.setHint(Component.literal("Line one | Line two | Line three"));
+        loreField.setHint(Component.literal(UiText.t("Строка 1 | Строка 2 | Строка 3")));
         addRenderableWidget(loreField);
         int bw = (w - 52) / 2;
-        addRenderableWidget(Button.builder(Component.literal("APPLY LORE"), b -> apply())
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить описание")), b -> apply())
                 .bounds(x + 22, height / 2 + 36, bw, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("CLEAR LORE"), b -> clear())
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Очистить описание")), b -> clear())
                 .bounds(x + 30 + bw, height / 2 + 36, bw, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("BACK"), b -> back())
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back())
                 .bounds(x + 22, height / 2 + 66, w - 44, 20).build());
     }
 
@@ -59,14 +59,14 @@ public final class LoreEditorScreen extends Screen {
 
     private void apply() {
         ItemStack stack = held();
-        if (stack.isEmpty()) { status = "Hold an item first"; return; }
+        if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
         List<Component> lines = new ArrayList<>();
         for (String line : loreField.getValue().split("\\|", -1)) {
             if (!line.isBlank()) lines.add(Component.literal(line));
         }
         if (lines.isEmpty()) stack.remove(DataComponents.LORE);
         else stack.set(DataComponents.LORE, new ItemLore(lines));
-        status = "Lore: " + lines.size() + " line(s). " + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
+        status = UiText.t("Строк в описании: ") + lines.size() + ". " + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
 
     private void clear() {
@@ -75,8 +75,8 @@ public final class LoreEditorScreen extends Screen {
         if (!stack.isEmpty()) {
             stack.remove(DataComponents.LORE);
             boolean synced = ItemSync.syncIfCreative(stack);
-            status = synced ? "Lore cleared and synced" : "Lore cleared locally only; creative mode/server support required to save";
-        } else status = "Hold an item first";
+            status = synced ? UiText.t("Описание очищено и отправлено на сервер") : UiText.t("Описание очищено локально; для сохранения нужен творческий режим");
+        } else status = UiText.t("Сначала выбери предмет");
     }
 
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
@@ -92,12 +92,12 @@ public final class LoreEditorScreen extends Screen {
         int x = (width - w) / 2;
         int y = (height - 220) / 2 + Math.round((1.0f - eased) * 12.0f);
         int bw = (w - 52) / 2;
-        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 36, bw, 22, "APPLY LORE", mouseX, mouseY);
-        ButtonSkin.draw(graphics, font, x + 30 + bw, height / 2 + 36, bw, 22, "CLEAR LORE", mouseX, mouseY);
-        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 66, w - 44, 20, "BACK", mouseX, mouseY);
+        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 36, bw, 22, UiText.t("Применить описание"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, font, x + 30 + bw, height / 2 + 36, bw, 22, UiText.t("Очистить описание"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 66, w - 44, 20, UiText.t("Назад"), mouseX, mouseY);
         graphics.text(font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
-        graphics.text(font, "LORE WORKSHOP  /  02", x + 28, y + 30, MUTED, false);
-        graphics.text(font, "LORE TEXT", x + 22, y + 55, 0xFFB49AFF, false);
+        graphics.text(font, UiText.t("РЕДАКТОР ОПИСАНИЯ  /  02"), x + 28, y + 30, MUTED, false);
+        graphics.text(font, UiText.t("ТЕКСТ ОПИСАНИЯ"), x + 22, y + 55, 0xFFB49AFF, false);
         graphics.text(font, status, x + 22, y + 188, TEXT, false);
     }
 

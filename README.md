@@ -29,3 +29,17 @@ The source ZIP intentionally does not bundle a Gradle wrapper JAR. This environm
 
 ## Status
 Version 0.3.2 fixes the decorative panel consuming mouse clicks, adds an animated accent sweep to the controls, and supports opening the editor over the inventory with the hovered slot as the target. It still needs a successful CI build and in-game testing. Test in a backup world before using it on a main save.
+
+
+## Версия 0.3.4 — правки по обратной связи
+- Интерфейс редакторов переведён на русский язык.
+- Выбор зачарований сделан через циклический список с русскими названиями и пояснениями; уровень можно задавать до 32767.
+- В настройке спавнера выбирается моб и изменяется именно блок спавнера, на который наведён прицел; если это не спавнер, показывается понятное сообщение. Для применения команды на сервере нужны права.
+- Добавление/удаление бонусов атаки больше не должно заменять стандартные атрибуты предмета; удаление бонусов мода возвращает стандартные атрибуты, если пользовательских атрибутов не осталось.
+
+Сборка всё ещё должна быть проверена GitHub Actions, а поведение в игре — протестировано на Minecraft 26.1.2.
+
+
+## Version 0.3.4 — language selector
+
+The main editor now includes a language button that cycles Russian → English → German. The selection applies to UI text throughout editor screens. Some less common descriptions may remain in Russian if a phrase is not yet included in the translation table.

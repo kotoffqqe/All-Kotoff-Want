@@ -3,7 +3,7 @@
   "id": "allkotowant",
   "version": "${version}",
   "name": "All-Kotoff-Want",
-  "description": "A black-and-violet item, entity, passenger and spawner editor prototype inspired by All-U-Want.",
+  "description": "Чёрно-фиолетовый редактор предметов, мобов и спавнеров в духе All-U-Want.",
   "environment": "client",
   "entrypoints": {
     "client": [

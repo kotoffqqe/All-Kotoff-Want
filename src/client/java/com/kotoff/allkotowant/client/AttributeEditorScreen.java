@@ -13,104 +13,90 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
-/** Sets simple custom main-hand attack damage and attack speed modifiers. */
+/** Adds our modifiers without deleting the item's existing/default modifiers. */
 public final class AttributeEditorScreen extends Screen {
     private final Screen parent;
-    private EditBox damageField;
-    private EditBox speedField;
-    private String status = "Values are modifier bonuses";
+    private EditBox damageField, speedField;
+    private String status = UiText.t("Базовые характеристики предмета сохраняются");
     private long openedAt;
 
     public AttributeEditorScreen(Screen parent) {
-        super(Component.literal("All-Kotoff-Want: Attributes"));
+        super(Component.literal(UiText.t("All-Kotoff-Want: Атрибуты")));
         this.parent = parent;
     }
 
-    @Override
-    protected void init() {
-        openedAt = System.nanoTime();
-        ButtonSkin.beginAnimation();
-        int w = Math.min(430, width - 24);
-        int x = (width - w) / 2;
-        addRenderableOnly(new PanelWidget(x, (height - 250) / 2, w, 250));
-        damageField = new EditBox(font, x + 22, height / 2 - 42, w - 44, 22, Component.literal("Attack damage bonus"));
-        damageField.setMaxLength(10);
-        damageField.setValue("10");
-        addRenderableWidget(damageField);
-        speedField = new EditBox(font, x + 22, height / 2 - 2, w - 44, 22, Component.literal("Attack speed bonus"));
-        speedField.setMaxLength(10);
-        speedField.setValue("1");
-        addRenderableWidget(speedField);
-        addRenderableWidget(Button.builder(Component.literal("APPLY ATTRIBUTES"), b -> apply())
-                .bounds(x + 22, height / 2 + 34, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("CLEAR CUSTOM ATTRIBUTES"), b -> clear())
-                .bounds(x + 22, height / 2 + 62, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("BACK"), b -> back())
-                .bounds(x + 22, height / 2 + 90, w - 44, 20).build());
-    }
-
-    private ItemStack held() {
-        return EditorContext.stack();
+    @Override protected void init() {
+        openedAt = System.nanoTime(); ButtonSkin.beginAnimation();
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 250) / 2;
+        addRenderableOnly(new PanelWidget(x, y, w, 250));
+        damageField = new EditBox(font, x + 22, y + 62, w - 44, 22, Component.literal(UiText.t("Бонус урона")));
+        damageField.setMaxLength(10); damageField.setValue("10"); addRenderableWidget(damageField);
+        speedField = new EditBox(font, x + 22, y + 106, w - 44, 22, Component.literal(UiText.t("Бонус скорости атаки")));
+        speedField.setMaxLength(10); speedField.setValue("1"); addRenderableWidget(speedField);
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Добавить бонусы")), b -> apply()).bounds(x + 22, y + 144, w - 44, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать только бонусы мода")), b -> clear()).bounds(x + 22, y + 172, w - 44, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 200, w - 44, 20).build());
     }
 
     private Double parse(EditBox field) {
-        try {
-            double value = Double.parseDouble(field.getValue().trim());
-            return Double.isFinite(value) && Math.abs(value) <= 1_000_000 ? value : null;
-        } catch (NumberFormatException ex) {
-            return null;
+        try { double v = Double.parseDouble(field.getValue().trim()); return Double.isFinite(v) && Math.abs(v) <= 1_000_000 ? v : null; }
+        catch (NumberFormatException e) { return null; }
+    }
+
+    private ItemAttributeModifiers withOurModifiers(ItemAttributeModifiers existing, Double damage, Double speed) {
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        for (ItemAttributeModifiers.Entry entry : existing.modifiers()) {
+            if (!entry.modifier().id().getNamespace().equals("allkotowant")) {
+                builder.add(entry.attribute(), entry.modifier(), entry.slot());
+            }
         }
+        if (damage != null) builder.add(Attributes.ATTACK_DAMAGE,
+                new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_damage"), damage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        if (speed != null) builder.add(Attributes.ATTACK_SPEED,
+                new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_speed"), speed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        return builder.build();
     }
 
     private void apply() {
-        ItemStack stack = held();
-        if (stack.isEmpty()) { status = "Hold an item first"; return; }
-        Double damage = parse(damageField);
-        Double speed = parse(speedField);
-        if (damage == null || speed == null) { status = "Enter valid numbers (max absolute value 1,000,000)"; return; }
-        // This editor intentionally installs a clean pair of custom main-hand modifiers.
-        ItemAttributeModifiers modifiers = ItemAttributeModifiers.builder()
-                .add(Attributes.ATTACK_DAMAGE,
-                        new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_damage"), damage, AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.MAINHAND)
-                .add(Attributes.ATTACK_SPEED,
-                        new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_speed"), speed, AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.MAINHAND)
-                .build();
-        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, modifiers);
+        ItemStack stack = EditorContext.stack();
+        if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
+        Double damage = parse(damageField), speed = parse(speedField);
+        if (damage == null || speed == null) { status = UiText.t("Введи числа от −1 000 000 до 1 000 000"); return; }
+        ItemAttributeModifiers existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+        // Repair items edited by older builds that replaced the full component with only our modifiers.
+        if (!existing.modifiers().isEmpty() && existing.modifiers().stream().allMatch(e -> e.modifier().id().getNamespace().equals("allkotowant"))) {
+            stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+            existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+        }
+        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, withOurModifiers(existing, damage, speed));
         status = ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
 
     private void clear() {
-        ItemStack stack = held();
-        if (stack.isEmpty()) { status = "Hold an item first"; return; }
-        stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
-        boolean synced = ItemSync.syncIfCreative(stack);
-        status = synced ? "Attribute component cleared and synced" : "Cleared locally only; creative mode/server support required to save";
+        ItemStack stack = EditorContext.stack();
+        if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
+        ItemAttributeModifiers existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+        boolean hasNonMod = existing.modifiers().stream().anyMatch(e -> !e.modifier().id().getNamespace().equals("allkotowant"));
+        if (!hasNonMod) {
+            // Removing the override lets Minecraft restore the item's own default attributes (e.g. armor).
+            stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+        } else {
+            stack.set(DataComponents.ATTRIBUTE_MODIFIERS, withOurModifiers(existing, null, null));
+        }
+        status = UiText.t("Убраны только бонусы All-Kotoff-Want. Базовые атрибуты восстановлены. ") + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
 
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
-
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
-        EditorContext.renderBackdrop(this, graphics, mouseX, mouseY, delta);
-        super.extractRenderState(graphics, mouseX, mouseY, delta);
-        long elapsed = Math.max(0L, System.nanoTime() - openedAt);
-        float t = Math.min(1.0f, elapsed / 190_000_000.0f);
-        float eased = 1.0f - (float) Math.pow(1.0f - t, 3.0f);
-        int w = Math.min(430, width - 24);
-        int x = (width - w) / 2;
-        int y = (height - 250) / 2 + Math.round((1.0f - eased) * 12.0f);
-        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 34, w - 44, 22, "APPLY ATTRIBUTES", mouseX, mouseY);
-        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 62, w - 44, 22, "CLEAR CUSTOM ATTRIBUTES", mouseX, mouseY);
-        ButtonSkin.draw(graphics, font, x + 22, height / 2 + 90, w - 44, 20, "BACK", mouseX, mouseY);
-        graphics.text(font, "ALL-KOTOFF-WANT", x + 28, y + 17, 0xFFF4F0FF, false);
-        graphics.text(font, "ATTRIBUTE LAB  /  04", x + 28, y + 30, 0xFFB4A9C9, false);
-        graphics.text(font, "ATTACK DAMAGE BONUS", x + 22, y + 47, 0xFFB49AFF, false);
-        graphics.text(font, "ATTACK SPEED BONUS", x + 22, y + 87, 0xFFB49AFF, false);
-        graphics.text(font, status, x + 22, y + 220, 0xFFF4F0FF, false);
+    @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        EditorContext.renderBackdrop(this, g, mx, my, delta); super.extractRenderState(g, mx, my, delta);
+        long elapsed = Math.max(0L, System.nanoTime() - openedAt); float t = Math.min(1f, elapsed / 190_000_000f), eased = 1f - (float)Math.pow(1f - t, 3);
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 250) / 2 + Math.round((1f-eased)*12f);
+        g.text(font, "ALL-KOTOFF-WANT", x+28,y+17,0xFFF4F0FF,false); g.text(font,UiText.t("АТРИБУТЫ  /  04"),x+28,y+30,0xFFB4A9C9,false);
+        g.text(font,UiText.t("БОНУС УРОНА"),x+22,y+49,0xFFB49AFF,false); g.text(font,UiText.t("БОНУС СКОРОСТИ АТАКИ"),x+22,y+93,0xFFB49AFF,false);
+        ButtonSkin.draw(g,font,x+22,y+144,w-44,22,UiText.t("Добавить бонусы"),mx,my);
+        ButtonSkin.draw(g,font,x+22,y+172,w-44,22,UiText.t("Убрать только бонусы мода"),mx,my);
+        ButtonSkin.draw(g,font,x+22,y+200,w-44,20,UiText.t("Назад"),mx,my); g.text(font,status,x+22,y+232,0xFFF4F0FF,false);
     }
-
     @Override public void onClose() { back(); }
     @Override public boolean isPauseScreen() { return false; }
 }
