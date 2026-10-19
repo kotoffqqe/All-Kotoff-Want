@@ -53,3 +53,9 @@ The main editor now includes a language button that cycles Russian → English �
 ## Version 0.3.5 — mouse-wheel selection
 - Mouse wheel changes the selected enchantment, spawner mob, entity type, and both passenger/vehicle types.
 - Scroll over the compact selector to change the selection; other controls remain unaffected.
+
+## v0.3.6
+- Click-to-open compact picker panels with visible choices, wheel scrolling, and selected-item highlighting for enchantments and mob selectors.
+- More restrained graphite/lavender UI with reduced visual noise.
+- Item name and lore fields support inline formatting codes: `&0`–`&f` colors, `&#RRGGBB` custom hex colors, `&l` bold, `&o` italic, `&n` underline, `&m` strikethrough, `&k` obfuscated/magic text, and `&r` reset. Toolbar buttons insert the codes at the text cursor.
+- Attribute editor adds a main-hand movement-speed modifier, active while the item is held. This is an item attribute modifier, not a potion status effect; arbitrary potion effects while holding would require server-side handling for reliable multiplayer behavior.

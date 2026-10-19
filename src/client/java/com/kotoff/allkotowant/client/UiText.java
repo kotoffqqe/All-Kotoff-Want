@@ -9,6 +9,24 @@ public final class UiText {
     private static Language language = Language.RU;
     private static final Map<String, String[]> TEXT = new HashMap<>();
     static {
+        TEXT.put("Выбрать зачарование", new String[]{"Выбрать зачарование", "Choose enchantment", "Verzauberung wählen"});
+        TEXT.put("Выбрать моба", new String[]{"Выбрать моба", "Choose entity", "Kreatur wählen"});
+        TEXT.put("Выбрать нижнего моба", new String[]{"Выбрать нижнего моба", "Choose vehicle", "Träger wählen"});
+        TEXT.put("Выбрать пассажира", new String[]{"Выбрать пассажира", "Choose passenger", "Passagier wählen"});
+        TEXT.put("Бонус скорости передвижения", new String[]{"Бонус скорости передвижения", "Movement speed bonus", "Bewegungsgeschwindigkeitsbonus"});
+        TEXT.put("БОНУС СКОРОСТИ ПЕРЕДВИЖЕНИЯ (ПОКА В РУКЕ)", new String[]{"БОНУС СКОРОСТИ ПЕРЕДВИЖЕНИЯ (ПОКА В РУКЕ)", "MOVEMENT SPEED BONUS (WHILE HELD)", "BEWEGUNGSTEMPO-BONUS (IN DER HAND)"});
+        TEXT.put("НАЗВАНИЕ ПРЕДМЕТА", new String[]{"НАЗВАНИЕ ПРЕДМЕТА", "ITEM NAME", "GEGENSTANDSNAME"});
+        TEXT.put("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК", new String[]{"НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК", "CLICK TO OPEN THE LIST", "KLICKEN, UM DIE LISTE ZU ÖFFNEN"});
+        TEXT.put("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ", new String[]{"НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ", "CLICK TO OPEN THE LISTS", "KLICKEN, UM DIE LISTEN ZU ÖFFNEN"});
+        TEXT.put("Выбери вариант · колесо мыши — прокрутка", new String[]{"Выбери вариант · колесо мыши — прокрутка", "Choose an option · mouse wheel to scroll", "Option wählen · Mausrad zum Scrollen"});
+        TEXT.put("Esc — назад", new String[]{"Esc — назад", "Esc — back", "Esc — zurück"});
+        TEXT.put("Красн.", new String[]{"Красн.", "Red", "Rot"}); TEXT.put("Зел.", new String[]{"Зел.", "Green", "Grün"});
+        TEXT.put("Голуб.", new String[]{"Голуб.", "Cyan", "Türkis"}); TEXT.put("Золото", new String[]{"Золото", "Gold", "Gold"});
+        TEXT.put("Жирн.", new String[]{"Жирн.", "Bold", "Fett"}); TEXT.put("Курсив", new String[]{"Курсив", "Italic", "Kursiv"});
+        TEXT.put("Подч.", new String[]{"Подч.", "Underl.", "Unterstr."}); TEXT.put("Зачерк.", new String[]{"Зачерк.", "Strike", "Durchstr."});
+        TEXT.put("Магия", new String[]{"Магия", "Magic", "Magisch"}); TEXT.put("Сброс", new String[]{"Сброс", "Reset", "Zurücksetzen"});
+        TEXT.put("Фиол.", new String[]{"Фиол.", "Purple", "Lila"});
+
         TEXT.put("Русский", new String[]{"Русский", "Russian", "Russisch"});
         TEXT.put("Английский", new String[]{"Английский", "English", "Englisch"});
         TEXT.put("Немецкий", new String[]{"Немецкий", "German", "Deutsch"});

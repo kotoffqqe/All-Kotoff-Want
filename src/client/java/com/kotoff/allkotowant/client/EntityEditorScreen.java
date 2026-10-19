@@ -39,7 +39,7 @@ public final class EntityEditorScreen extends Screen {
         ButtonSkin.beginAnimation();
         int w = Math.min(440, width - 24), x = (width - w) / 2, y = (height - 310) / 2;
         addRenderableOnly(new PanelWidget(x, y, w, 310));
-        mobButton = Button.builder(mobLabel(), b -> { mobIndex = (mobIndex + 1) % MOB_OPTIONS.length; b.setMessage(mobLabel()); })
+        mobButton = Button.builder(mobLabel(), b -> { if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать моба"), java.util.Arrays.stream(MOB_OPTIONS).map(m->UiText.t(m.name())).toList(), mobIndex, i->{mobIndex=i;if(mobButton!=null)mobButton.setMessage(mobLabel());})); })
                 .bounds(x + 22, y + 55, w - 44, 20).build(); addRenderableWidget(mobButton);
         customName = new EditBox(font, x + 22, y + 99, w - 44, 20, Component.literal(UiText.t("Имя моба")));
         customName.setMaxLength(64); customName.setHint(Component.literal(UiText.t("Например: Страж пустоты (необязательно)"))); addRenderableWidget(customName);
@@ -102,7 +102,7 @@ public final class EntityEditorScreen extends Screen {
         y += Math.round((1f - eased) * 10f);
         g.text(font, "ALL-KOTOFF-WANT", x + 28, y + 16, 0xFFF4F0FF, false);
         g.text(font, UiText.t("НАСТРОЙКИ МОБА  /  05"), x + 28, y + 30, 0xFFB4A9C9, false);
-        g.text(font, UiText.t("КОЛЁСИКО МЫШИ — ВЫБОР МОБА"), x + 22, y + 44, 0xFFB49AFF, false);
+        g.text(font, UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК"), x + 22, y + 44, 0xFFB49AFF, false);
         ButtonSkin.draw(g, font, x + 22, y + 55, w - 44, 20, UiText.t("Тип моба: ") + UiText.t(MOB_OPTIONS[mobIndex].name()) + "  ›", mx, my);
         g.text(font, UiText.t("ИМЯ МОБА"), x + 22, y + 88, 0xFFB49AFF, false);
         int bw = (w - 52) / 2, by = (height - 310) / 2 + 139;
@@ -115,15 +115,6 @@ public final class EntityEditorScreen extends Screen {
         ButtonSkin.draw(g, font, x + 22, by + 116, bw, 20, UiText.t("Посадить моба на другого"), mx, my);
         ButtonSkin.draw(g, font, x + 22 + bw + 8, by + 116, bw, 20, UiText.t("Назад"), mx, my);
         g.text(font, status, x + 22, y + 290, 0xFFEAE2FF, false);
-    }
-    @Override public boolean mouseScrolled(double mouseX,double mouseY,double horizontalAmount,double verticalAmount) {
-        int w=Math.min(440,width-24),x=(width-w)/2,y=(height-310)/2;
-        if(mouseX>=x+22&&mouseX<=x+w-22&&mouseY>=y+53&&mouseY<=y+77&&verticalAmount!=0){
-            mobIndex=Math.floorMod(mobIndex+(verticalAmount<0?1:-1),MOB_OPTIONS.length);
-            if(mobButton!=null)mobButton.setMessage(mobLabel());
-            return true;
-        }
-        return super.mouseScrolled(mouseX,mouseY,horizontalAmount,verticalAmount);
     }
     @Override public void onClose() { back(); }
     @Override public boolean isPauseScreen() { return false; }

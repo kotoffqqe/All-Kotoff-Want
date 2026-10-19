@@ -33,8 +33,8 @@ public final class ItemEditorScreen extends Screen {
         int panelWidth = Math.min(430, this.width - 24);
         int left = (this.width - panelWidth) / 2;
 
-        int panelTop = (this.height - 280) / 2;
-        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 280));
+        int panelTop = (this.height - 310) / 2;
+        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 310));
         addRenderableWidget(Button.builder(Component.literal(UiText.languageLabel()), b -> {
             UiText.nextLanguage();
             if (minecraft != null) minecraft.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), inventoryBackdrop));
@@ -50,8 +50,15 @@ public final class ItemEditorScreen extends Screen {
         nameField.setValue(existing);
         nameField.setHint(Component.literal(UiText.t("Например: Разрушитель пустоты")));
         addRenderableWidget(nameField);
+        String[][] format = {{UiText.t("Красн."),"&c"},{UiText.t("Зел."),"&a"},{UiText.t("Голуб."),"&b"},{UiText.t("Золото"),"&6"},{UiText.t("Жирн."),"&l"},{UiText.t("Курсив"),"&o"},{UiText.t("Подч."),"&n"},{UiText.t("Зачерк."),"&m"},{UiText.t("Магия"),"&k"},{UiText.t("Сброс"),"&r"}};
+        int fmtGap=4, fmtW=(fieldWidth-fmtGap*4)/5;
+        for(int i=0;i<format.length;i++) {
+            final String code=format[i][1]; int col=i%5,row=i/5;
+            addRenderableWidget(Button.builder(Component.literal(format[i][0]),b->nameField.insertText(code))
+                .bounds(left+22+col*(fmtW+fmtGap),panelTop+101+row*20,fmtW,18).build());
+        }
 
-        int buttonY = panelTop + 104;
+        int buttonY = panelTop + 148;
         int gap = 8;
         int buttonWidth = (fieldWidth - gap) / 2;
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить имя")), b -> applyName())
@@ -89,7 +96,7 @@ public final class ItemEditorScreen extends Screen {
         }
         String value = nameField.getValue().trim();
         if (value.isEmpty()) stack.remove(DataComponents.CUSTOM_NAME);
-        else stack.set(DataComponents.CUSTOM_NAME, Component.literal(value));
+        else stack.set(DataComponents.CUSTOM_NAME, StyledText.parse(value));
         boolean synced = ItemSync.syncIfCreative(stack);
         status = value.isEmpty()
                 ? (synced ? UiText.t("Имя удалено и отправлено на сервер") : UiText.t("Имя изменено локально; для сохранения нужен творческий режим"))
@@ -109,15 +116,18 @@ public final class ItemEditorScreen extends Screen {
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
         float eased = 1.0f - (float) Math.pow(1.0f - t, 3.0);
         int panelWidth = Math.min(430, this.width - 24);
-        int panelHeight = 280;
+        int panelHeight = 310;
         int x = (this.width - panelWidth) / 2;
         int targetY = (this.height - panelHeight) / 2;
         int y = targetY + Math.round((1.0f - eased) * 12.0f);
 
-        int by = targetY + 104;
+        int by = targetY + 148;
         int fw = panelWidth - 44;
         int bw = (fw - 8) / 2;
         ButtonSkin.draw(graphics, this.font, x + panelWidth - 132, targetY + 14, 110, 20, UiText.languageLabel(), mouseX, mouseY);
+        String[][] format = {{UiText.t("Красн."),"&c"},{UiText.t("Зел."),"&a"},{UiText.t("Голуб."),"&b"},{UiText.t("Золото"),"&6"},{UiText.t("Жирн."),"&l"},{UiText.t("Курсив"),"&o"},{UiText.t("Подч."),"&n"},{UiText.t("Зачерк."),"&m"},{UiText.t("Магия"),"&k"},{UiText.t("Сброс"),"&r"}};
+        int fmtGap=4, fmtW=(fw-fmtGap*4)/5;
+        for(int i=0;i<format.length;i++){int col=i%5,row=i/5;ButtonSkin.draw(graphics,this.font,x+22+col*(fmtW+fmtGap),targetY+101+row*20,fmtW,18,format[i][0],mouseX,mouseY);}
         ButtonSkin.draw(graphics, this.font, x + 22, by, bw, 22, UiText.t("Применить имя"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by, bw, 22, UiText.t("Сбросить имя"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, by + 30, bw, 22, UiText.t("Описание"), mouseX, mouseY);
@@ -128,10 +138,10 @@ public final class ItemEditorScreen extends Screen {
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 84, bw, 20, UiText.t("Закрыть"), mouseX, mouseY);
         graphics.text(this.font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
         graphics.text(this.font, UiText.t("РЕДАКТОР ПРЕДМЕТА  /  01"), x + 28, y + 30, MUTED, false);
-        graphics.text(this.font, UiText.t("ИМЯ МОБА"), x + 22, y + 61, PURPLE_BRIGHT, false);
-        graphics.text(this.font, UiText.t("РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ"), x + 22, y + 222, MUTED, false);
-        graphics.text(this.font, status, x + 22, y + 246, TEXT, false);
-        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 260, MUTED, false);
+        graphics.text(this.font, UiText.t("НАЗВАНИЕ ПРЕДМЕТА"), x + 22, y + 61, PURPLE_BRIGHT, false);
+        graphics.text(this.font, UiText.t("РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ"), x + 22, y + 272, MUTED, false);
+        graphics.text(this.font, status, x + 22, y + 286, TEXT, false);
+        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 298, MUTED, false);
     }
 
     @Override

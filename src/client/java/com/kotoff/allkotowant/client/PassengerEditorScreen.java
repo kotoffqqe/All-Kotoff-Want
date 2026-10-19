@@ -24,8 +24,8 @@ public final class PassengerEditorScreen extends Screen {
         openedAt=System.nanoTime(); ButtonSkin.beginAnimation();
         int w=Math.min(420,width-24),x=(width-w)/2,y=(height-220)/2;
         addRenderableOnly(new PanelWidget(x,y,w,220));
-        vehicleButton=Button.builder(vehicleLabel(),b->{vehicleIndex=(vehicleIndex+1)%MOBS.length;b.setMessage(vehicleLabel());}).bounds(x+22,y+62,w-44,22).build(); addRenderableWidget(vehicleButton);
-        passengerButton=Button.builder(passengerLabel(),b->{passengerIndex=(passengerIndex+1)%MOBS.length;b.setMessage(passengerLabel());}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
+        vehicleButton=Button.builder(vehicleLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать нижнего моба"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),vehicleIndex,i->{vehicleIndex=i;if(vehicleButton!=null)vehicleButton.setMessage(vehicleLabel());}));}).bounds(x+22,y+62,w-44,22).build(); addRenderableWidget(vehicleButton);
+        passengerButton=Button.builder(passengerLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать пассажира"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),passengerIndex,i->{passengerIndex=i;if(passengerButton!=null)passengerButton.setMessage(passengerLabel());}));}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Создать мобов")),b->summon()).bounds(x+22,y+146,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->back()).bounds(x+22,y+174,w-44,20).build());
     }
@@ -43,19 +43,11 @@ public final class PassengerEditorScreen extends Screen {
         int w=Math.min(420,width-24),x=(width-w)/2,y=(height-220)/2;
         long elapsed=Math.max(0L,System.nanoTime()-openedAt);float t=Math.min(1f,elapsed/190_000_000f),eased=1f-(float)Math.pow(1f-t,3);y+=Math.round((1f-eased)*10f);
         g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false);g.text(font,UiText.t("ПОСАДКА МОБОВ  /  06"),x+28,y+31,0xFFB4A9C9,false);
-        g.text(font,UiText.t("КОЛЁСИКО МЫШИ — ВЫБОР МОБОВ"),x+22,y+49,0xFFB49AFF,false);
+        g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ"),x+22,y+49,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+62,w-44,22,UiText.t("Нижний моб: ")+UiText.t(MOBS[vehicleIndex].name())+"  ›",mx,my);
         ButtonSkin.draw(g,font,x+22,y+108,w-44,22,UiText.t("Пассажир сверху: ")+UiText.t(MOBS[passengerIndex].name())+"  ›",mx,my);
         ButtonSkin.draw(g,font,x+22,y+146,w-44,22,UiText.t("Создать мобов"),mx,my);ButtonSkin.draw(g,font,x+22,y+174,w-44,20,UiText.t("Назад"),mx,my);
         g.text(font,status,x+22,y+203,0xFFEAE2FF,false);
-    }
-    @Override public boolean mouseScrolled(double mouseX,double mouseY,double horizontalAmount,double verticalAmount){
-        int w=Math.min(420,width-24),x=(width-w)/2,y=(height-220)/2;
-        if(verticalAmount!=0&&mouseX>=x+22&&mouseX<=x+w-22){
-            if(mouseY>=y+60&&mouseY<=y+86){vehicleIndex=Math.floorMod(vehicleIndex+(verticalAmount<0?1:-1),MOBS.length);if(vehicleButton!=null)vehicleButton.setMessage(vehicleLabel());return true;}
-            if(mouseY>=y+106&&mouseY<=y+132){passengerIndex=Math.floorMod(passengerIndex+(verticalAmount<0?1:-1),MOBS.length);if(passengerButton!=null)passengerButton.setMessage(passengerLabel());return true;}
-        }
-        return super.mouseScrolled(mouseX,mouseY,horizontalAmount,verticalAmount);
     }
     @Override public void onClose(){back();}@Override public boolean isPauseScreen(){return false;}
 }
