@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import java.util.List;
 import java.util.Locale;
@@ -64,8 +65,8 @@ public final class AttributeEditorScreen extends Screen {
     @Override protected void init() {
         try { selected = Math.max(0, Math.min(OPTIONS.size() - 1, Integer.parseInt(EditorContext.draft("attr.selected", "0")))); }
         catch (NumberFormatException ignored) { selected = 0; }
-        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 280) / 2;
-        addRenderableOnly(new PanelWidget(x, y, w, 280));
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 310) / 2;
+        addRenderableOnly(new PanelWidget(x, y, w, 310));
         choiceButton = Button.builder(choiceLabel(), b -> {
             if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать атрибут"),
                     OPTIONS.stream().map(AttrOption::name).map(UiText::t).toList(), selected, i -> {
@@ -83,11 +84,30 @@ public final class AttributeEditorScreen extends Screen {
         loadAmount();
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить значение")), b -> apply()).bounds(x + 22, y + 148, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать изменение этого атрибута")), b -> remove()).bounds(x + 22, y + 176, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 204, w - 44, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(unbreakableLabel()), b -> toggleUnbreakable()).bounds(x + 22, y + 204, w - 44, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 232, w - 44, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
 
     private Component choiceLabel() { return Component.literal(UiText.t("Атрибут: ") + UiText.t(OPTIONS.get(selected).name()) + "  ›"); }
+
+    private String unbreakableLabel() {
+        ItemStack stack = EditorContext.stack();
+        return (stack != null && !stack.isEmpty() && stack.has(DataComponents.UNBREAKABLE) ? "☑ " : "☐ ") + "Неломаемость";
+    }
+
+    private void toggleUnbreakable() {
+        ItemStack stack = EditorContext.stack();
+        if (stack == null || stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
+        if (stack.has(DataComponents.UNBREAKABLE)) {
+            stack.remove(DataComponents.UNBREAKABLE);
+            status = "Неломаемость отключена";
+        } else {
+            stack.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
+            status = "Предмет сделан неломаемым";
+        }
+        if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(parent));
+    }
 
     private ItemAttributeModifiers baseModifiers(ItemStack stack) {
         ItemAttributeModifiers explicit = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
@@ -164,7 +184,7 @@ public final class AttributeEditorScreen extends Screen {
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
         EditorContext.renderBackdrop(this, g, mx, my, delta);
         super.extractRenderState(g, mx, my, delta);
-        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 280) / 2;
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 310) / 2;
         ItemStack stack = EditorContext.stack();
         AttrOption option = OPTIONS.get(selected);
         ItemAttributeModifiers defaults = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : stack.getItem().components().getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
@@ -176,8 +196,9 @@ public final class AttributeEditorScreen extends Screen {
         ButtonSkin.draw(g, font, x + 22, y + 58, w - 44, 24, UiText.t("Атрибут: ") + UiText.t(OPTIONS.get(selected).name()) + "  ›", mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 148, w - 44, 22, UiText.t("Применить значение"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 176, w - 44, 22, UiText.t("Убрать изменение этого атрибута"), mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 204, w - 44, 20, UiText.t("Назад"), mx, my);
-        g.text(font, status, x + 22, y + 244, 0xFFF4F0FF, false);
+        ButtonSkin.draw(g, font, x + 22, y + 204, w - 44, 20, unbreakableLabel(), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 232, w - 44, 20, UiText.t("Назад"), mx, my);
+        g.text(font, status, x + 22, y + 272, 0xFFF4F0FF, false);
     }
 
     @Override public void onClose() { back(); }

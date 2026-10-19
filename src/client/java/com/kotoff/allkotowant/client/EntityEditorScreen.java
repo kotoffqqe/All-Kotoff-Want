@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import java.util.List;
 
-/** Straightforward summon builder: health, equipment, head item and one potion effect. */
+/** Summon builder with health, equipment and multiple configurable potion effects. */
 public final class EntityEditorScreen extends Screen {
     private record MobOption(String id, String name) {}
     private static final MobOption[] MOBS = {
@@ -21,7 +21,7 @@ public final class EntityEditorScreen extends Screen {
     private final Screen parent;
     private int mobIndex;
     private Button mobButton;
-    private EditBox health, mainHand, head, chest, legs, feet, effect, effectLevel, customName;
+    private EditBox health, mainHand, head, chest, legs, feet, customName;
     private String status = "Нужны права на /summon (читы или оператор)";
     private long openedAt;
 
@@ -45,9 +45,10 @@ public final class EntityEditorScreen extends Screen {
         chest = field(x + 22, y + 190, half, "Нагрудник: minecraft:diamond_chestplate", "entity.chest", "");
         legs = field(x + 30 + half, y + 190, half, "Поножи: minecraft:diamond_leggings", "entity.legs", "");
         feet = field(x + 22, y + 238, half, "Ботинки: minecraft:diamond_boots", "entity.feet", "");
-        effect = field(x + 30 + half, y + 238, half, "Эффект: minecraft:speed", "entity.effect", "minecraft:speed");
-        effectLevel = field(x + 22, y + 286, 100, "Уровень эффекта", "entity.effectLevel", "1");
-        addRenderableWidget(Button.builder(Component.literal("Создать моба"), b -> summon()).bounds(x + 130, y + 286, w - 152, 22).build());
+        addRenderableWidget(Button.builder(Component.literal("Настроить эффекты…"), b -> {
+            if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(this));
+        }).bounds(x + 30 + half, y + 238, half, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Создать моба"), b -> summon()).bounds(x + 22, y + 286, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal("Назад"), b -> back()).bounds(x + 22, y + 324, w - 44, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
@@ -67,20 +68,16 @@ public final class EntityEditorScreen extends Screen {
     private void summon() {
         if (minecraft == null || minecraft.player == null) { status = "Мир ещё не загружен"; return; }
         float hp;
-        int level;
         try { hp = Float.parseFloat(health.getValue().trim()); if (!Float.isFinite(hp) || hp < 1 || hp > 1024) throw new NumberFormatException(); }
         catch (NumberFormatException ex) { status = "Здоровье: число от 1 до 1024"; return; }
-        try { level = Integer.parseInt(effectLevel.getValue().trim()); if (level < 1 || level > 255) throw new NumberFormatException(); }
-        catch (NumberFormatException ex) { status = "Уровень эффекта: число от 1 до 255"; return; }
         String handS = itemSnbt(mainHand), headS = itemSnbt(head), chestS = itemSnbt(chest), legsS = itemSnbt(legs), feetS = itemSnbt(feet);
         if (handS == null || headS == null || chestS == null || legsS == null || feetS == null) { status = "Предметы указывай как minecraft:diamond_sword"; return; }
-        String effectId = effect.getValue().trim();
-        if (!effectId.isEmpty() && !effectId.matches("[a-z0-9_.-]+:[a-z0-9_./-]+")) { status = "Эффект указывай как minecraft:speed"; return; }
         StringBuilder data = new StringBuilder("{Health:").append(hp).append("f,attributes:[{id:\"minecraft:max_health\",base:").append(hp).append("}],equipment:{mainhand:").append(handS).append(",head:").append(headS).append(",chest:").append(chestS).append(",legs:").append(legsS).append(",feet:").append(feetS).append("}");
         String name = customName.getValue().trim();
         if (!name.isEmpty()) data.append(",CustomName:'{\"text\":\"").append(name.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'")).append("\"}'");
-        if (!effectId.isEmpty()) data.append(",active_effects:[{id:\"").append(effectId).append("\",amplifier:").append(level - 1).append(",duration:999999,show_particles:1b}]");
-        data.append('}');
+        String effects = MobEffectsScreen.commandTag();
+        if (effects.startsWith("ERROR:")) { status = effects.substring(7).trim(); return; }
+        data.append(effects).append('}');
         minecraft.player.connection.sendCommand("summon " + MOBS[mobIndex].id() + " ~ ~ ~ " + data);
         status = "Команда отправлена. Если моб не появился — проверь права на команды";
     }
@@ -89,16 +86,15 @@ public final class EntityEditorScreen extends Screen {
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
         EditorContext.renderBackdrop(this, g, mx, my, delta); super.extractRenderState(g, mx, my, delta);
         int w = Math.min(500, width - 24), x = (width - w) / 2, y = Math.max(8, (height - 390) / 2);
-        long elapsed = Math.max(0L, System.nanoTime() - openedAt); float t = Math.min(1f, elapsed / 190_000_000f), eased = 1f - (float)Math.pow(1f - t, 3); y += Math.round((1f - eased) * 10f);
         g.text(font, "ALL-KOTOFF-WANT", x + 28, y + 16, 0xFFF4F0FF, false);
         g.text(font, "СОЗДАНИЕ МОБА · ЗДОРОВЬЕ / ЭКИПИРОВКА / ЭФФЕКТЫ", x + 22, y + 31, 0xFFB49AFF, false);
         ButtonSkin.draw(g, font, x + 22, y + 48, w - 44, 22, "Моб: " + MOBS[mobIndex].name() + "  ›", mx, my);
         g.text(font, "ЗДОРОВЬЕ / ИМЯ", x + 22, y + 83, 0xFFB49AFF, false);
         g.text(font, "ОРУЖИЕ / ПРЕДМЕТ НА ГОЛОВУ", x + 22, y + 131, 0xFFB49AFF, false);
         g.text(font, "БРОНЯ", x + 22, y + 179, 0xFFB49AFF, false);
-        g.text(font, "БОТИНКИ / ЭФФЕКТ", x + 22, y + 227, 0xFFB49AFF, false);
-        g.text(font, "Уровень эффекта 1–255 (1 = I)", x + 22, y + 277, 0xFFB4A9C9, false);
-        ButtonSkin.draw(g, font, x + 130, y + 286, w - 152, 22, "Создать моба", mx, my);
+        g.text(font, "БОТИНКИ / ЭФФЕКТЫ", x + 22, y + 227, 0xFFB49AFF, false);
+        ButtonSkin.draw(g, font, x + 30 + (w - 52) / 2, y + 238, (w - 52) / 2, 20, "Настроить эффекты…", mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 286, w - 44, 22, "Создать моба", mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 324, w - 44, 20, "Назад", mx, my);
         g.text(font, status, x + 22, y + 357, 0xFFEAE2FF, false);
     }

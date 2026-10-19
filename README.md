@@ -98,3 +98,10 @@ The main editor now includes a language button that cycles Russian → English �
 - Saved stacks can be deleted or sent to the currently selected inventory slot in Creative mode.
 - Removed the spawner editor; mob settings now create a mob with chosen health, equipment/head item, name and potion effect.
 - Oversized stacks get a unique hidden marker so separate dropped stacks do not merge into each other.
+
+
+### v0.4.3
+- Added a toggle for unbreakable items in the attribute editor.
+- Rebuilt the saved-item library as a 9×3 inventory grid with working page navigation, one-click back, delete controls, and local hotbar assignment plus server sync.
+- Added a dedicated multi-effect mob editor with per-effect enable toggles, level, and duration.
+- Removed the animated offset from the mob editor so visible controls align with their click hitboxes.
