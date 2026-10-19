@@ -45,10 +45,10 @@ public final class EntityEditorScreen extends Screen {
         ButtonSkin.beginAnimation();
         int w = Math.min(440, width - 24), x = (width - w) / 2, y = (height - 310) / 2;
         addRenderableOnly(new PanelWidget(x, y, w, 310));
-        mobButton = Button.builder(mobLabel(), b -> { if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать моба"), java.util.Arrays.stream(MOB_OPTIONS).map(m->UiText.t(m.name())).toList(), mobIndex, i->{mobIndex=i;EditorContext.draft("entity.mob",Integer.toString(i));if(mobButton!=null)mobButton.setMessage(mobLabel());})); })
+        mobButton = Button.builder(mobLabel(), b -> { if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать моба"), java.util.Arrays.stream(MOB_OPTIONS).map(m->UiText.t(m.name())).toList(), mobIndex, i->{mobIndex=i;EditorContext.setDraft("entity.mob",Integer.toString(i));if(mobButton!=null)mobButton.setMessage(mobLabel());})); })
                 .bounds(x + 22, y + 55, w - 44, 20).build(); addRenderableWidget(mobButton);
         customName = new EditBox(font, x + 22, y + 99, w - 44, 20, Component.literal(UiText.t("Имя моба")));
-        customName.setMaxLength(64); customName.setValue(EditorContext.draft("entity.name", "")); customName.setResponder(v -> EditorContext.draft("entity.name", v)); customName.setHint(Component.literal(UiText.t("Например: Страж пустоты (необязательно)"))); addRenderableWidget(customName);
+        customName.setMaxLength(64); customName.setValue(EditorContext.draft("entity.name", "")); customName.setResponder(v -> EditorContext.setDraft("entity.name", v)); customName.setHint(Component.literal(UiText.t("Например: Страж пустоты (необязательно)"))); addRenderableWidget(customName);
         int bw = (w - 52) / 2, gap = 8, by = y + 139;
         addRenderableWidget(toggle(UiText.t("Без ИИ: ВЫКЛ"), x + 22, by, bw, 22, 0));
         addRenderableWidget(toggle(UiText.t("Без звука: ВЫКЛ"), x + 22 + bw + gap, by, bw, 22, 1));
@@ -67,11 +67,11 @@ public final class EntityEditorScreen extends Screen {
     private Button toggle(String label, int x, int y, int w, int h, int which) {
         return Button.builder(Component.literal(label), b -> {
             switch (which) {
-                case 0 -> { noAi = !noAi; EditorContext.draft("entity.noAi", Boolean.toString(noAi)); }
-                case 1 -> { silent = !silent; EditorContext.draft("entity.silent", Boolean.toString(silent)); }
-                case 2 -> { glowing = !glowing; EditorContext.draft("entity.glowing", Boolean.toString(glowing)); }
-                case 3 -> { invulnerable = !invulnerable; EditorContext.draft("entity.invulnerable", Boolean.toString(invulnerable)); }
-                case 4 -> { noGravity = !noGravity; EditorContext.draft("entity.noGravity", Boolean.toString(noGravity)); }
+                case 0 -> { noAi = !noAi; EditorContext.setDraft("entity.noAi", Boolean.toString(noAi)); }
+                case 1 -> { silent = !silent; EditorContext.setDraft("entity.silent", Boolean.toString(silent)); }
+                case 2 -> { glowing = !glowing; EditorContext.setDraft("entity.glowing", Boolean.toString(glowing)); }
+                case 3 -> { invulnerable = !invulnerable; EditorContext.setDraft("entity.invulnerable", Boolean.toString(invulnerable)); }
+                case 4 -> { noGravity = !noGravity; EditorContext.setDraft("entity.noGravity", Boolean.toString(noGravity)); }
             }
             b.setMessage(Component.literal(switch (which) {
                 case 0 -> UiText.t("Без ИИ: ") + onOff(noAi); case 1 -> UiText.t("Без звука: ") + onOff(silent);

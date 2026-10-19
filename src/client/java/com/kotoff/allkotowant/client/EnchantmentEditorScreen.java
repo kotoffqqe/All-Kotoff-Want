@@ -80,13 +80,13 @@ public final class EnchantmentEditorScreen extends Screen {
         choiceButton = Button.builder(choiceLabel(), b -> {
             if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать зачарование"),
                 java.util.Arrays.stream(OPTIONS).map(o -> UiText.t(o.name())).toList(), selected, i -> {
-                    selected = i; EditorContext.draft("enchant.selected", Integer.toString(i)); if (choiceButton != null) choiceButton.setMessage(choiceLabel()); loadSelectedLevel(); status = UiText.t(OPTIONS[selected].hint());
+                    selected = i; EditorContext.setDraft("enchant.selected", Integer.toString(i)); if (choiceButton != null) choiceButton.setMessage(choiceLabel()); loadSelectedLevel(); status = UiText.t(OPTIONS[selected].hint());
                 }));
         })
                 .bounds(x+22,y+60,w-44,24).build(); addRenderableWidget(choiceButton);
         levelField = new EditBox(font,x+22,y+111,w-44,22,Component.literal(UiText.t("Уровень зачарования")));
         levelField.setMaxLength(5); levelField.setValue("1000"); levelField.setHint(Component.literal(UiText.t("От 1 до 32767"))); addRenderableWidget(levelField);
-        levelField.setResponder(v -> { if (!loadingLevel) EditorContext.draft("enchant.level." + OPTIONS[selected].id(), v); });
+        levelField.setResponder(v -> { if (!loadingLevel) EditorContext.setDraft("enchant.level." + OPTIONS[selected].id(), v); });
         loadSelectedLevel();
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать это зачарование")), b -> remove()).bounds(x+22,y+177,w-44,22).build());
@@ -110,7 +110,7 @@ public final class EnchantmentEditorScreen extends Screen {
         loadingLevel = true;
         levelField.setValue(existing > 0 ? Integer.toString(existing) : "1000");
         loadingLevel = false;
-        EditorContext.draft(key, levelField.getValue());
+        EditorContext.setDraft(key, levelField.getValue());
     }
     private Holder<Enchantment> resolve(String raw) {
         if (minecraft == null || minecraft.level == null) return null;

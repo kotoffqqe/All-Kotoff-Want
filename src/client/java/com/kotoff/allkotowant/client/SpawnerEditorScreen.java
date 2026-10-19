@@ -36,7 +36,7 @@ public final class SpawnerEditorScreen extends Screen {
         openedAt=System.nanoTime(); ButtonSkin.beginAnimation();
         int w=Math.min(440,width-24),x=(width-w)/2,y=(height-300)/2;
         addRenderableOnly(new PanelWidget(x,y,w,300));
-        mobButton=Button.builder(mobLabel(),b->{ if(minecraft!=null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать моба"), java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(), mobIndex, i->{mobIndex=i;EditorContext.draft("spawner.mob", Integer.toString(i));if(mobButton!=null)mobButton.setMessage(mobLabel());})); })
+        mobButton=Button.builder(mobLabel(),b->{ if(minecraft!=null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать моба"), java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(), mobIndex, i->{mobIndex=i;EditorContext.setDraft("spawner.mob", Integer.toString(i));if(mobButton!=null)mobButton.setMessage(mobLabel());})); })
                 .bounds(x+22,y+56,w-44,24).build(); addRenderableWidget(mobButton);
         delay=field(x+22,y+100,(w-52)/2,UiText.t("Задержка (тики)"),EditorContext.draft("spawner.delay","20"),"spawner.delay");
         minDelay=field(x+30+(w-52)/2,y+100,(w-52)/2,UiText.t("Мин. задержка"),EditorContext.draft("spawner.min","200"),"spawner.min");
@@ -47,7 +47,7 @@ public final class SpawnerEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->{if(minecraft!=null)minecraft.setScreen(parent);}).bounds(x+22,y+250,w-44,20).build());
     }
     private Component mobLabel(){return Component.literal(UiText.t("Моб: ")+UiText.t(MOBS[mobIndex].name())+"  ›");}
-    private EditBox field(int x,int y,int w,String hint,String value,String key){EditBox b=new EditBox(font,x,y,w,20,Component.literal(hint));b.setMaxLength(8);b.setValue(value);b.setResponder(v -> EditorContext.draft(key,v));addRenderableWidget(b);return b;}
+    private EditBox field(int x,int y,int w,String hint,String value,String key){EditBox b=new EditBox(font,x,y,w,20,Component.literal(hint));b.setMaxLength(8);b.setValue(value);b.setResponder(v -> EditorContext.setDraft(key,v));addRenderableWidget(b);return b;}
     private Integer number(EditBox box,int min,int max){try{int n=Integer.parseInt(box.getValue().trim());return n>=min&&n<=max?n:null;}catch(NumberFormatException e){return null;}}
     private void apply(){
         if(minecraft==null||minecraft.player==null||minecraft.level==null){status=UiText.t("Мир ещё не загружен");return;}

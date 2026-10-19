@@ -49,7 +49,7 @@ final class EditorContext {
     static String loreDraft() { return loreDraft; }
     static void loreDraft(String value) { loreDraft = value; }
     static String draft(String key, String fallback) { return drafts.getOrDefault(key, fallback); }
-    static void draft(String key, String value) { drafts.put(key, value); }
+    static void setDraft(String key, String value) { drafts.put(key, value); }
 
     static void clearDrafts() {
         nameDraft = null;
