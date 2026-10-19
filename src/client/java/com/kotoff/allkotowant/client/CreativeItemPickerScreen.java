@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 /** Searchable, inventory-grid item picker inspired by creative inventory selectors. */
 final class CreativeItemPickerScreen extends Screen {
-    enum Kind { ARMOR, WEAPON }
+    enum Kind { HEAD, CHEST, LEGS, FEET, WEAPON }
 
     private final Screen parent;
     private final Kind kind;
@@ -32,7 +32,7 @@ final class CreativeItemPickerScreen extends Screen {
     private static final int GRID_W = COLS * CELL + (COLS - 1) * GAP;
 
     CreativeItemPickerScreen(Screen parent, Kind kind, Consumer<String> onSelect) {
-        super(Component.literal(kind == Kind.ARMOR ? "Выбрать броню" : "Выбрать оружие"));
+        super(Component.literal(kind == Kind.WEAPON ? UiText.t("Выбрать оружие") : UiText.t("Выбрать броню")));
         this.parent = parent;
         this.kind = kind;
         this.onSelect = onSelect;
@@ -46,12 +46,10 @@ final class CreativeItemPickerScreen extends Screen {
     }
 
     private boolean matchesKind(String path) {
-        if (kind == Kind.ARMOR) {
-            return path.endsWith("_helmet") || path.endsWith("_chestplate")
-                    || path.endsWith("_leggings") || path.endsWith("_boots")
-                    || path.equals("elytra") || path.equals("turtle_helmet")
-                    || path.endsWith("_horse_armor") || path.equals("wolf_armor");
-        }
+        if (kind == Kind.HEAD) return path.endsWith("_helmet") || path.equals("turtle_helmet");
+        if (kind == Kind.CHEST) return path.endsWith("_chestplate") || path.equals("elytra");
+        if (kind == Kind.LEGS) return path.endsWith("_leggings");
+        if (kind == Kind.FEET) return path.endsWith("_boots");
         return path.endsWith("_sword") || path.endsWith("_axe")
                 || path.equals("bow") || path.equals("crossbow")
                 || path.equals("trident") || path.equals("mace")
@@ -60,9 +58,9 @@ final class CreativeItemPickerScreen extends Screen {
 
     @Override protected void init() {
         int x = left(), y = top(), w = panelW();
-        search = new EditBox(font, x + 14, y + 43, w - 28, 20, Component.literal("Поиск предмета"));
+        search = new EditBox(font, x + 14, y + 43, w - 28, 20, Component.literal(UiText.t("Поиск предмета")));
         search.setMaxLength(80);
-        search.setHint(Component.literal("Поиск по названию или ID…"));
+        search.setHint(Component.literal(UiText.t("Поиск по названию или ID…")));
         search.setResponder(this::filter);
         addRenderableWidget(search);
     }
@@ -92,8 +90,8 @@ final class CreativeItemPickerScreen extends Screen {
         g.fill(x, y, x + w, y + h, 0xF016171D);
         g.outline(x, y, w, h, 0xFF454752);
         g.fill(x + 1, y + 1, x + w - 1, y + 3, 0xFF9B8AFB);
-        g.text(font, kind == Kind.ARMOR ? "ВЫБОР БРОНИ" : "ВЫБОР ОРУЖИЯ", x + 14, y + 13, 0xFFF5F5FA, false);
-        g.text(font, "Предметы · нажми на иконку · поиск по названию или ID", x + 14, y + 29, 0xFF9A9DAA, false);
+        g.text(font, kind == Kind.WEAPON ? UiText.t("ВЫБОР ОРУЖИЯ") : UiText.t("ВЫБОР БРОНИ"), x + 14, y + 13, 0xFFF5F5FA, false);
+        g.text(font, UiText.t("Предметы · нажми на иконку · поиск по названию или ID"), x + 14, y + 29, 0xFF9A9DAA, false);
         super.extractRenderState(g, mx, my, delta);
 
         int gx = gridX(), gy = gridY();
@@ -111,12 +109,12 @@ final class CreativeItemPickerScreen extends Screen {
                 g.item(stack, sx + 9, sy + 9);
                 if (hovered) hoveredStack = stack;
             } else {
-                g.text(font, "·", sx + 14, sy + 11, 0xFF555763, false);
+                g.text(font, UiText.t("·"), sx + 14, sy + 11, 0xFF555763, false);
             }
         }
         String range = filtered.isEmpty() ? "0" : (first + 1) + "–" + Math.min(first + PAGE_SIZE, filtered.size());
-        g.text(font, range + " / " + filtered.size() + " предметов", x + 14, y + h - 19, 0xFFB4A9C9, false);
-        String pageText = "Колесо — прокрутка · Esc — назад";
+        g.text(font, range + " / " + filtered.size() + " " + UiText.t("предметов"), x + 14, y + h - 19, 0xFFB4A9C9, false);
+        String pageText = UiText.t("Колесо — прокрутка · Esc — назад");
         g.text(font, pageText, x + w - 14 - font.width(pageText), y + h - 19, 0xFF9A9DAA, false);
         if (!hoveredStack.isEmpty()) {
             String tip = hoveredStack.getHoverName().getString() + " · " + BuiltInRegistries.ITEM.getKey(hoveredStack.getItem());

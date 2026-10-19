@@ -15,6 +15,77 @@ final class StyledText {
         Map.entry('c',0xFF5555),Map.entry('d',0xFF55FF),Map.entry('e',0xFFFF55),Map.entry('f',0xFFFFFF));
     private StyledText() {}
 
+    static String toJson(String raw, String fontId) {
+        StringBuilder out = new StringBuilder("{\"text\":\"\",\"extra\":[");
+        StringBuilder part = new StringBuilder();
+        Integer color = null;
+        boolean bold = false, italic = false, underlined = false, strike = false, obfuscated = false;
+        boolean first = true;
+        for (int i = 0; i < raw.length();) {
+            if (raw.charAt(i) == '&' && i + 1 < raw.length()) {
+                char code = Character.toLowerCase(raw.charAt(i + 1));
+                Integer nextColor = COLORS.get(code);
+                boolean valid = nextColor != null || "klmnor".indexOf(code) >= 0;
+                if (code == '#' && i + 8 <= raw.length()) {
+                    try { nextColor = Integer.parseInt(raw.substring(i + 2, i + 8), 16); valid = true; i += 6; code = 'x'; }
+                    catch (NumberFormatException ignored) { }
+                }
+                if (valid) {
+                    if (!part.isEmpty()) {
+                        if (!first) out.append(',');
+                        out.append("{\"text\":\"").append(jsonEscape(part.toString())).append("\"");
+                        if (color != null) out.append(",\"color\":\"").append(String.format(java.util.Locale.ROOT, "#%06X", color)).append('\"');
+                        if (bold) out.append(",\"bold\":true");
+                        if (italic) out.append(",\"italic\":true");
+                        if (underlined) out.append(",\"underlined\":true");
+                        if (strike) out.append(",\"strikethrough\":true");
+                        if (obfuscated) out.append(",\"obfuscated\":true");
+                        if (fontId != null && !fontId.equals("minecraft:default")) out.append(",\"font\":\"").append(jsonEscape(fontId)).append('\"');
+                        out.append('}'); first = false; part.setLength(0);
+                    }
+                    if (code == 'x') color = nextColor;
+                    else if (nextColor != null) { color = nextColor; bold = italic = underlined = strike = obfuscated = false; }
+                    else switch (code) {
+                        case 'k' -> obfuscated = true; case 'l' -> bold = true; case 'm' -> strike = true;
+                        case 'n' -> underlined = true; case 'o' -> italic = true;
+                        case 'r' -> { color = null; bold = italic = underlined = strike = obfuscated = false; }
+                    }
+                    i += 2; continue;
+                }
+            }
+            part.append(raw.charAt(i++));
+        }
+        if (!part.isEmpty()) {
+            if (!first) out.append(',');
+            out.append("{\"text\":\"").append(jsonEscape(part.toString())).append("\"");
+            if (color != null) out.append(",\"color\":\"").append(String.format(java.util.Locale.ROOT, "#%06X", color)).append('\"');
+            if (bold) out.append(",\"bold\":true");
+            if (italic) out.append(",\"italic\":true");
+            if (underlined) out.append(",\"underlined\":true");
+            if (strike) out.append(",\"strikethrough\":true");
+            if (obfuscated) out.append(",\"obfuscated\":true");
+            if (fontId != null && !fontId.equals("minecraft:default")) out.append(",\"font\":\"").append(jsonEscape(fontId)).append('\"');
+            out.append('}');
+        }
+        return out.append("]}").toString();
+    }
+
+    private static String jsonEscape(String value) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            switch (c) {
+                case '\\' -> b.append("\\\\");
+                case '"' -> b.append("\\\"");
+                case '\n' -> b.append("\\n");
+                case '\r' -> b.append("\\r");
+                case '\t' -> b.append("\\t");
+                default -> { if (c < 0x20) b.append(String.format(java.util.Locale.ROOT, "\\u%04x", (int)c)); else b.append(c); }
+            }
+        }
+        return b.toString();
+    }
+
     static Component parse(String raw) {
         MutableComponent result=Component.empty(); StringBuilder part=new StringBuilder();
         Style style=Style.EMPTY; int i=0;

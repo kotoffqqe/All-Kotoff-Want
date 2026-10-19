@@ -74,7 +74,7 @@ public final class TextEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить описание")), b -> applyLore()).bounds(x + 30 + half, y + 202, half, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Очистить текст и описание")), b -> clear()).bounds(x + 22, y + 230, w - 44, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 254, (w - 52) / 2, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.nameDraft(""); EditorContext.loreDraft(""); if (minecraft != null) minecraft.setScreen(new TextEditorScreen(parent)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")), b -> { EditorContext.nameDraft(""); EditorContext.loreDraft(""); if (minecraft != null) minecraft.setScreen(new TextEditorScreen(parent)); })
                 .bounds(x + 30 + (w - 52) / 2, y + 254, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
@@ -130,7 +130,7 @@ public final class TextEditorScreen extends Screen {
         super.extractRenderState(g, mx, my, delta);
         int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 300) / 2;
         int innerW = w - 44, gap = 4, bw = (innerW - gap * 6) / 7, fw = (innerW - gap * 4) / 5, half = (w - 52) / 2;
-        g.text(font, "ALL-KOTOFF-WANT", x + 22, y + 15, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("ALL-KOTOFF-WANT"), x + 22, y + 15, 0xFFF4F0FF, false);
         g.text(font, UiText.t("ТЕКСТ И ОПИСАНИЕ"), x + 22, y + 32, 0xFFB49AFF, false);
         g.text(font, UiText.t("НАЗВАНИЕ"), x + 22, y + 46, 0xFFB4A9C9, false);
         g.text(font, UiText.t("ОПИСАНИЕ · разделитель строк: |"), x + 22, y + 88, 0xFFB4A9C9, false);

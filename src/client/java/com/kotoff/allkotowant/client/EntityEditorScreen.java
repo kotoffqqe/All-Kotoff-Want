@@ -25,7 +25,7 @@ public final class EntityEditorScreen extends Screen {
     private String status = "Нужны права на /summon (читы или оператор)";
     private long openedAt;
 
-    public EntityEditorScreen(Screen parent) { super(Component.literal("All-Kotoff-Want: Создать моба")); this.parent = parent; }
+    public EntityEditorScreen(Screen parent) { super(Component.literal(UiText.t("All-Kotoff-Want: Создать моба"))); this.parent = parent; }
 
     @Override protected void init() {
         try { mobIndex = Math.max(0, Math.min(MOBS.length - 1, Integer.parseInt(EditorContext.draft("entity.mob", "0")))); } catch (NumberFormatException ignored) { mobIndex = 0; }
@@ -39,32 +39,35 @@ public final class EntityEditorScreen extends Screen {
         }).bounds(x + 22, y + 48, w - 44, 22).build(); addRenderableWidget(mobButton);
         health = field(x + 22, y + 94, 92, "Здоровье", "entity.health", "40");
         customName = field(x + 126, y + 94, w - 148, "Имя (необязательно)", "entity.name", "");
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Цвет и формат ника  ✦")), b -> {
+            if (minecraft != null) minecraft.setScreen(new MobNameStyleScreen(this));
+        }).bounds(x + 126, y + 118, w - 148, 18).build());
         int half = (w - 52) / 2, gap = 8;
-        addRenderableWidget(Button.builder(Component.literal("Оружие: " + shortId(EditorContext.draft("entity.hand", "minecraft:diamond_sword"))), b -> openItemPicker(CreativeItemPickerScreen.Kind.WEAPON, "entity.hand", "minecraft:diamond_sword", b))
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Шлем: ") + shortId(EditorContext.draft("entity.head", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.HEAD, "entity.head", "", b))
                 .bounds(x + 22, y + 142, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Шлем: " + shortId(EditorContext.draft("entity.head", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.ARMOR, "entity.head", "", b))
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Нагрудник: ") + shortId(EditorContext.draft("entity.chest", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.CHEST, "entity.chest", "", b))
                 .bounds(x + 30 + half, y + 142, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Нагрудник: " + shortId(EditorContext.draft("entity.chest", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.ARMOR, "entity.chest", "", b))
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Поножи: ") + shortId(EditorContext.draft("entity.legs", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.LEGS, "entity.legs", "", b))
                 .bounds(x + 22, y + 190, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Поножи: " + shortId(EditorContext.draft("entity.legs", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.ARMOR, "entity.legs", "", b))
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Ботинки: ") + shortId(EditorContext.draft("entity.feet", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.FEET, "entity.feet", "", b))
                 .bounds(x + 30 + half, y + 190, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Ботинки: " + shortId(EditorContext.draft("entity.feet", ""))), b -> openItemPicker(CreativeItemPickerScreen.Kind.ARMOR, "entity.feet", "", b))
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Оружие: ") + shortId(EditorContext.draft("entity.hand", "minecraft:diamond_sword"))), b -> openItemPicker(CreativeItemPickerScreen.Kind.WEAPON, "entity.hand", "minecraft:diamond_sword", b))
                 .bounds(x + 22, y + 238, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Настроить эффекты…"), b -> { if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(this)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Настроить эффекты…")), b -> { if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(this)); })
                 .bounds(x + 30 + half, y + 238, half, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Создать моба"), b -> summon()).bounds(x + 22, y + 278, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal("Назад"), b -> back()).bounds(x + 22, y + 309, (w - 52) / 2, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { resetTab(); if (minecraft != null) minecraft.setScreen(new EntityEditorScreen(parent)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Создать моба")), b -> summon()).bounds(x + 22, y + 278, w - 44, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 309, (w - 52) / 2, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")), b -> { resetTab(); if (minecraft != null) minecraft.setScreen(new EntityEditorScreen(parent)); })
                 .bounds(x + 30 + (w - 52) / 2, y + 309, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
 
     private EditBox field(int x, int y, int w, String hint, String key, String fallback) {
-        EditBox box = new EditBox(font, x, y, w, 20, Component.literal(hint));
+        EditBox box = new EditBox(font, x, y, w, 20, Component.literal(UiText.t(hint)));
         box.setMaxLength(100); box.setValue(EditorContext.draft(key, fallback));
-        box.setResponder(v -> EditorContext.setDraft(key, v)); box.setHint(Component.literal(hint)); addRenderableWidget(box); return box;
+        box.setResponder(v -> EditorContext.setDraft(key, v)); box.setHint(Component.literal(UiText.t(hint))); addRenderableWidget(box); return box;
     }
-    private Component mobLabel() { return Component.literal("Моб: " + MOBS[mobIndex].name() + "  ›"); }
+    private Component mobLabel() { return Component.literal(UiText.t("Моб: ") + MOBS[mobIndex].name() + "  ›"); }
     private void openItemPicker(CreativeItemPickerScreen.Kind kind, String key, String fallback, Button button) {
         if (minecraft == null) return;
         minecraft.setScreen(new CreativeItemPickerScreen(this, kind, id -> {
@@ -72,7 +75,7 @@ public final class EntityEditorScreen extends Screen {
             if (button != null) button.setMessage(Component.literal(labelFor(key) + shortId(id)));
         }));
     }
-    private String labelFor(String key) { return switch (key) { case "entity.hand" -> "Оружие: "; case "entity.head" -> "Шлем: "; case "entity.chest" -> "Нагрудник: "; case "entity.legs" -> "Поножи: "; default -> "Ботинки: "; }; }
+    private String labelFor(String key) { return switch (key) { case "entity.hand" -> UiText.t("Оружие: "); case "entity.head" -> UiText.t("Шлем: "); case "entity.chest" -> UiText.t("Нагрудник: "); case "entity.legs" -> UiText.t("Поножи: "); default -> UiText.t("Ботинки: "); }; }
     private static String shortId(String id) { if (id == null || id.isBlank()) return "пусто"; String[] p = id.split(":", 2); String value = p.length == 2 ? p[1] : id; return value.length() > 18 ? value.substring(0, 17) + "…" : value; }
     private void resetTab() { EditorContext.resetDraftPrefix("entity."); EditorContext.resetDraftPrefix("mobfx."); status = "Настройки моба сброшены к исходным"; }
     private String itemSnbt(String id) {
@@ -90,7 +93,11 @@ public final class EntityEditorScreen extends Screen {
         if (handS == null || headS == null || chestS == null || legsS == null || feetS == null) { status = "Предметы указывай как minecraft:diamond_sword"; return; }
         StringBuilder data = new StringBuilder("{Health:").append(hp).append("f,attributes:[{id:\"minecraft:max_health\",base:").append(hp).append("}],equipment:{mainhand:").append(handS).append(",head:").append(headS).append(",chest:").append(chestS).append(",legs:").append(legsS).append(",feet:").append(feetS).append("}");
         String name = customName.getValue().trim();
-        if (!name.isEmpty()) data.append(",CustomName:'{\"text\":\"").append(name.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'")).append("\"}'");
+        if (!name.isEmpty()) {
+            String fontId = EditorContext.draft("entity.namefont", "minecraft:default");
+            String json = StyledText.toJson(name, fontId);
+            data.append(",CustomName:'").append(json.replace("\\", "\\\\").replace("'", "\\'")).append("'");
+        }
         String effects = MobEffectsScreen.commandTag();
         if (effects.startsWith("ERROR:")) { status = effects.substring(7).trim(); return; }
         data.append(effects).append('}');
@@ -102,21 +109,22 @@ public final class EntityEditorScreen extends Screen {
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
         EditorContext.renderBackdrop(this, g, mx, my, delta); super.extractRenderState(g, mx, my, delta);
         int w = Math.min(500, width - 24), x = (width - w) / 2, y = Math.max(8, (height - 390) / 2);
-        g.text(font, "ALL-KOTOFF-WANT", x + 28, y + 16, 0xFFF4F0FF, false);
-        g.text(font, "СОЗДАНИЕ МОБА · ЗДОРОВЬЕ / ЭКИПИРОВКА / ЭФФЕКТЫ", x + 22, y + 31, 0xFFB49AFF, false);
-        ButtonSkin.draw(g, font, x + 22, y + 48, w - 44, 22, "Моб: " + MOBS[mobIndex].name() + "  ›", mx, my);
-        g.text(font, "ЗДОРОВЬЕ / ИМЯ", x + 22, y + 83, 0xFFB49AFF, false);
+        g.text(font, UiText.t("ALL-KOTOFF-WANT"), x + 28, y + 16, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("СОЗДАНИЕ МОБА · ЗДОРОВЬЕ / ЭКИПИРОВКА / ЭФФЕКТЫ"), x + 22, y + 31, 0xFFB49AFF, false);
+        ButtonSkin.draw(g, font, x + 22, y + 48, w - 44, 22, UiText.t("Моб: ") + MOBS[mobIndex].name() + "  ›", mx, my);
+        g.text(font, UiText.t("ЗДОРОВЬЕ / ИМЯ"), x + 22, y + 83, 0xFFB49AFF, false);
+        ButtonSkin.draw(g, font, x + 126, y + 118, w - 148, 18, UiText.t("Цвет и формат ника  ✦"), mx, my);
         int half = (w - 52) / 2;
-        ButtonSkin.draw(g, font, x + 22, y + 142, half, 22, "Оружие: " + shortId(EditorContext.draft("entity.hand", "minecraft:diamond_sword")), mx, my);
-        ButtonSkin.draw(g, font, x + 30 + half, y + 142, half, 22, "Шлем: " + shortId(EditorContext.draft("entity.head", "")), mx, my);
-        g.text(font, "БРОНЯ", x + 22, y + 179, 0xFFB49AFF, false);
-        ButtonSkin.draw(g, font, x + 22, y + 190, half, 22, "Нагрудник: " + shortId(EditorContext.draft("entity.chest", "")), mx, my);
-        ButtonSkin.draw(g, font, x + 30 + half, y + 190, half, 22, "Поножи: " + shortId(EditorContext.draft("entity.legs", "")), mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 238, half, 22, "Ботинки: " + shortId(EditorContext.draft("entity.feet", "")), mx, my);
-        ButtonSkin.draw(g, font, x + 30 + half, y + 238, half, 22, "Настроить эффекты…", mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 278, w - 44, 22, "Создать моба", mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 309, (w - 52) / 2, 20, "Назад", mx, my);
-        ButtonSkin.draw(g, font, x + 30 + (w - 52) / 2, y + 309, (w - 52) / 2, 20, "Сбросить вкладку", mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 142, half, 22, UiText.t("Шлем: ") + shortId(EditorContext.draft("entity.head", "")), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + half, y + 142, half, 22, UiText.t("Нагрудник: ") + shortId(EditorContext.draft("entity.chest", "")), mx, my);
+        g.text(font, UiText.t("БРОНЯ"), x + 22, y + 179, 0xFFB49AFF, false);
+        ButtonSkin.draw(g, font, x + 22, y + 190, half, 22, UiText.t("Поножи: ") + shortId(EditorContext.draft("entity.legs", "")), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + half, y + 190, half, 22, UiText.t("Ботинки: ") + shortId(EditorContext.draft("entity.feet", "")), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 238, half, 22, UiText.t("Оружие: ") + shortId(EditorContext.draft("entity.hand", "minecraft:diamond_sword")), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + half, y + 238, half, 22, UiText.t("Настроить эффекты…"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 278, w - 44, 22, UiText.t("Создать моба"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 309, (w - 52) / 2, 20, UiText.t("Назад"), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + (w - 52) / 2, y + 309, (w - 52) / 2, 20, UiText.t("Сбросить вкладку"), mx, my);
         g.text(font, status, x + 22, y + 354, 0xFFEAE2FF, false);
     }
     @Override public void onClose() { back(); }

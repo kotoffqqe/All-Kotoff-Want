@@ -18,7 +18,7 @@ public final class DyeEditorScreen extends Screen {
     private long openedAt;
 
     public DyeEditorScreen(Screen parent) {
-        super(Component.literal("All-Kotoff-Want: Цвет брони"));
+        super(Component.literal(UiText.t("All-Kotoff-Want: Цвет брони")));
         this.parent = parent;
     }
 
@@ -29,7 +29,7 @@ public final class DyeEditorScreen extends Screen {
         addRenderableOnly(new PanelWidget(x, y, w, 190));
         ItemStack stack = EditorContext.stack();
         int current = stack.getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(0xA06540)).rgb();
-        hexField = new EditBox(font, x + 22, y + 70, w - 44, 22, Component.literal("HEX"));
+        hexField = new EditBox(font, x + 22, y + 70, w - 44, 22, Component.literal(UiText.t("HEX")));
         hexField.setMaxLength(7);
         hexField.setValue(String.format("#%06X", current & 0xFFFFFF));
         hexField.setResponder(v -> EditorContext.setDraft("dye.hex", v));
@@ -79,7 +79,7 @@ public final class DyeEditorScreen extends Screen {
         long elapsed = Math.max(0L, System.nanoTime() - openedAt);
         float t = Math.min(1f, elapsed / 190_000_000f), eased = 1f - (float)Math.pow(1f - t, 3);
         int w = Math.min(380, width - 24), x = (width - w) / 2, y = (height - 190) / 2 + Math.round((1f - eased) * 12f);
-        g.text(font, "ALL-KOTOFF-WANT", x + 28, y + 17, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("ALL-KOTOFF-WANT"), x + 28, y + 17, 0xFFF4F0FF, false);
         g.text(font, UiText.t("ЦВЕТ КОЖАНОЙ БРОНИ"), x + 22, y + 43, 0xFFB49AFF, false);
         g.text(font, UiText.t("Введи HEX, например #AA33FF"), x + 22, y + 59, 0xFFB4A9C9, false);
         ButtonSkin.draw(g, font, x + 22, y + 104, w - 44, 22, UiText.t("Применить цвет"), mx, my);

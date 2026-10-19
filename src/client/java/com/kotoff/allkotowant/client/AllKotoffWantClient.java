@@ -35,10 +35,10 @@ public final class AllKotoffWantClient implements ClientModInitializer {
                     if (hovered == null) continue;
                     int menuSlot = accessor.allkotowant$getMenu().slots.indexOf(hovered);
                     EditorContext.select(hovered.getItem(), menuSlot, inventoryScreen);
-                    client.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), inventoryScreen));
+                    client.setScreen(new ItemEditorScreen(Component.literal(UiText.t("All-Kotoff-Want")), inventoryScreen));
                 } else if (client.screen == null) {
                     EditorContext.select(client.player.getMainHandItem(), -1, null);
-                    client.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), null));
+                    client.setScreen(new ItemEditorScreen(Component.literal(UiText.t("All-Kotoff-Want")), null));
                 }
             }
         });

@@ -38,7 +38,7 @@ public final class ItemEditorScreen extends Screen {
         addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 310));
         addRenderableWidget(Button.builder(Component.literal(UiText.languageLabel()), b -> {
             UiText.nextLanguage();
-            if (minecraft != null) minecraft.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), inventoryBackdrop));
+            if (minecraft != null) minecraft.setScreen(new ItemEditorScreen(Component.literal(UiText.t("All-Kotoff-Want")), inventoryBackdrop));
         }).bounds(left + panelWidth - 132, panelTop + 14, 110, 20).build());
         int fieldWidth = panelWidth - 44;
 
@@ -48,7 +48,7 @@ public final class ItemEditorScreen extends Screen {
         countField.setMaxLength(7);
         countField.setValue(EditorContext.draft("item.count", Integer.toString(Math.max(1, stack.getCount()))));
         countField.setResponder(v -> EditorContext.setDraft("item.count", v));
-        countField.setHint(Component.literal("1"));
+        countField.setHint(Component.literal(UiText.t("1")));
         addRenderableWidget(countField);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить")), b -> applyCount())
                 .bounds(countX + 76, panelTop + 76, 82, 22).build());
@@ -79,6 +79,9 @@ public final class ItemEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сохранённые предметы")), b -> {
                     if (minecraft != null) minecraft.setScreen(new SavedItemsScreen(this));
                 }).bounds(left + 22, buttonY + 54, fieldWidth, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("О моде")), b -> {
+                    if (minecraft != null) minecraft.setScreen(new AboutModScreen(this));
+                }).bounds(left + 22, buttonY + 80, fieldWidth, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить всё до заводских")), b -> resetAll())
                 .bounds(left + 22, panelTop + 244, fieldWidth, 20).build());
             ButtonSkin.hideVanillaButtons(this);
@@ -165,8 +168,9 @@ public final class ItemEditorScreen extends Screen {
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 28, bw, 20,
                 isLeatherDyeable(currentStack()) ? UiText.t("Цвет брони") : UiText.t("Настройки моба"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, by + 54, fw, 22, UiText.t("Сохранённые предметы"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, by + 80, fw, 20, UiText.t("О моде"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, targetY + 244, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);
-        graphics.text(this.font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
+        graphics.text(this.font, UiText.t("ALL-KOTOFF-WANT"), x + 28, y + 17, TEXT, false);
         graphics.text(this.font, UiText.t("Редактор предмета"), x + 28, y + 30, MUTED, false);
         ItemStack selected = currentStack();
         String selectedLabel = selected.isEmpty() ? UiText.t("Предмет не выбран") : selected.getHoverName().getString();

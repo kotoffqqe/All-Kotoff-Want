@@ -30,7 +30,7 @@ public final class PassengerEditorScreen extends Screen {
         passengerButton=Button.builder(passengerLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать пассажира"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),passengerIndex,i->{passengerIndex=i;EditorContext.setDraft("passenger.passenger",Integer.toString(i));if(passengerButton!=null)passengerButton.setMessage(passengerLabel());}));}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Создать мобов")),b->summon()).bounds(x+22,y+146,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->back()).bounds(x+22,y+174,(w-52)/2,20).build());
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"),b->{EditorContext.resetDraftPrefix("passenger.");if(minecraft!=null)minecraft.setScreen(new PassengerEditorScreen(parent));}).bounds(x+30+(w-52)/2,y+174,(w-52)/2,20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")),b->{EditorContext.resetDraftPrefix("passenger.");if(minecraft!=null)minecraft.setScreen(new PassengerEditorScreen(parent));}).bounds(x+30+(w-52)/2,y+174,(w-52)/2,20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
     private Component vehicleLabel(){return Component.literal(UiText.t("Нижний моб: ")+UiText.t(MOBS[vehicleIndex].name())+"  ›");}

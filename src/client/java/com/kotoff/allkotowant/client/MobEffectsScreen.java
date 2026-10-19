@@ -24,7 +24,7 @@ public final class MobEffectsScreen extends Screen {
     private final Screen parent;
     private final List<Button> toggles = new ArrayList<>();
     private String status = "Отметь эффекты, укажи уровень и длительность в секундах";
-    public MobEffectsScreen(Screen parent) { super(Component.literal("All-Kotoff-Want: Эффекты моба")); this.parent = parent; }
+    public MobEffectsScreen(Screen parent) { super(Component.literal(UiText.t("All-Kotoff-Want: Эффекты моба"))); this.parent = parent; }
 
     @Override protected void init() {
         toggles.clear();
@@ -40,9 +40,9 @@ public final class MobEffectsScreen extends Screen {
             addField(x + 207, ry, 54, "1", key(effect, "level"), "1", 3);
             addField(x + 270, ry, 78, "сек", key(effect, "seconds"), "60", 6);
         }
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("mobfx."); if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(parent)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")), b -> { EditorContext.resetDraftPrefix("mobfx."); if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(parent)); })
                 .bounds(x + 18, y + 322, 150, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Назад"), b -> { if (minecraft != null) minecraft.setScreen(parent); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> { if (minecraft != null) minecraft.setScreen(parent); })
                 .bounds(x + w - 112, y + 322, 90, 20).build());
         ButtonSkin.hideVanillaButtons(this);
     }
@@ -70,18 +70,18 @@ public final class MobEffectsScreen extends Screen {
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
         EditorContext.renderBackdrop(this, g, mx, my, delta); super.extractRenderState(g, mx, my, delta);
         int w = Math.min(520, width - 24), h = 390, x = (width - w) / 2, y = (height - h) / 2;
-        g.text(font, "ALL-KOTOFF-WANT", x + 22, y + 15, 0xFFF4F0FF, false);
-        g.text(font, "ЭФФЕКТЫ МОБА · УРОВЕНЬ / ВРЕМЯ В СЕКУНДАХ", x + 22, y + 31, 0xFFB49AFF, false);
-        g.text(font, "Эффект", x + 24, y + 43, 0xFFB4A9C9, false);
-        g.text(font, "Ур.", x + 216, y + 43, 0xFFB4A9C9, false);
-        g.text(font, "Секунд", x + 277, y + 43, 0xFFB4A9C9, false);
+        g.text(font, UiText.t("ALL-KOTOFF-WANT"), x + 22, y + 15, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("ЭФФЕКТЫ МОБА · УРОВЕНЬ / ВРЕМЯ В СЕКУНДАХ"), x + 22, y + 31, 0xFFB49AFF, false);
+        g.text(font, UiText.t("Эффект"), x + 24, y + 43, 0xFFB4A9C9, false);
+        g.text(font, UiText.t("Ур."), x + 216, y + 43, 0xFFB4A9C9, false);
+        g.text(font, UiText.t("Секунд"), x + 277, y + 43, 0xFFB4A9C9, false);
         for (int i = 0; i < EFFECTS.size(); i++) {
             Effect effect = EFFECTS.get(i); int ry = y + 52 + i * 31;
             ButtonSkin.draw(g, font, x + 18, ry, 178, 22, toggleLabel(effect), mx, my);
         }
         ButtonSkin.draw(g, font, x + 18, y + 322, 150, 20, "Сбросить вкладку", mx, my);
         ButtonSkin.draw(g, font, x + w - 112, y + 322, 90, 20, "Назад", mx, my);
-        g.text(font, "Уровень 1–255 · длительность 1–999999 секунд", x + 22, y + 354, 0xFFEAE2FF, false);
+        g.text(font, UiText.t("Уровень 1–255 · длительность 1–999999 секунд"), x + 22, y + 354, 0xFFEAE2FF, false);
     }
     @Override public void onClose() { if (minecraft != null) minecraft.setScreen(parent); }
     @Override public boolean isPauseScreen() { return false; }

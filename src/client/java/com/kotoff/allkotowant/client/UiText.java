@@ -5,10 +5,19 @@ import java.util.Map;
 
 /** Lightweight runtime localization for the editor UI. */
 public final class UiText {
-    public enum Language { RU, EN, DE }
+    public enum Language { RU, EN, DE, UK, PL, CS }
     private static Language language = Language.RU;
     private static final Map<String, String[]> TEXT = new HashMap<>();
     static {
+        TEXT.put("Цвет и формат ника моба", new String[]{"Цвет и формат ника моба", "Mob name styling", "Kreaturennamen gestalten", "Стиль імені моба", "Stylizacja nazwy moba", "Styl jména moba"});
+        TEXT.put("Цвет и формат ника  ✦", new String[]{"Цвет и формат ника  ✦", "Name color & style  ✦", "Namensfarbe & Stil  ✦", "Колір і стиль імені  ✦", "Kolor i styl nazwy  ✦", "Barva a styl jména  ✦"});
+        TEXT.put("Ник моба", new String[]{"Ник моба", "Mob name", "Kreaturenname", "Ім’я моба", "Nazwa moba", "Jméno moba"});
+        TEXT.put("Введи ник; коды цвета вставляй кнопками ниже", new String[]{"Введи ник; коды цвета вставляй кнопками ниже", "Enter a name; insert colors with the buttons", "Name eingeben; Farben mit den Schaltflächen einfügen", "Введи ім’я; додавай кольори кнопками нижче", "Wpisz nazwę; dodawaj kolory przyciskami", "Zadej jméno; barvy vlož tlačítky"});
+        TEXT.put("ЦВЕТА", new String[]{"ЦВЕТА", "COLORS", "FARBEN", "КОЛЬОРИ", "KOLORY", "BARVY"});
+        TEXT.put("ФОРМАТИРОВАНИЕ", new String[]{"ФОРМАТИРОВАНИЕ", "FORMATTING", "FORMATIERUNG", "ФОРМАТУВАННЯ", "FORMATOWANIE", "FORMÁTOVÁNÍ"});
+        TEXT.put("Очистить ник", new String[]{"Очистить ник", "Clear name", "Namen löschen", "Очистити ім’я", "Wyczyść nazwę", "Vymazat jméno"});
+        TEXT.put("Готово", new String[]{"Готово", "Done", "Fertig", "Готово", "Gotowe", "Hotovo"});
+        TEXT.put("Сбросить ник", new String[]{"Сбросить ник", "Reset name", "Namen zurücksetzen", "Скинути ім’я", "Resetuj nazwę", "Obnovit jméno"});
         TEXT.put("Выбрать зачарование", new String[]{"Выбрать зачарование", "Choose enchantment", "Verzauberung wählen"});
         TEXT.put("Выбрать моба", new String[]{"Выбрать моба", "Choose entity", "Kreatur wählen"});
         TEXT.put("Выбрать нижнего моба", new String[]{"Выбрать нижнего моба", "Choose vehicle", "Träger wählen"});
@@ -306,14 +315,130 @@ public final class UiText {
         TEXT.put("Бонус кислорода", new String[]{"Бонус кислорода", "Oxygen bonus", "Sauerstoffbonus"});
     }
 
+    private static final Map<String, String[]> EXTRA = new HashMap<>();
+    static {
+        // Full labels for the newly supported languages; entries use order RU, EN, DE, UK, PL, CS.
+        put("Язык: Русский", "Язык: Русский", "Language: English", "Sprache: Deutsch", "Мова: Українська", "Język: polski", "Jazyk: čeština");
+        put("Английский", "Английский", "English", "Englisch", "Англійська", "Angielski", "Angličtina");
+        put("Немецкий", "Немецкий", "German", "Deutsch", "Німецька", "Niemiecki", "Němčina");
+        put("Русский", "Русский", "Russian", "Russisch", "Українська", "Rosyjski", "Ruština");
+        put("Украинский", "Украинский", "Ukrainian", "Ukrainisch", "Українська", "Ukraiński", "Ukrajinština");
+        put("Польский", "Польский", "Polish", "Polnisch", "Польська", "Polski", "Polština");
+        put("Чешский", "Чешский", "Czech", "Tschechisch", "Чеська", "Czeski", "Čeština");
+        put("Редактор предмета", "Редактор предмета", "Item editor", "Gegenstands-Editor", "Редактор предмета", "Edytor przedmiotu", "Editor předmětů");
+        put("Сохранённые предметы", "Сохранённые предметы", "Saved items", "Gespeicherte Gegenstände", "Збережені предмети", "Zapisane przedmioty", "Uložené předměty");
+        put("Сбросить вкладку", "Сбросить вкладку", "Reset tab", "Registerkarte zurücksetzen", "Скинути вкладку", "Resetuj kartę", "Obnovit kartu");
+        put("Назад", "Назад", "Back", "Zurück", "Назад", "Wstecz", "Zpět");
+        put("Выбрать броню", "Выбрать броню", "Choose armor", "Rüstung auswählen", "Вибрати броню", "Wybierz zbroję", "Vybrat zbroj");
+        put("Выбрать оружие", "Выбрать оружие", "Choose weapon", "Waffe auswählen", "Вибрати зброю", "Wybierz broń", "Vybrat zbraň");
+        put("Поиск предмета", "Поиск предмета", "Search items", "Gegenstände suchen", "Пошук предметів", "Szukaj przedmiotów", "Hledat předměty");
+        put("Поиск по названию или ID…", "Поиск по названию или ID…", "Search by name or ID…", "Nach Name oder ID suchen…", "Пошук за назвою або ID…", "Szukaj według nazwy lub ID…", "Hledat podle názvu nebo ID…");
+        put("ВЫБОР БРОНИ", "ВЫБОР БРОНИ", "ARMOR SELECTION", "RÜSTUNG AUSWÄHLEN", "ВИБІР БРОНІ", "WYBÓR ZBROI", "VÝBĚR ZBROJE");
+        put("ВЫБОР ОРУЖИЯ", "ВЫБОР ОРУЖИЯ", "WEAPON SELECTION", "WAFFENAUSWAHL", "ВИБІР ЗБРОЇ", "WYBÓR BRONI", "VÝBĚR ZBRANĚ");
+        put("Предметы · нажми на иконку · поиск по названию или ID", "Предметы · нажми на иконку · поиск по названию или ID", "Items · click an icon · search by name or ID", "Gegenstände · Symbol anklicken · nach Name oder ID suchen", "Предмети · натисни іконку · пошук за назвою або ID", "Przedmioty · kliknij ikonę · szukaj po nazwie lub ID", "Předměty · klikni na ikonu · hledej podle názvu nebo ID");
+        put("Колесо — прокрутка · Esc — назад", "Колесо — прокрутка · Esc — назад", "Wheel to scroll · Esc to go back", "Mausrad zum Scrollen · Esc zurück", "Коліщатко — прокрутка · Esc — назад", "Kółko — przewijanie · Esc — wstecz", "Kolečko — posun · Esc — zpět");
+        put("предметов", "предметов", "items", "Gegenstände", "предметів", "przedmiotów", "předmětů");
+        put("Предметы: поиск, выбор и библиотека", "Предметы: поиск, выбор и библиотека", "Items: search, selection and library", "Gegenstände: Suche, Auswahl und Bibliothek", "Предмети: пошук, вибір і бібліотека", "Przedmioty: wyszukiwanie, wybór i biblioteka", "Předměty: hledání, výběr a knihovna");
+        put("Выдача предметов в выбранный слот хотбара", "Выдача предметов в выбранный слот хотбара", "Give items to the selected hotbar slot", "Gegenstände in den ausgewählten Schnellleisten-Slot geben", "Видача предметів у вибраний слот панелі швидкого доступу", "Dawaj przedmioty do wybranego slotu paska", "Vydat předměty do vybraného slotu lišty");
+        put("Имя, описание, чары, атрибуты, цвет брони и стаки", "Имя, описание, чары, атрибуты, цвет брони и стаки", "Names, lore, enchantments, attributes, armor color and stacks", "Namen, Beschreibung, Verzauberungen, Attribute, Rüstungsfarbe und Stapel", "Ім’я, опис, чари, атрибути, колір броні та стаки", "Nazwy, opisy, zaklęcia, atrybuty, kolor zbroi i stosy", "Názvy, popisy, očarování, atributy, barva zbroje a stacky");
+        put("Мобы: здоровье, имя, броня, оружие и эффекты", "Мобы: здоровье, имя, броня, оружие и эффекты", "Mobs: health, name, armor, weapons and effects", "Kreaturen: Gesundheit, Name, Rüstung, Waffen und Effekte", "Моби: здоров’я, ім’я, броня, зброя та ефекти", "Moby: zdrowie, nazwa, zbroja, broń i efekty", "Mobové: zdraví, jméno, zbroj, zbraně a efekty");
+        put("Черновики сохраняются между открытиями", "Черновики сохраняются между открытиями", "Draft settings persist between openings", "Entwürfe bleiben zwischen dem Öffnen erhalten", "Чернетки зберігаються між відкриттями", "Wersje robocze są zachowywane między otwarciami", "Rozpracovaná nastavení se uchovávají mezi otevřeními");
+        put("Сброс отдельной вкладки к исходным настройкам", "Сброс отдельной вкладки к исходным настройкам", "Reset an individual tab to its defaults", "Einzelne Registerkarte auf Standardwerte zurücksetzen", "Скидання окремої вкладки до початкових налаштувань", "Reset pojedynczej karty do ustawień domyślnych", "Obnovit výchozí nastavení jednotlivé karty");
+        put("О моде", "О моде", "About the mod", "Über den Mod", "Про мод", "O modzie", "O modu");
+        put("Кратко о возможностях", "Кратко о возможностях", "Features at a glance", "Funktionen im Überblick", "Коротко про можливості", "Najważniejsze funkcje", "Přehled funkcí");
+        put("Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)", "Автор: Дмитрий Котов (nekotoff)");
+        put("Поиск и выбор предметов", "Поиск и выбор предметов", "Search and select items", "Gegenstände suchen und auswählen", "Пошук і вибір предметів", "Wyszukiwanie i wybór przedmiotów", "Hledání a výběr předmětů");
+        put("Сохранение предметов в библиотеку и выдача в хотбар", "Сохранение предметов в библиотеку и выдача в хотбар", "Save items to the library and give them to the hotbar", "Gegenstände speichern und in die Schnellleiste geben", "Збереження предметів у бібліотеці та видача на панель швидкого доступу", "Zapisywanie przedmiotów w bibliotece i dawanie ich na pasek", "Ukládání předmětů do knihovny a jejich vložení na lištu");
+        put("Имя, описание, зачарования, атрибуты, цвет брони и размер стака", "Имя, описание, зачарования, атрибуты, цвет брони и размер стака", "Names, lore, enchantments, attributes, armor color and stack size", "Namen, Beschreibung, Verzauberungen, Attribute, Rüstungsfarbe und Stapelgröße", "Назви, описи, чари, атрибути, колір броні та розмір стека", "Nazwy, opisy, zaklęcia, atrybuty, kolor zbroi i rozmiar stosu", "Názvy, popisy, očarování, atributy, barva zbroje a velikost stacku");
+        put("Настройка мобов: здоровье, имя, экипировка и эффекты", "Настройка мобов: здоровье, имя, экипировка и эффекты", "Mob setup: health, name, equipment and effects", "Kreaturen: Gesundheit, Name, Ausrüstung und Effekte", "Налаштування мобів: здоров’я, ім’я, спорядження та ефекти", "Konfiguracja mobów: zdrowie, nazwa, wyposażenie i efekty", "Nastavení mobů: zdraví, jméno, výbava a efekty");
+        put("Черновики настроек сохраняются между открытиями", "Черновики настроек сохраняются между открытиями", "Settings drafts persist between openings", "Einstellungsentwürfe bleiben erhalten", "Чернетки налаштувань зберігаються між відкриттями", "Wersje robocze ustawień są zachowywane", "Návrhy nastavení se uchovávají");
+        put("Сброс вкладки возвращает её настройки к исходным", "Сброс вкладки возвращает её настройки к исходным", "Reset tab restores its defaults", "Registerkarten-Reset stellt Standardwerte wieder her", "Скидання вкладки повертає початкові налаштування", "Reset karty przywraca ustawienia domyślne", "Obnovení karty vrátí výchozí nastavení");
+        put("Закрыть можно клавишей Esc", "Закрыть можно клавишей Esc", "Press Esc to close", "Mit Esc schließen", "Закрити можна клавішею Esc", "Zamknij klawiszem Esc", "Zavřete klávesou Esc");
+        put("Количество", "Количество", "Count", "Anzahl", "Кількість", "Liczba", "Počet");
+        put("Применить", "Применить", "Apply", "Anwenden", "Застосувати", "Zastosuj", "Použít");
+        put("Текст и описание", "Текст и описание", "Text and lore", "Text und Beschreibung", "Текст і опис", "Tekst i opis", "Text a popis");
+        put("Зачарования", "Зачарования", "Enchantments", "Verzauberungen", "Чари", "Zaklęcia", "Očarování");
+        put("Атрибуты", "Атрибуты", "Attributes", "Attribute", "Атрибути", "Atrybuty", "Atributy");
+        put("Цвет брони", "Цвет брони", "Armor color", "Rüstungsfarbe", "Колір броні", "Kolor zbroi", "Barva zbroje");
+        put("Настройки моба", "Настройки моба", "Mob settings", "Kreaturen-Einstellungen", "Налаштування моба", "Ustawienia moba", "Nastavení moba");
+        put("Сбросить всё до заводских", "Сбросить всё до заводских", "Reset everything", "Alles zurücksetzen", "Скинути все до заводських", "Resetuj wszystko", "Obnovit vše");
+        put("Предмет не выбран", "Предмет не выбран", "No item selected", "Kein Gegenstand ausgewählt", "Предмет не вибрано", "Nie wybrano przedmiotu", "Není vybrán žádný předmět");
+        put("В выбранной ячейке нет предмета", "В выбранной ячейке нет предмета", "No item in selected slot", "Kein Gegenstand im ausgewählten Slot", "У вибраній комірці немає предмета", "Brak przedmiotu w wybranym slocie", "Ve vybraném slotu není předmět");
+        put("Применить имя", "Применить имя", "Apply name", "Namen anwenden", "Застосувати ім’я", "Zastosuj nazwę", "Použít název");
+        put("Сбросить имя", "Сбросить имя", "Reset name", "Namen zurücksetzen", "Скинути ім’я", "Resetuj nazwę", "Obnovit název");
+        put("Описание", "Описание", "Lore", "Beschreibung", "Опис", "Opis", "Popis");
+        put("Назначить броню", "Назначить броню", "Equip armor", "Rüstung zuweisen", "Призначити броню", "Załóż zbroję", "Nasadit zbroj");
+        put("Шлем: ", "Шлем: ", "Helmet: ", "Helm: ", "Шолом: ", "Hełm: ", "Helma: ");
+        put("Нагрудник: ", "Нагрудник: ", "Chestplate: ", "Brustplatte: ", "Нагрудник: ", "Napierśnik: ", "Kyrys: ");
+        put("Поножи: ", "Поножи: ", "Leggings: ", "Beinschutz: ", "Поножі: ", "Nogawice: ", "Kalhoty: ");
+        put("Ботинки: ", "Ботинки: ", "Boots: ", "Stiefel: ", "Чоботи: ", "Buty: ", "Boty: ");
+        put("Оружие: ", "Оружие: ", "Weapon: ", "Waffe: ", "Зброя: ", "Broń: ", "Zbraň: ");
+        put("Создать моба", "Создать моба", "Summon mob", "Kreatur erstellen", "Створити моба", "Przywołaj moba", "Vyvolat moba");
+        put("Настроить эффекты…", "Настроить эффекты…", "Configure effects…", "Effekte einstellen…", "Налаштувати ефекти…", "Skonfiguruj efekty…", "Nastavit efekty…");
+        put("Моб:", "Моб:", "Mob:", "Kreatur:", "Моб:", "Mob:", "Mob:");
+        put("Здоровье", "Здоровье", "Health", "Gesundheit", "Здоров’я", "Zdrowie", "Zdraví");
+        put("Зомби", "Зомби", "Zombie", "Zombie", "Зомбі", "Zombie", "Zombie");
+        put("Скелет", "Скелет", "Skeleton", "Skelett", "Скелет", "Szkielet", "Kostlivec");
+        put("Крипер", "Крипер", "Creeper", "Creeper", "Кріпер", "Creeper", "Creeper");
+        put("Паук", "Паук", "Spider", "Spinne", "Павук", "Pająk", "Pavouk");
+        put("Ведьма", "Ведьма", "Witch", "Hexe", "Відьма", "Wiedźma", "Čarodějnice");
+        put("Ифрит", "Ифрит", "Blaze", "Lohen", "Іфрит", "Płomyk", "Blaze");
+        put("Эндермен", "Эндермен", "Enderman", "Enderman", "Ендермен", "Enderman", "Enderman");
+        put("Свинья", "Свинья", "Pig", "Schwein", "Свиня", "Świnia", "Prase");
+        put("Корова", "Корова", "Cow", "Kuh", "Корова", "Krowa", "Kráva");
+        put("Железный голем", "Железный голем", "Iron Golem", "Eisengolem", "Залізний голем", "Żelazny golem", "Železný golem");
+        put("Хранитель", "Хранитель", "Warden", "Wärter", "Вартовий", "Strażnik", "Strážce");
+        put("Дракон Края", "Дракон Края", "Ender Dragon", "Enderdrache", "Дракон Краю", "Smok Kresu", "Drak Endu");
+        put("СОЗДАНИЕ МОБА · ЗДОРОВЬЕ / ЭКИПИРОВКА / ЭФФЕКТЫ", "СОЗДАНИЕ МОБА · ЗДОРОВЬЕ / ЭКИПИРОВКА / ЭФФЕКТЫ", "MOB CREATION · HEALTH / EQUIPMENT / EFFECTS", "KREATURENERSTELLUNG · GESUNDHEIT / AUSRÜSTUNG / EFFEKTE", "СТВОРЕННЯ МОБА · ЗДОРОВ’Я / СПОРЯДЖЕННЯ / ЕФЕКТИ", "TWORZENIE MOBA · ZDROWIE / WYPOSAŻENIE / EFEKTY", "VYTVOŘENÍ MOBA · ZDRAVÍ / VÝBAVA / EFEKTY");
+        put("ЗДОРОВЬЕ / ИМЯ", "ЗДОРОВЬЕ / ИМЯ", "HEALTH / NAME", "GESUNDHEIT / NAME", "ЗДОРОВ’Я / ІМ’Я", "ZDROWIE / NAZWA", "ZDRAVÍ / JMÉNO");
+        put("БРОНЯ", "БРОНЯ", "ARMOR", "RÜSTUNG", "БРОНЯ", "ZBROJA", "ZBROJ");
+        put("Имя (необязательно)", "Имя (необязательно)", "Name (optional)", "Name (optional)", "Ім’я (необов’язково)", "Nazwa (opcjonalnie)", "Jméno (volitelné)");
+        put("Нужны права на /summon (читы или оператор)", "Нужны права на /summon (читы или оператор)", "Requires /summon permission (cheats or operator)", "Benötigt /summon-Rechte (Cheats oder Operator)", "Потрібні права на /summon (чити або оператор)", "Wymagane uprawnienia /summon (cheaty lub operator)", "Vyžaduje oprávnění /summon (cheaty nebo operátor)");
+        put("Настройки моба сброшены к исходным", "Настройки моба сброшены к исходным", "Mob settings reset to defaults", "Kreaturen-Einstellungen zurückgesetzt", "Налаштування моба скинуто до початкових", "Ustawienia moba przywrócone", "Nastavení moba obnoveno na výchozí");
+        put("Страница", "Страница", "Page", "Seite", "Сторінка", "Strona", "Stránka");
+        put("РЕДАКТОР ПРЕДМЕТА", "РЕДАКТОР ПРЕДМЕТА", "ITEM EDITOR", "GEGENSTANDS-EDITOR", "РЕДАКТОР ПРЕДМЕТА", "EDYTOR PRZEDMIOTU", "EDITOR PŘEDMĚTŮ");
+        put("РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ", "РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ", "EDITING SELECTED ITEM", "AUSGEWÄHLTER GEGENSTAND WIRD BEARBEITET", "РЕДАГУЄТЬСЯ ВИБРАНИЙ ПРЕДМЕТ", "EDYCJA WYBRANEGO PRZEDMIOTU", "UPRAVUJE SE VYBRANÝ PŘEDMĚT");
+        put("R  •  ОТКРЫТЬ РЕДАКТОР", "R  •  ОТКРЫТЬ РЕДАКТОР", "R • OPEN EDITOR", "R • EDITOR ÖFFNEN", "R • ВІДКРИТИ РЕДАКТОР", "R • OTWÓRZ EDYTOR", "R • OTEVŘÍT EDITOR");
+        put("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК", "НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК", "CLICK TO OPEN THE LIST", "KLICKEN, UM DIE LISTE ZU ÖFFNEN", "НАТИСНИ, ЩОБ ВІДКРИТИ СПИСОК", "KLIKNIJ, ABY OTWORZYĆ LISTĘ", "KLIKNUTÍM OTEVŘETE SEZNAM");
+        put("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ", "НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ", "CLICK TO OPEN THE LISTS", "KLICKEN, UM DIE LISTEN ZU ÖFFNEN", "НАТИСНИ, ЩОБ ВІДКРИТИ СПИСКИ", "KLIKNIJ, ABY OTWORZYĆ LISTY", "KLIKNUTÍM OTEVŘETE SEZNAMY");
+        put("Выбери вариант · колесо мыши — прокрутка", "Выбери вариант · колесо мыши — прокрутка", "Choose an option · mouse wheel to scroll", "Option wählen · Mausrad zum Scrollen", "Вибери варіант · коліщатко миші — прокрутка", "Wybierz opcję · kółko myszy przewija", "Vyber možnost · kolečko myši posouvá");
+        put("Esc — назад", "Esc — назад", "Esc — back", "Esc — zurück", "Esc — назад", "Esc — wstecz", "Esc — zpět");
+        put("Сохранить", "Сохранить", "Save", "Speichern", "Зберегти", "Zapisz", "Uložit");
+        put("Удалить", "Удалить", "Delete", "Löschen", "Видалити", "Usuń", "Smazat");
+        put("Выдать", "Выдать", "Give", "Geben", "Видати", "Daj", "Vydat");
+        put("Выбрать предмет", "Выбрать предмет", "Select item", "Gegenstand auswählen", "Вибрати предмет", "Wybierz przedmiot", "Vybrat předmět");
+        put("Поиск", "Поиск", "Search", "Suchen", "Пошук", "Szukaj", "Hledat");
+        put("Зачарование", "Зачарование", "Enchantment", "Verzauberung", "Чари", "Zaklęcie", "Očarování");
+        put("Уровень", "Уровень", "Level", "Stufe", "Рівень", "Poziom", "Úroveň");
+        put("Длительность", "Длительность", "Duration", "Dauer", "Тривалість", "Czas trwania", "Trvání");
+        put("Эффекты моба", "Эффекты моба", "Mob effects", "Kreatureneffekte", "Ефекти моба", "Efekty moba", "Efekty moba");
+        put("Скорость", "Скорость", "Speed", "Geschwindigkeit", "Швидкість", "Szybkość", "Rychlost");
+        put("Невидимость", "Невидимость", "Invisibility", "Unsichtbarkeit", "Невидимість", "Niewidzialność", "Neviditelnost");
+        put("Сила", "Сила", "Strength", "Stärke", "Сила", "Siła", "Síla");
+        put("Прыгучесть", "Прыгучесть", "Jump Boost", "Sprungkraft", "Стрибучість", "Wysoki skok", "Zvýšený skok");
+        put("Сопротивление", "Сопротивление", "Resistance", "Resistenz", "Опір", "Odpor", "Odolnost");
+        put("Регенерация", "Регенерация", "Regeneration", "Regeneration", "Регенерація", "Regeneracja", "Regenerace");
+        put("Огнестойкость", "Огнестойкость", "Fire Resistance", "Feuerresistenz", "Вогнестійкість", "Odporność na ogień", "Ohnivzdornost");
+        put("Замедление", "Замедление", "Slowness", "Langsamkeit", "Сповільнення", "Spowolnienie", "Zpomalení");
+    }
+    private static void put(String key, String ru, String en, String de, String uk, String pl, String cs) {
+        EXTRA.put(key, new String[]{ru, en, de, uk, pl, cs});
+    }
+
     private UiText() {}
     public static String t(String russian) {
+        String[] extra = EXTRA.get(russian);
+        if (extra != null) return extra[language.ordinal()];
         String[] values = TEXT.get(russian);
-        return values == null ? russian : values[language.ordinal()];
+        if (values == null) return russian;
+        return language.ordinal() < values.length ? values[language.ordinal()] : russian;
     }
     public static Language language() { return language; }
     public static String languageLabel() {
-        return switch (language) { case RU -> "Язык: Русский"; case EN -> "Language: English"; case DE -> "Sprache: Deutsch"; };
+        return switch (language) {
+            case RU -> "Язык: Русский"; case EN -> "Language: English"; case DE -> "Sprache: Deutsch";
+            case UK -> "Мова: Українська"; case PL -> "Język: polski"; case CS -> "Jazyk: čeština";
+        };
     }
     public static void nextLanguage() { language = Language.values()[(language.ordinal() + 1) % Language.values().length]; }
 }

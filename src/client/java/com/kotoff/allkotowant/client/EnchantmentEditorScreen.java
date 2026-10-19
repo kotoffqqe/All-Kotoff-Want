@@ -91,7 +91,7 @@ public final class EnchantmentEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать это зачарование")), b -> remove()).bounds(x+22,y+177,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x+22,y+205,(w-52)/2,20).build());
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("enchant."); if (minecraft != null) minecraft.setScreen(new EnchantmentEditorScreen(parent)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")), b -> { EditorContext.resetDraftPrefix("enchant."); if (minecraft != null) minecraft.setScreen(new EnchantmentEditorScreen(parent)); })
                 .bounds(x+30+(w-52)/2,y+205,(w-52)/2,20).build());
             ButtonSkin.hideVanillaButtons(this);
     }

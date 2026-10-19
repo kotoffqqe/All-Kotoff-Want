@@ -86,7 +86,7 @@ public final class AttributeEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать изменение этого атрибута")), b -> remove()).bounds(x + 22, y + 176, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(unbreakableLabel()), b -> toggleUnbreakable()).bounds(x + 22, y + 204, w - 44, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 232, (w - 52) / 2, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("attr."); if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(parent)); })
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить вкладку")), b -> { EditorContext.resetDraftPrefix("attr."); if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(parent)); })
                 .bounds(x + 30 + (w - 52) / 2, y + 232, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
@@ -191,7 +191,7 @@ public final class AttributeEditorScreen extends Screen {
         AttrOption option = OPTIONS.get(selected);
         ItemAttributeModifiers defaults = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : stack.getItem().components().getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
         ItemAttributeModifiers current = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : baseModifiers(stack);
-        g.text(font, "ALL-KOTOFF-WANT", x + 22, y + 17, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("ALL-KOTOFF-WANT"), x + 22, y + 17, 0xFFF4F0FF, false);
         g.text(font, UiText.t("АТРИБУТЫ"), x + 22, y + 34, 0xFFB49AFF, false);
         g.text(font, UiText.t("Стандарт") + ": " + formatted(sum(defaults, option.attribute(), false)), x + 22, y + 88, 0xFFB4A9C9, false);
         g.text(font, UiText.t("Сейчас на предмете") + ": " + formatted(sum(current, option.attribute(), false)), x + 22, y + 99, 0xFFB4A9C9, false);

@@ -126,3 +126,17 @@ The main editor now includes a language button that cycles Russian → English �
 - Save/delete operations now report persistence failures and roll back the in-memory change if writing the library file fails.
 - Library loading waits for registry access when a saved library exists, avoiding a premature title-screen load.
 - Preserved selected item/page while rebuilding the library screen.
+
+
+## v0.4.7 — Localization, about screen and equipment slots
+- Added Ukrainian, Polish and Czech to the in-editor language cycle alongside Russian, English and German. Added translated labels and picker hints for the main UI.
+- Added an “About the mod” screen with a concise feature list and author credit: Dmitry Kotov (nekotoff).
+- Split armor selection by equipment slot: helmets only for the head, chestplates/elytra for the chest, leggings for legs, and boots for feet.
+- Rearranged the mob equipment buttons so armor is grouped together and weapon selection sits to the left of the effects button.
+- Build still needs to be verified by GitHub Actions on Minecraft 26.1.2.
+
+
+## v0.4.8 — Mob name styling
+- Added a dedicated editor for mob nicknames with quick color, HEX color and formatting buttons.
+- Added standard, uniform and enchanting-table style font choices.
+- Nickname formatting is stored in the persistent draft and applied to the summon command as styled text JSON.
