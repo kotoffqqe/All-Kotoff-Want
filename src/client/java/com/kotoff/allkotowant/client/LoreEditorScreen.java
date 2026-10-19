@@ -42,7 +42,9 @@ public final class LoreEditorScreen extends Screen {
         }
         loreField = new EditBox(font, x + 22, top + 58, w - 44, 54, Component.literal(UiText.t("Описание предмета")));
         loreField.setMaxLength(1024);
-        loreField.setValue(existing);
+        String draft = EditorContext.loreDraft();
+        loreField.setValue(draft != null ? draft : existing);
+        loreField.setResponder(EditorContext::loreDraft);
         loreField.setHint(Component.literal(UiText.t("Строка 1 | Строка 2 | Строка 3")));
         addRenderableWidget(loreField);
         String[][] format = {{UiText.t("Красн."),"&c"},{UiText.t("Зел."),"&a"},{UiText.t("Голуб."),"&b"},{UiText.t("Золото"),"&6"},{UiText.t("Фиол."),"&d"},{UiText.t("Жирн."),"&l"},{UiText.t("Курсив"),"&o"},{UiText.t("Подч."),"&n"},{UiText.t("Зачерк."),"&m"},{UiText.t("Магия"),"&k"},{UiText.t("Сброс"),"&r"}};

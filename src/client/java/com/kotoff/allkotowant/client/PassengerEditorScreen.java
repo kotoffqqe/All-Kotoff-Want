@@ -21,11 +21,13 @@ public final class PassengerEditorScreen extends Screen {
     private long openedAt;
     public PassengerEditorScreen(Screen parent) { super(Component.literal(UiText.t("Посадка моба на моба"))); this.parent = parent; }
     @Override protected void init() {
+        try { vehicleIndex = Math.max(0, Math.min(MOBS.length - 1, Integer.parseInt(EditorContext.draft("passenger.vehicle", "0")))); } catch (NumberFormatException ignored) { vehicleIndex = 0; }
+        try { passengerIndex = Math.max(0, Math.min(MOBS.length - 1, Integer.parseInt(EditorContext.draft("passenger.passenger", "4")))); } catch (NumberFormatException ignored) { passengerIndex = 4; }
         openedAt=System.nanoTime(); ButtonSkin.beginAnimation();
         int w=Math.min(420,width-24),x=(width-w)/2,y=(height-220)/2;
         addRenderableOnly(new PanelWidget(x,y,w,220));
-        vehicleButton=Button.builder(vehicleLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать нижнего моба"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),vehicleIndex,i->{vehicleIndex=i;if(vehicleButton!=null)vehicleButton.setMessage(vehicleLabel());}));}).bounds(x+22,y+62,w-44,22).build(); addRenderableWidget(vehicleButton);
-        passengerButton=Button.builder(passengerLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать пассажира"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),passengerIndex,i->{passengerIndex=i;if(passengerButton!=null)passengerButton.setMessage(passengerLabel());}));}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
+        vehicleButton=Button.builder(vehicleLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать нижнего моба"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),vehicleIndex,i->{vehicleIndex=i;EditorContext.draft("passenger.vehicle",Integer.toString(i));if(vehicleButton!=null)vehicleButton.setMessage(vehicleLabel());}));}).bounds(x+22,y+62,w-44,22).build(); addRenderableWidget(vehicleButton);
+        passengerButton=Button.builder(passengerLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать пассажира"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),passengerIndex,i->{passengerIndex=i;EditorContext.draft("passenger.passenger",Integer.toString(i));if(passengerButton!=null)passengerButton.setMessage(passengerLabel());}));}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Создать мобов")),b->summon()).bounds(x+22,y+146,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->back()).bounds(x+22,y+174,w-44,20).build());
     }

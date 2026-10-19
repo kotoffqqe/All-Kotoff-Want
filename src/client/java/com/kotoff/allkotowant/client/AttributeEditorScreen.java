@@ -30,14 +30,24 @@ public final class AttributeEditorScreen extends Screen {
         int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 290) / 2;
         addRenderableOnly(new PanelWidget(x, y, w, 290));
         damageField = new EditBox(font, x + 22, y + 62, w - 44, 22, Component.literal(UiText.t("Бонус урона")));
-        damageField.setMaxLength(10); damageField.setValue("10"); addRenderableWidget(damageField);
+        damageField.setMaxLength(10); damageField.setValue(EditorContext.draft("attr.damage", existingAmount("attack_damage", "10"))); damageField.setResponder(v -> EditorContext.draft("attr.damage", v)); addRenderableWidget(damageField);
         speedField = new EditBox(font, x + 22, y + 102, w - 44, 20, Component.literal(UiText.t("Бонус скорости атаки")));
-        speedField.setMaxLength(10); speedField.setValue("1"); addRenderableWidget(speedField);
+        speedField.setMaxLength(10); speedField.setValue(EditorContext.draft("attr.speed", existingAmount("attack_speed", "1"))); speedField.setResponder(v -> EditorContext.draft("attr.speed", v)); addRenderableWidget(speedField);
         movementField = new EditBox(font, x + 22, y + 140, w - 44, 20, Component.literal(UiText.t("Бонус скорости передвижения")));
-        movementField.setMaxLength(10); movementField.setValue("0.05"); addRenderableWidget(movementField);
+        movementField.setMaxLength(10); movementField.setValue(EditorContext.draft("attr.movement", existingAmount("movement_speed", "0.05"))); movementField.setResponder(v -> EditorContext.draft("attr.movement", v)); addRenderableWidget(movementField);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Добавить бонусы")), b -> apply()).bounds(x + 22, y + 174, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать только бонусы мода")), b -> clear()).bounds(x + 22, y + 202, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 230, w - 44, 20).build());
+    }
+
+    private String existingAmount(String id, String fallback) {
+        ItemStack stack = EditorContext.stack();
+        ItemAttributeModifiers modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+        String targetId = "allkotowant:" + id;
+        return modifiers.modifiers().stream()
+                .filter(entry -> entry.modifier().id().toString().equals(targetId))
+                .map(entry -> Double.toString(entry.modifier().amount()))
+                .findFirst().orElse(fallback);
     }
 
     private Double parse(EditBox field) {

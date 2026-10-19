@@ -240,6 +240,9 @@ public final class UiText {
         TEXT.put("ЗАДЕРЖКА / МИНИМУМ", new String[]{"ЗАДЕРЖКА / МИНИМУМ", "DELAY / MINIMUM", "VERZÖGERUNG / MINIMUM"});
         TEXT.put("МАКСИМУМ / КОЛИЧЕСТВО", new String[]{"МАКСИМУМ / КОЛИЧЕСТВО", "MAXIMUM / COUNT", "MAXIMUM / ANZAHL"});
         TEXT.put("РАДИУС АКТИВАЦИИ", new String[]{"РАДИУС АКТИВАЦИИ", "ACTIVATION RANGE", "AKTIVIERUNGSREICHWEITE"});
+        TEXT.put("Сбросить всё до заводских", new String[]{"Сбросить всё до заводских", "Reset item edits", "Änderungen zurücksetzen"});
+        TEXT.put("Параметры редактора сброшены", new String[]{"Параметры редактора сброшены", "Item edits reset", "Änderungen zurückgesetzt"});
+        TEXT.put("Сброшено локально; для отправки нужен творческий режим", new String[]{"Сброшено локально; для отправки нужен творческий режим", "Reset locally; Creative mode is required to sync", "Lokal zurückgesetzt; zum Synchronisieren ist der Kreativmodus nötig"});
         TEXT.put("Моб: ", new String[]{"Моб: ", "Entity: ", "Kreatur: "});
         TEXT.put("Изменения отправлены на сервер (творческий режим)", new String[]{"Изменения отправлены на сервер (творческий режим)", "Changes sent to server (Creative mode)", "Änderungen an den Server gesendet (Kreativmodus)"});
         TEXT.put("Изменено только локально; для сохранения нужен творческий режим или поддержка сервера", new String[]{"Изменено только локально; для сохранения нужен творческий режим или поддержка сервера", "Changed locally only; Creative mode or server support is required to save", "Nur lokal geändert; zum Speichern sind Kreativmodus oder Serverunterstützung nötig"});

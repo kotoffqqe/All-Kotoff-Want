@@ -59,3 +59,18 @@ The main editor now includes a language button that cycles Russian → English �
 - More restrained graphite/lavender UI with reduced visual noise.
 - Item name and lore fields support inline formatting codes: `&0`–`&f` colors, `&#RRGGBB` custom hex colors, `&l` bold, `&o` italic, `&n` underline, `&m` strikethrough, `&k` obfuscated/magic text, and `&r` reset. Toolbar buttons insert the codes at the text cursor.
 - Attribute editor adds a main-hand movement-speed modifier, active while the item is held. This is an item attribute modifier, not a potion status effect; arbitrary potion effects while holding would require server-side handling for reliable multiplayer behavior.
+
+
+## v0.3.8
+- Added a built-in dark anime-fantasy background inspired by the user's Death Note / Creation of Adam prompt, shared across editor tabs.
+- Added a reset action for custom name, lore, enchantments, stored enchantments, and attribute modifiers.
+
+## v0.3.9
+- Keeps editor drafts keyed to the selected inventory slot and item type instead of relying on Java object identity.
+- Persists draft fields and selections across tabs for enchantments, attributes, spawner settings, mob settings, and passenger setup; the reset-all action clears these drafts.
+- Enchantment editor reads and edits existing enchantment levels, including stored enchantments on enchanted books.
+- Attribute editor preloads existing All-Kotoff-Want modifier values instead of always starting from defaults.
+- Main editor displays the selected item's icon and current display name.
+- Keeps the user's original text casing; italic formatting changes style only.
+- The bundled background asset is included in `src/main/resources/assets/allkotowant/textures/gui/death_note_bg.png`.
+- Source archive only: compilation has not been verified in this environment.

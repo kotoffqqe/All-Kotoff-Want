@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 
 /** Minimal graphite panel with a restrained lavender accent. */
 final class PanelWidget extends AbstractWidget {
-    private static final int PANEL = 0xF016171D;
+    private static final int PANEL = 0xB816171D;
     private static final int ACCENT = 0xFF9B8AFB;
     PanelWidget(int x, int y, int width, int height) { super(x,y,width,height,Component.empty()); }
     @Override protected void extractWidgetRenderState(GuiGraphicsExtractor g,int mouseX,int mouseY,float delta) {

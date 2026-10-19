@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -65,29 +66,52 @@ public final class EnchantmentEditorScreen extends Screen {
     private int selected;
     private Button choiceButton;
     private EditBox levelField;
+    private boolean loadingLevel;
     private String status = UiText.t("Выбери зачарование в списке");
     private long openedAt;
 
     public EnchantmentEditorScreen(Screen parent) { super(Component.literal(UiText.t("All-Kotoff-Want: Зачарования"))); this.parent = parent; }
 
     @Override protected void init() {
+        try { selected = Math.max(0, Math.min(OPTIONS.length - 1, Integer.parseInt(EditorContext.draft("enchant.selected", "0")))); } catch (NumberFormatException ignored) { selected = 0; }
         openedAt = System.nanoTime(); ButtonSkin.beginAnimation();
         int w = Math.min(440, width - 24), x = (width - w) / 2, y = (height - 250) / 2;
         addRenderableOnly(new PanelWidget(x,y,w,250));
         choiceButton = Button.builder(choiceLabel(), b -> {
             if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать зачарование"),
                 java.util.Arrays.stream(OPTIONS).map(o -> UiText.t(o.name())).toList(), selected, i -> {
-                    selected = i; if (choiceButton != null) choiceButton.setMessage(choiceLabel()); status = UiText.t(OPTIONS[selected].hint());
+                    selected = i; EditorContext.draft("enchant.selected", Integer.toString(i)); if (choiceButton != null) choiceButton.setMessage(choiceLabel()); loadSelectedLevel(); status = UiText.t(OPTIONS[selected].hint());
                 }));
         })
                 .bounds(x+22,y+60,w-44,24).build(); addRenderableWidget(choiceButton);
         levelField = new EditBox(font,x+22,y+111,w-44,22,Component.literal(UiText.t("Уровень зачарования")));
         levelField.setMaxLength(5); levelField.setValue("1000"); levelField.setHint(Component.literal(UiText.t("От 1 до 32767"))); addRenderableWidget(levelField);
+        levelField.setResponder(v -> { if (!loadingLevel) EditorContext.draft("enchant.level." + OPTIONS[selected].id(), v); });
+        loadSelectedLevel();
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать это зачарование")), b -> remove()).bounds(x+22,y+177,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x+22,y+205,w-44,20).build());
     }
     private Component choiceLabel() { return Component.literal(UiText.t("Выбор: ") + UiText.t(OPTIONS[selected].name()) + "  ›"); }
+    private void loadSelectedLevel() {
+        if (levelField == null) return;
+        String key = "enchant.level." + OPTIONS[selected].id();
+        String saved = EditorContext.draft(key, "");
+        if (!saved.isEmpty()) { loadingLevel = true; levelField.setValue(saved); loadingLevel = false; return; }
+        ItemStack stack = EditorContext.stack();
+        if (stack.isEmpty()) { loadingLevel = true; levelField.setValue("1000"); loadingLevel = false; return; }
+        Holder<Enchantment> ench = resolve(OPTIONS[selected].id());
+        if (ench == null) { loadingLevel = true; levelField.setValue("1000"); loadingLevel = false; return; }
+        ItemEnchantments current = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        if (stack.is(net.minecraft.world.item.Items.ENCHANTED_BOOK)) {
+            current = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+        }
+        int existing = current.getLevel(ench);
+        loadingLevel = true;
+        levelField.setValue(existing > 0 ? Integer.toString(existing) : "1000");
+        loadingLevel = false;
+        EditorContext.draft(key, levelField.getValue());
+    }
     private Holder<Enchantment> resolve(String raw) {
         if (minecraft == null || minecraft.level == null) return null;
         Identifier id = Identifier.tryParse("minecraft:" + raw);
@@ -100,15 +124,19 @@ public final class EnchantmentEditorScreen extends Screen {
         int level; try { level = Integer.parseInt(levelField.getValue().trim()); } catch (NumberFormatException e) { status = UiText.t("Уровень должен быть числом от 1 до 32767"); return; }
         if (level < 1 || level > 32767) { status = UiText.t("Допустимый уровень: от 1 до 32767"); return; }
         Holder<Enchantment> ench = resolve(OPTIONS[selected].id()); if (ench == null) { status = UiText.t("Это зачарование отсутствует в текущей версии"); return; }
-        ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(stack.getOrDefault(DataComponents.ENCHANTMENTS,ItemEnchantments.EMPTY));
-        mutable.set(ench,level); stack.set(DataComponents.ENCHANTMENTS,mutable.toImmutable());
+        boolean stored = stack.is(net.minecraft.world.item.Items.ENCHANTED_BOOK);
+        DataComponentType<ItemEnchantments> component = stored ? DataComponents.STORED_ENCHANTMENTS : DataComponents.ENCHANTMENTS;
+        ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(stack.getOrDefault(component,ItemEnchantments.EMPTY));
+        mutable.set(ench,level); stack.set(component,mutable.toImmutable());
         status = UiText.t("Добавлено: ") + UiText.t(OPTIONS[selected].name()) + " " + level + ". " + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
     private void remove() {
         ItemStack stack = EditorContext.stack(); if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
         Holder<Enchantment> ench = resolve(OPTIONS[selected].id()); if (ench == null) { status = UiText.t("Это зачарование отсутствует в текущей версии"); return; }
-        ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(stack.getOrDefault(DataComponents.ENCHANTMENTS,ItemEnchantments.EMPTY));
-        mutable.set(ench,0); stack.set(DataComponents.ENCHANTMENTS,mutable.toImmutable());
+        boolean stored = stack.is(net.minecraft.world.item.Items.ENCHANTED_BOOK);
+        DataComponentType<ItemEnchantments> component = stored ? DataComponents.STORED_ENCHANTMENTS : DataComponents.ENCHANTMENTS;
+        ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(stack.getOrDefault(component,ItemEnchantments.EMPTY));
+        mutable.set(ench,0); stack.set(component,mutable.toImmutable());
         status = UiText.t("Убрано: ") + UiText.t(OPTIONS[selected].name()) + ". " + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
