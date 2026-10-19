@@ -43,3 +43,13 @@ Version 0.3.2 fixes the decorative panel consuming mouse clicks, adds an animate
 ## Version 0.3.4 — language selector
 
 The main editor now includes a language button that cycles Russian → English → German. The selection applies to UI text throughout editor screens. Some less common descriptions may remain in Russian if a phrase is not yet included in the translation table.
+
+
+## Версия 0.3.5 — прокрутка выбора
+- Колесо мыши меняет выбранное зачарование, моба для спавнера, тип моба в редакторе сущностей и оба типа мобов в редакторе посадки.
+- Прокрутка работает, когда курсор находится над соответствующим компактным селектором; текстовые поля и кнопки ниже не перехватывают колесо.
+- Кнопки выбора оставлены как запасной способ переключения.
+
+## Version 0.3.5 — mouse-wheel selection
+- Mouse wheel changes the selected enchantment, spawner mob, entity type, and both passenger/vehicle types.
+- Scroll over the compact selector to change the selection; other controls remain unaffected.
