@@ -91,3 +91,10 @@ The main editor now includes a language button that cycles Russian â†’ English â
 - Replaced the three hard-coded attribute fields with a selectable attribute editor and default/current value readouts.
 - Removed numbered page suffixes from headings.
 - Source archive only; compilation and in-game behavior still require CI verification.
+
+
+### v0.4.2
+- Personal item library persists locally in `config/all-kotoff-want-items.json` across worlds and servers.
+- Saved stacks can be deleted or sent to the currently selected inventory slot in Creative mode.
+- Removed the spawner editor; mob settings now create a mob with chosen health, equipment/head item, name and potion effect.
+- Oversized stacks get a unique hidden marker so separate dropped stacks do not merge into each other.

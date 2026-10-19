@@ -34,8 +34,8 @@ public final class ItemEditorScreen extends Screen {
         int panelWidth = Math.min(430, this.width - 24);
         int left = (this.width - panelWidth) / 2;
 
-        int panelTop = (this.height - 290) / 2;
-        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 290));
+        int panelTop = (this.height - 310) / 2;
+        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 310));
         addRenderableWidget(Button.builder(Component.literal(UiText.languageLabel()), b -> {
             UiText.nextLanguage();
             if (minecraft != null) minecraft.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), inventoryBackdrop));
@@ -76,13 +76,11 @@ public final class ItemEditorScreen extends Screen {
                         if (minecraft != null) minecraft.setScreen(new EntityEditorScreen(this));
                     }).bounds(left + 22 + buttonWidth + gap, buttonY + 28, buttonWidth, 20).build());
         }
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Настройки спавнера")), b -> {
-                    if (minecraft != null) minecraft.setScreen(new SpawnerEditorScreen(this));
-                }).bounds(left + 22, buttonY + 54, buttonWidth, 20).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Закрыть")), b -> onClose())
-                .bounds(left + 22 + buttonWidth + gap, buttonY + 54, buttonWidth, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сохранённые предметы")), b -> {
+                    if (minecraft != null) minecraft.setScreen(new SavedItemsScreen(this));
+                }).bounds(left + 22, buttonY + 54, fieldWidth, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить всё до заводских")), b -> resetAll())
-                .bounds(left + 22, panelTop + 218, fieldWidth, 20).build());
+                .bounds(left + 22, panelTop + 244, fieldWidth, 20).build());
     }
 
     private ItemStack currentStack() {
@@ -101,9 +99,15 @@ public final class ItemEditorScreen extends Screen {
         try {
             int count = Integer.parseInt(countField.getValue().trim());
             if (count < 1 || count > 9_999_999) { status = UiText.t("Количество должно быть от 1 до 9999999"); return; }
-            // Raise this stack's own max size so non-stackable items can hold 52/64 units too.
-            stack.set(DataComponents.MAX_STACK_SIZE, Math.max(64, count));
+            // Never change MAX_STACK_SIZE: otherwise swords and other normally unique items
+            // become stackable when dropped and picked up again.
+            stack.remove(DataComponents.MAX_STACK_SIZE);
             stack.setCount(count);
+            // A unique hidden component prevents separate dropped oversized stacks from merging on pickup.
+            if (count > stack.getMaxStackSize()) {
+                net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, stack,
+                        tag -> tag.putString("all_kotoff_stack_id", java.util.UUID.randomUUID().toString()));
+            }
             EditorContext.setDraft("item.count", Integer.toString(count));
             status = ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
         } catch (NumberFormatException e) {
@@ -156,17 +160,16 @@ public final class ItemEditorScreen extends Screen {
         ButtonSkin.draw(graphics, this.font, x + 22, by + 28, bw, 20, UiText.t("Атрибуты"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 28, bw, 20,
                 isLeatherDyeable(currentStack()) ? UiText.t("Цвет брони") : UiText.t("Настройки моба"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, by + 54, bw, 20, UiText.t("Настройки спавнера"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 54, bw, 20, UiText.t("Закрыть"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, targetY + 218, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, by + 54, fw, 22, UiText.t("Сохранённые предметы"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, targetY + 244, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);
         graphics.text(this.font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
         graphics.text(this.font, UiText.t("Редактор предмета"), x + 28, y + 30, MUTED, false);
         ItemStack selected = currentStack();
         String selectedLabel = selected.isEmpty() ? UiText.t("Предмет не выбран") : selected.getHoverName().getString();
         if (!selected.isEmpty()) graphics.item(selected, x + 22, y + 42);
         graphics.text(this.font, selectedLabel, x + (selected.isEmpty() ? 22 : 44), y + 50, MUTED, false);
-        graphics.text(this.font, status, x + 22, y + 260, TEXT, false);
-        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 274, MUTED, false);
+        graphics.text(this.font, status, x + 22, y + 282, TEXT, false);
+        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 296, MUTED, false);
     }
 
     @Override

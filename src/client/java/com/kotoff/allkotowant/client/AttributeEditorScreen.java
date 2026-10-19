@@ -172,6 +172,7 @@ public final class AttributeEditorScreen extends Screen {
         g.text(font, UiText.t("АТРИБУТЫ"), x + 22, y + 34, 0xFFB49AFF, false);
         g.text(font, UiText.t("Стандарт") + ": " + formatted(sum(defaults, option.attribute(), false)), x + 22, y + 88, 0xFFB4A9C9, false);
         g.text(font, UiText.t("Сейчас на предмете") + ": " + formatted(sum(current, option.attribute(), false)), x + 22, y + 99, 0xFFB4A9C9, false);
+        ButtonSkin.draw(g, font, x + 22, y + 58, w - 44, 24, UiText.t("Атрибут: ") + UiText.t(OPTIONS.get(selected).name()) + "  ›", mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 148, w - 44, 22, UiText.t("Применить значение"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 176, w - 44, 22, UiText.t("Убрать изменение этого атрибута"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 204, w - 44, 20, UiText.t("Назад"), mx, my);

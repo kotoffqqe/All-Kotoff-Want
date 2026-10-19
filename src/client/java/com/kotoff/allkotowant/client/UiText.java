@@ -35,7 +35,7 @@ public final class UiText {
         TEXT.put("All-Kotoff-Want: Зачарования", new String[]{"All-Kotoff-Want: Зачарования", "All-Kotoff-Want: Enchantments", "All-Kotoff-Want: Verzauberungen"});
         TEXT.put("All-Kotoff-Want: Настройки моба", new String[]{"All-Kotoff-Want: Настройки моба", "All-Kotoff-Want: Entity settings", "All-Kotoff-Want: Kreaturen-Einstellungen"});
         TEXT.put("All-Kotoff-Want: Описание", new String[]{"All-Kotoff-Want: Описание", "All-Kotoff-Want: Lore", "All-Kotoff-Want: Beschreibung"});
-        TEXT.put("All-Kotoff-Want: Спавнер", new String[]{"All-Kotoff-Want: Спавнер", "All-Kotoff-Want: Spawner", "All-Kotoff-Want: Spawner"});
+
         TEXT.put("Наведи на ячейку инвентаря и нажми R", new String[]{"Наведи на ячейку инвентаря и нажми R", "Hover an inventory slot and press R", "Fahre über ein Inventarfeld und drücke R"});
         TEXT.put("Пользовательское название предмета", new String[]{"Пользовательское название предмета", "Custom item name", "Benutzerdefinierter Gegenstandsname"});
         TEXT.put("Например: Разрушитель пустоты", new String[]{"Например: Разрушитель пустоты", "Example: Void Breaker", "Beispiel: Leerenbrecher"});
@@ -45,7 +45,7 @@ public final class UiText {
         TEXT.put("Зачарования", new String[]{"Зачарования", "Enchantments", "Verzauberungen"});
         TEXT.put("Атрибуты", new String[]{"Атрибуты", "Attributes", "Attribute"});
         TEXT.put("Настройки моба", new String[]{"Настройки моба", "Entity settings", "Kreaturen-Einstellungen"});
-        TEXT.put("Настройки спавнера", new String[]{"Настройки спавнера", "Spawner settings", "Spawner-Einstellungen"});
+        TEXT.put("Сохранённые предметы", new String[]{"Сохранённые предметы", "Saved items", "Gespeicherte Gegenstände"});
         TEXT.put("Закрыть", new String[]{"Закрыть", "Close", "Schließen"});
         TEXT.put("В выбранной ячейке нет предмета", new String[]{"В выбранной ячейке нет предмета", "No item in the selected slot", "Kein Gegenstand im ausgewählten Feld"});
         TEXT.put("Имя удалено и отправлено на сервер", new String[]{"Имя удалено и отправлено на сервер", "Name removed and sent to server", "Name entfernt und an den Server gesendet"});

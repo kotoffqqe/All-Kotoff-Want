@@ -85,7 +85,7 @@ public final class EnchantmentEditorScreen extends Screen {
         })
                 .bounds(x+22,y+60,w-44,24).build(); addRenderableWidget(choiceButton);
         levelField = new EditBox(font,x+22,y+111,w-44,22,Component.literal(UiText.t("Уровень зачарования")));
-        levelField.setMaxLength(5); levelField.setValue("1000"); levelField.setHint(Component.literal(UiText.t("От 1 до 32767"))); addRenderableWidget(levelField);
+        levelField.setMaxLength(3); levelField.setValue("255"); levelField.setHint(Component.literal(UiText.t("УРОВЕНЬ (1-255)"))); addRenderableWidget(levelField);
         levelField.setResponder(v -> { if (!loadingLevel) EditorContext.setDraft("enchant.level." + OPTIONS[selected].id(), v); });
         loadSelectedLevel();
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
@@ -99,16 +99,16 @@ public final class EnchantmentEditorScreen extends Screen {
         String saved = EditorContext.draft(key, "");
         if (!saved.isEmpty()) { loadingLevel = true; levelField.setValue(saved); loadingLevel = false; return; }
         ItemStack stack = EditorContext.stack();
-        if (stack.isEmpty()) { loadingLevel = true; levelField.setValue("1000"); loadingLevel = false; return; }
+        if (stack.isEmpty()) { loadingLevel = true; levelField.setValue("255"); loadingLevel = false; return; }
         Holder<Enchantment> ench = resolve(OPTIONS[selected].id());
-        if (ench == null) { loadingLevel = true; levelField.setValue("1000"); loadingLevel = false; return; }
+        if (ench == null) { loadingLevel = true; levelField.setValue("255"); loadingLevel = false; return; }
         ItemEnchantments current = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         if (stack.is(net.minecraft.world.item.Items.ENCHANTED_BOOK)) {
             current = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         }
         int existing = current.getLevel(ench);
         loadingLevel = true;
-        levelField.setValue(existing > 0 ? Integer.toString(existing) : "1000");
+        levelField.setValue(existing > 0 ? Integer.toString(existing) : "255");
         loadingLevel = false;
         EditorContext.setDraft(key, levelField.getValue());
     }
@@ -121,8 +121,8 @@ public final class EnchantmentEditorScreen extends Screen {
     }
     private void apply() {
         ItemStack stack = EditorContext.stack(); if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
-        int level; try { level = Integer.parseInt(levelField.getValue().trim()); } catch (NumberFormatException e) { status = UiText.t("Уровень должен быть числом от 1 до 32767"); return; }
-        if (level < 1 || level > 32767) { status = UiText.t("Допустимый уровень: от 1 до 32767"); return; }
+        int level; try { level = Integer.parseInt(levelField.getValue().trim()); } catch (NumberFormatException e) { status = UiText.t("Уровень должен быть числом от 1 до 255"); return; }
+        if (level < 1 || level > 255) { status = UiText.t("Допустимый уровень: от 1 до 255"); return; }
         Holder<Enchantment> ench = resolve(OPTIONS[selected].id()); if (ench == null) { status = UiText.t("Это зачарование отсутствует в текущей версии"); return; }
         boolean stored = stack.is(net.minecraft.world.item.Items.ENCHANTED_BOOK);
         DataComponentType<ItemEnchantments> component = stored ? DataComponents.STORED_ENCHANTMENTS : DataComponents.ENCHANTMENTS;
@@ -147,7 +147,7 @@ public final class EnchantmentEditorScreen extends Screen {
         g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false); g.text(font,UiText.t("ЗАЧАРОВАНИЯ"),x+28,y+30,0xFFB4A9C9,false);
         g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК"),x+22,y+47,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+60,w-44,24,UiText.t("Выбор: ")+UiText.t(OPTIONS[selected].name())+"  ›",mx,my);
-        g.text(font,UiText.t(OPTIONS[selected].hint()),x+22,y+91,0xFFE0D7F4,false); g.text(font,UiText.t("УРОВЕНЬ (1–32767)"),x+22,y+101,0xFFB49AFF,false);
+        g.text(font,UiText.t(OPTIONS[selected].hint()),x+22,y+91,0xFFE0D7F4,false); g.text(font,UiText.t("УРОВЕНЬ (1-255)"),x+22,y+101,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+149,w-44,22,UiText.t("Применить зачарование"),mx,my);
         ButtonSkin.draw(g,font,x+22,y+177,w-44,22,UiText.t("Убрать это зачарование"),mx,my); ButtonSkin.draw(g,font,x+22,y+205,w-44,20,UiText.t("Назад"),mx,my);
         g.text(font,status,x+22,y+235,0xFFF4F0FF,false);

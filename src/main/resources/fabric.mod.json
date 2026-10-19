@@ -3,7 +3,7 @@
   "id": "allkotowant",
   "version": "${version}",
   "name": "All-Kotoff-Want",
-  "description": "Чёрно-фиолетовый редактор предметов, мобов и спавнеров в духе All-U-Want.",
+  "description": "Редактор предметов, сохранённых наборов и создаваемых мобов.",
   "environment": "client",
   "entrypoints": {
     "client": [
