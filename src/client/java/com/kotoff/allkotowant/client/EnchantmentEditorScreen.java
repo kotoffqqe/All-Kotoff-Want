@@ -90,7 +90,9 @@ public final class EnchantmentEditorScreen extends Screen {
         loadSelectedLevel();
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать это зачарование")), b -> remove()).bounds(x+22,y+177,w-44,22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x+22,y+205,w-44,20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x+22,y+205,(w-52)/2,20).build());
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("enchant."); if (minecraft != null) minecraft.setScreen(new EnchantmentEditorScreen(parent)); })
+                .bounds(x+30+(w-52)/2,y+205,(w-52)/2,20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
     private Component choiceLabel() { return Component.literal(UiText.t("Выбор: ") + UiText.t(OPTIONS[selected].name()) + "  ›"); }
@@ -150,7 +152,7 @@ public final class EnchantmentEditorScreen extends Screen {
         ButtonSkin.draw(g,font,x+22,y+60,w-44,24,UiText.t("Выбор: ")+UiText.t(OPTIONS[selected].name())+"  ›",mx,my);
         g.text(font,UiText.t(OPTIONS[selected].hint()),x+22,y+91,0xFFE0D7F4,false); g.text(font,UiText.t("УРОВЕНЬ (1-255)"),x+22,y+101,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+149,w-44,22,UiText.t("Применить зачарование"),mx,my);
-        ButtonSkin.draw(g,font,x+22,y+177,w-44,22,UiText.t("Убрать это зачарование"),mx,my); ButtonSkin.draw(g,font,x+22,y+205,w-44,20,UiText.t("Назад"),mx,my);
+        ButtonSkin.draw(g,font,x+22,y+177,w-44,22,UiText.t("Убрать это зачарование"),mx,my); ButtonSkin.draw(g,font,x+22,y+205,(w-52)/2,20,UiText.t("Назад"),mx,my); ButtonSkin.draw(g,font,x+30+(w-52)/2,y+205,(w-52)/2,20,"Сбросить вкладку",mx,my);
         g.text(font,status,x+22,y+235,0xFFF4F0FF,false);
     }
     @Override public void onClose(){back();} @Override public boolean isPauseScreen(){return false;}

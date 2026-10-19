@@ -105,3 +105,24 @@ The main editor now includes a language button that cycles Russian → English �
 - Rebuilt the saved-item library as a 9×3 inventory grid with working page navigation, one-click back, delete controls, and local hotbar assignment plus server sync.
 - Added a dedicated multi-effect mob editor with per-effect enable toggles, level, and duration.
 - Removed the animated offset from the mob editor so visible controls align with their click hitboxes.
+
+
+### v0.4.4
+- Библиотека: выбор предмета и отдельные кнопки «Выдать» / «Удалить» над ячейками.
+- Количество предметов: увеличенные стаки получают индивидуальный идентификатор, а обычные количества возвращаются к стандартному размеру стака.
+- Создание моба: выбор оружия и частей брони через список предметов с поиском по названию или ID и прокруткой; ручной ввод ID больше не нужен.
+- Черновики редактора сохраняются в `config/all-kotoff-want-drafts.properties` между открытиями игры.
+- Добавлены сбросы черновиков текущего раздела в редакторах мобов, эффектов, атрибутов, зачарований, текста, описания и пассажиров.
+
+## 0.4.5 — TMI-style item picker
+- Reworked armor and weapon selection into a compact creative-inventory-style icon grid.
+- Added searchable item names and IDs, hover labels, mouse-wheel paging, and page/item counts.
+- Kept selection connected to the saved mob-equipment drafts.
+
+
+## v0.4.6 — Saved item library reliability
+- Added explicit hotbar target selection (slots 1–9) before giving a saved item.
+- Giving updates the local hotbar slot, sends the creative inventory slot update, and selects that slot.
+- Save/delete operations now report persistence failures and roll back the in-memory change if writing the library file fails.
+- Library loading waits for registry access when a saved library exists, avoiding a premature title-screen load.
+- Preserved selected item/page while rebuilding the library screen.

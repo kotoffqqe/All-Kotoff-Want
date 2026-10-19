@@ -56,7 +56,9 @@ public final class LoreEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Очистить описание")), b -> clear())
                 .bounds(x + 30 + bw, top + 160, bw, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back())
-                .bounds(x + 22, top + 188, w - 44, 20).build());
+                .bounds(x + 22, top + 188, (w - 52) / 2, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.loreDraft(""); if (minecraft != null) minecraft.setScreen(new LoreEditorScreen(parent)); })
+                .bounds(x + 30 + (w - 52) / 2, top + 188, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
 
@@ -104,7 +106,8 @@ public final class LoreEditorScreen extends Screen {
         for(int i=0;i<format.length;i++){int col=i%6,row=i/6;ButtonSkin.draw(graphics,font,x+22+col*(fw+fg),y+117+row*20,fw,18,format[i][0],mouseX,mouseY);}
         ButtonSkin.draw(graphics, font, x + 22, y + 160, bw, 22, UiText.t("Применить описание"), mouseX, mouseY);
         ButtonSkin.draw(graphics, font, x + 30 + bw, y + 160, bw, 22, UiText.t("Очистить описание"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, font, x + 22, y + 188, w - 44, 20, UiText.t("Назад"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, font, x + 22, y + 188, (w - 52) / 2, 20, UiText.t("Назад"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, font, x + 30 + (w - 52) / 2, y + 188, (w - 52) / 2, 20, "Сбросить вкладку", mouseX, mouseY);
         graphics.text(font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
         graphics.text(font, UiText.t("РЕДАКТОР ОПИСАНИЯ"), x + 28, y + 30, MUTED, false);
         graphics.text(font, UiText.t("ТЕКСТ ОПИСАНИЯ"), x + 22, y + 49, 0xFFB49AFF, false);

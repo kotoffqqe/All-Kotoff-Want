@@ -100,15 +100,18 @@ public final class ItemEditorScreen extends Screen {
         try {
             int count = Integer.parseInt(countField.getValue().trim());
             if (count < 1 || count > 9_999_999) { status = UiText.t("Количество должно быть от 1 до 9999999"); return; }
-            // Never change MAX_STACK_SIZE: otherwise swords and other normally unique items
-            // become stackable when dropped and picked up again.
-            stack.remove(DataComponents.MAX_STACK_SIZE);
-            stack.setCount(count);
-            // A unique hidden component prevents separate dropped oversized stacks from merging on pickup.
-            if (count > stack.getMaxStackSize()) {
+            int naturalMax = stack.getItem().getDefaultMaxStackSize();
+            if (count > naturalMax) {
+                // Keep the oversized amount as a real stack. A unique component makes independently
+                // created oversized stacks distinct, so they do not merge with each other on pickup.
+                stack.set(DataComponents.MAX_STACK_SIZE, Math.min(count, 99));
                 net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, stack,
                         tag -> tag.putString("all_kotoff_stack_id", java.util.UUID.randomUUID().toString()));
+            } else {
+                stack.remove(DataComponents.MAX_STACK_SIZE);
+                net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.remove("all_kotoff_stack_id"));
             }
+            stack.setCount(count);
             EditorContext.setDraft("item.count", Integer.toString(count));
             status = ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
         } catch (NumberFormatException e) {

@@ -29,7 +29,8 @@ public final class PassengerEditorScreen extends Screen {
         vehicleButton=Button.builder(vehicleLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать нижнего моба"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),vehicleIndex,i->{vehicleIndex=i;EditorContext.setDraft("passenger.vehicle",Integer.toString(i));if(vehicleButton!=null)vehicleButton.setMessage(vehicleLabel());}));}).bounds(x+22,y+62,w-44,22).build(); addRenderableWidget(vehicleButton);
         passengerButton=Button.builder(passengerLabel(),b->{if(minecraft!=null)minecraft.setScreen(new CompactPickerScreen(this,UiText.t("Выбрать пассажира"),java.util.Arrays.stream(MOBS).map(m->UiText.t(m.name())).toList(),passengerIndex,i->{passengerIndex=i;EditorContext.setDraft("passenger.passenger",Integer.toString(i));if(passengerButton!=null)passengerButton.setMessage(passengerLabel());}));}).bounds(x+22,y+108,w-44,22).build(); addRenderableWidget(passengerButton);
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Создать мобов")),b->summon()).bounds(x+22,y+146,w-44,22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->back()).bounds(x+22,y+174,w-44,20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")),b->back()).bounds(x+22,y+174,(w-52)/2,20).build());
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"),b->{EditorContext.resetDraftPrefix("passenger.");if(minecraft!=null)minecraft.setScreen(new PassengerEditorScreen(parent));}).bounds(x+30+(w-52)/2,y+174,(w-52)/2,20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
     private Component vehicleLabel(){return Component.literal(UiText.t("Нижний моб: ")+UiText.t(MOBS[vehicleIndex].name())+"  ›");}
@@ -49,7 +50,7 @@ public final class PassengerEditorScreen extends Screen {
         g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ"),x+22,y+49,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+62,w-44,22,UiText.t("Нижний моб: ")+UiText.t(MOBS[vehicleIndex].name())+"  ›",mx,my);
         ButtonSkin.draw(g,font,x+22,y+108,w-44,22,UiText.t("Пассажир сверху: ")+UiText.t(MOBS[passengerIndex].name())+"  ›",mx,my);
-        ButtonSkin.draw(g,font,x+22,y+146,w-44,22,UiText.t("Создать мобов"),mx,my);ButtonSkin.draw(g,font,x+22,y+174,w-44,20,UiText.t("Назад"),mx,my);
+        ButtonSkin.draw(g,font,x+22,y+146,w-44,22,UiText.t("Создать мобов"),mx,my);ButtonSkin.draw(g,font,x+22,y+174,(w-52)/2,20,UiText.t("Назад"),mx,my);ButtonSkin.draw(g,font,x+30+(w-52)/2,y+174,(w-52)/2,20,"Сбросить вкладку",mx,my);
         g.text(font,status,x+22,y+203,0xFFEAE2FF,false);
     }
     @Override public void onClose(){back();}@Override public boolean isPauseScreen(){return false;}

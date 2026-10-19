@@ -29,9 +29,13 @@ final class SavedItemStore {
     }
     static void load() {
         if (loaded) return;
-        loaded = true;
         Path path = path();
-        if (!Files.exists(path)) return;
+        if (!Files.exists(path)) { loaded = true; return; }
+        Minecraft client = Minecraft.getInstance();
+        // Registry-aware item codecs need a world/player registry access. Retry later instead of
+        // marking the library loaded while the client is still at the title screen.
+        if (client.level == null && client.player == null) return;
+        loaded = true;
         try {
             JsonElement root = JsonParser.parseString(Files.readString(path, StandardCharsets.UTF_8));
             if (!root.isJsonArray()) return;
@@ -44,7 +48,7 @@ final class SavedItemStore {
             }
         } catch (Exception ignored) { }
     }
-    private static void saveFile() {
+    private static boolean saveFile() {
         JsonArray array = new JsonArray();
         var ops = ops();
         for (ItemStack stack : ITEMS) {
@@ -54,20 +58,31 @@ final class SavedItemStore {
         try {
             Files.createDirectories(path().getParent());
             Files.writeString(path(), GSON.toJson(array), StandardCharsets.UTF_8);
-        } catch (IOException ignored) { }
+            return true;
+        } catch (IOException ignored) { return false; }
     }
     private static com.mojang.serialization.DynamicOps<JsonElement> ops() {
         var client = Minecraft.getInstance();
-        return client.level != null ? RegistryOps.create(JsonOps.INSTANCE, client.level.registryAccess()) : JsonOps.INSTANCE;
+        if (client.level != null) return RegistryOps.create(JsonOps.INSTANCE, client.level.registryAccess());
+        if (client.player != null) return RegistryOps.create(JsonOps.INSTANCE, client.player.level().registryAccess());
+        return JsonOps.INSTANCE;
     }
     static List<ItemStack> all() { load(); return ITEMS.stream().map(ItemStack::copy).toList(); }
-    static void add(ItemStack stack) {
+    static boolean add(ItemStack stack) {
         load();
-        if (stack == null || stack.isEmpty()) return;
-        ITEMS.add(stack.copy()); saveFile();
+        if (stack == null || stack.isEmpty()) return false;
+        ITEMS.add(stack.copy());
+        if (saveFile()) return true;
+        ITEMS.remove(ITEMS.size() - 1);
+        return false;
     }
-    static void remove(int index) {
-        load(); if (index >= 0 && index < ITEMS.size()) { ITEMS.remove(index); saveFile(); }
+    static boolean remove(int index) {
+        load();
+        if (index < 0 || index >= ITEMS.size()) return false;
+        ItemStack removed = ITEMS.remove(index);
+        if (saveFile()) return true;
+        ITEMS.add(Math.min(index, ITEMS.size()), removed);
+        return false;
     }
     static int size() { load(); return ITEMS.size(); }
 }

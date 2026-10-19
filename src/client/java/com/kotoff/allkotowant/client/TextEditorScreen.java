@@ -73,7 +73,9 @@ public final class TextEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить текст")), b -> applyName()).bounds(x + 22, y + 202, half, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить описание")), b -> applyLore()).bounds(x + 30 + half, y + 202, half, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Очистить текст и описание")), b -> clear()).bounds(x + 22, y + 230, w - 44, 20).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 254, w - 44, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 254, (w - 52) / 2, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.nameDraft(""); EditorContext.loreDraft(""); if (minecraft != null) minecraft.setScreen(new TextEditorScreen(parent)); })
+                .bounds(x + 30 + (w - 52) / 2, y + 254, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
 
@@ -139,7 +141,8 @@ public final class TextEditorScreen extends Screen {
         ButtonSkin.draw(g, font, x + 22, y + 202, half, 22, UiText.t("Применить текст"), mx, my);
         ButtonSkin.draw(g, font, x + 30 + half, y + 202, half, 22, UiText.t("Применить описание"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 230, w - 44, 20, UiText.t("Очистить текст и описание"), mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 254, w - 44, 20, UiText.t("Назад"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 254, (w - 52) / 2, 20, UiText.t("Назад"), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + (w - 52) / 2, y + 254, (w - 52) / 2, 20, "Сбросить вкладку", mx, my);
         g.text(font, status, x + 22, y + 282, 0xFFF4F0FF, false);
     }
 

@@ -40,6 +40,8 @@ public final class MobEffectsScreen extends Screen {
             addField(x + 207, ry, 54, "1", key(effect, "level"), "1", 3);
             addField(x + 270, ry, 78, "сек", key(effect, "seconds"), "60", 6);
         }
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("mobfx."); if (minecraft != null) minecraft.setScreen(new MobEffectsScreen(parent)); })
+                .bounds(x + 18, y + 322, 150, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Назад"), b -> { if (minecraft != null) minecraft.setScreen(parent); })
                 .bounds(x + w - 112, y + 322, 90, 20).build());
         ButtonSkin.hideVanillaButtons(this);
@@ -77,6 +79,7 @@ public final class MobEffectsScreen extends Screen {
             Effect effect = EFFECTS.get(i); int ry = y + 52 + i * 31;
             ButtonSkin.draw(g, font, x + 18, ry, 178, 22, toggleLabel(effect), mx, my);
         }
+        ButtonSkin.draw(g, font, x + 18, y + 322, 150, 20, "Сбросить вкладку", mx, my);
         ButtonSkin.draw(g, font, x + w - 112, y + 322, 90, 20, "Назад", mx, my);
         g.text(font, "Уровень 1–255 · длительность 1–999999 секунд", x + 22, y + 354, 0xFFEAE2FF, false);
     }

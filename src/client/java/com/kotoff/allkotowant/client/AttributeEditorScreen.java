@@ -85,7 +85,9 @@ public final class AttributeEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить значение")), b -> apply()).bounds(x + 22, y + 148, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать изменение этого атрибута")), b -> remove()).bounds(x + 22, y + 176, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(unbreakableLabel()), b -> toggleUnbreakable()).bounds(x + 22, y + 204, w - 44, 20).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 232, w - 44, 20).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 232, (w - 52) / 2, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Сбросить вкладку"), b -> { EditorContext.resetDraftPrefix("attr."); if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(parent)); })
+                .bounds(x + 30 + (w - 52) / 2, y + 232, (w - 52) / 2, 20).build());
             ButtonSkin.hideVanillaButtons(this);
     }
 
@@ -197,7 +199,8 @@ public final class AttributeEditorScreen extends Screen {
         ButtonSkin.draw(g, font, x + 22, y + 148, w - 44, 22, UiText.t("Применить значение"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 176, w - 44, 22, UiText.t("Убрать изменение этого атрибута"), mx, my);
         ButtonSkin.draw(g, font, x + 22, y + 204, w - 44, 20, unbreakableLabel(), mx, my);
-        ButtonSkin.draw(g, font, x + 22, y + 232, w - 44, 20, UiText.t("Назад"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 232, (w - 52) / 2, 20, UiText.t("Назад"), mx, my);
+        ButtonSkin.draw(g, font, x + 30 + (w - 52) / 2, y + 232, (w - 52) / 2, 20, "Сбросить вкладку", mx, my);
         g.text(font, status, x + 22, y + 272, 0xFFF4F0FF, false);
     }
 
