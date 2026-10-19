@@ -144,7 +144,7 @@ public final class EnchantmentEditorScreen extends Screen {
         EditorContext.renderBackdrop(this,g,mx,my,delta); super.extractRenderState(g,mx,my,delta);
         long elapsed=Math.max(0L,System.nanoTime()-openedAt); float t=Math.min(1f,elapsed/190_000_000f),eased=1f-(float)Math.pow(1f-t,3);
         int w=Math.min(440,width-24),x=(width-w)/2,y=(height-250)/2+Math.round((1f-eased)*12f);
-        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false); g.text(font,UiText.t("ЗАЧАРОВАНИЯ  /  03"),x+28,y+30,0xFFB4A9C9,false);
+        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false); g.text(font,UiText.t("ЗАЧАРОВАНИЯ"),x+28,y+30,0xFFB4A9C9,false);
         g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК"),x+22,y+47,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+60,w-44,24,UiText.t("Выбор: ")+UiText.t(OPTIONS[selected].name())+"  ›",mx,my);
         g.text(font,UiText.t(OPTIONS[selected].hint()),x+22,y+91,0xFFE0D7F4,false); g.text(font,UiText.t("УРОВЕНЬ (1–32767)"),x+22,y+101,0xFFB49AFF,false);

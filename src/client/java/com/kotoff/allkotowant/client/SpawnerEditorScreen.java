@@ -64,7 +64,7 @@ public final class SpawnerEditorScreen extends Screen {
         EditorContext.renderBackdrop(this,g,mx,my,delta);super.extractRenderState(g,mx,my,delta);
         long elapsed=Math.max(0L,System.nanoTime()-openedAt);float t=Math.min(1f,elapsed/190_000_000f),eased=1f-(float)Math.pow(1f-t,3);
         int w=Math.min(440,width-24),x=(width-w)/2,y=(height-300)/2+Math.round((1f-eased)*10f);
-        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false);g.text(font,UiText.t("НАСТРОЙКА СПАВНЕРА  /  07"),x+28,y+30,0xFFB4A9C9,false);
+        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false);g.text(font,UiText.t("НАСТРОЙКА СПАВНЕРА"),x+28,y+30,0xFFB4A9C9,false);
         g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК"),x+22,y+44,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+56,w-44,24,UiText.t("Моб: ")+UiText.t(MOBS[mobIndex].name())+"  ›",mx,my);
         g.text(font,UiText.t("ЗАДЕРЖКА / МИНИМУМ"),x+22,y+88,0xFFB49AFF,false);g.text(font,UiText.t("МАКСИМУМ / КОЛИЧЕСТВО"),x+22,y+132,0xFFB49AFF,false);g.text(font,UiText.t("РАДИУС АКТИВАЦИИ"),x+22,y+176,0xFFB49AFF,false);

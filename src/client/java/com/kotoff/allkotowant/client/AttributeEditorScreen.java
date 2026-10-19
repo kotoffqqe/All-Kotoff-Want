@@ -4,21 +4,57 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import java.util.List;
+import java.util.Locale;
 
-/** Adds our modifiers without deleting the item's existing/default modifiers. */
+/** Compact attribute editor. Existing vanilla modifiers are retained; only this mod's selected modifier is replaced. */
 public final class AttributeEditorScreen extends Screen {
+    private record AttrOption(String id, String name, Holder<Attribute> attribute) {}
+    private static final List<AttrOption> OPTIONS = List.of(
+        new AttrOption("attack_damage", "Урон атаки", Attributes.ATTACK_DAMAGE),
+        new AttrOption("attack_speed", "Скорость атаки", Attributes.ATTACK_SPEED),
+        new AttrOption("attack_knockback", "Отбрасывание атаки", Attributes.ATTACK_KNOCKBACK),
+        new AttrOption("armor", "Броня", Attributes.ARMOR),
+        new AttrOption("armor_toughness", "Твёрдость брони", Attributes.ARMOR_TOUGHNESS),
+        new AttrOption("knockback_resistance", "Сопротивление отбрасыванию", Attributes.KNOCKBACK_RESISTANCE),
+        new AttrOption("max_health", "Максимальное здоровье", Attributes.MAX_HEALTH),
+        new AttrOption("movement_speed", "Скорость передвижения", Attributes.MOVEMENT_SPEED),
+        new AttrOption("flying_speed", "Скорость полёта", Attributes.FLYING_SPEED),
+        new AttrOption("follow_range", "Дальность обнаружения", Attributes.FOLLOW_RANGE),
+        new AttrOption("luck", "Удача", Attributes.LUCK),
+        new AttrOption("jump_strength", "Сила прыжка", Attributes.JUMP_STRENGTH),
+        new AttrOption("block_break_speed", "Скорость разрушения блоков", Attributes.BLOCK_BREAK_SPEED),
+        new AttrOption("block_interaction_range", "Дальность взаимодействия с блоками", Attributes.BLOCK_INTERACTION_RANGE),
+        new AttrOption("entity_interaction_range", "Дальность взаимодействия с сущностями", Attributes.ENTITY_INTERACTION_RANGE),
+        new AttrOption("gravity", "Гравитация", Attributes.GRAVITY),
+        new AttrOption("safe_fall_distance", "Безопасная высота падения", Attributes.SAFE_FALL_DISTANCE),
+        new AttrOption("step_height", "Высота шага", Attributes.STEP_HEIGHT),
+        new AttrOption("sneaking_speed", "Скорость в приседе", Attributes.SNEAKING_SPEED),
+        new AttrOption("water_movement_efficiency", "Эффективность движения в воде", Attributes.WATER_MOVEMENT_EFFICIENCY),
+        new AttrOption("movement_efficiency", "Эффективность передвижения", Attributes.MOVEMENT_EFFICIENCY),
+        new AttrOption("mining_efficiency", "Эффективность добычи", Attributes.MINING_EFFICIENCY),
+        new AttrOption("scale", "Масштаб сущности", Attributes.SCALE),
+        new AttrOption("max_absorption", "Максимальное поглощение", Attributes.MAX_ABSORPTION),
+        new AttrOption("fall_damage_multiplier", "Множитель урона от падения", Attributes.FALL_DAMAGE_MULTIPLIER),
+        new AttrOption("explosion_knockback_resistance", "Сопротивление отбрасыванию взрывом", Attributes.EXPLOSION_KNOCKBACK_RESISTANCE),
+        new AttrOption("oxygen_bonus", "Бонус кислорода", Attributes.OXYGEN_BONUS)
+    );
     private final Screen parent;
-    private EditBox damageField, speedField, movementField;
+    private int selected;
+    private Button choiceButton;
+    private EditBox amountField;
+    private boolean loading;
     private String status = UiText.t("Базовые характеристики предмета сохраняются");
-    private long openedAt;
 
     public AttributeEditorScreen(Screen parent) {
         super(Component.literal(UiText.t("All-Kotoff-Want: Атрибуты")));
@@ -26,92 +62,122 @@ public final class AttributeEditorScreen extends Screen {
     }
 
     @Override protected void init() {
-        openedAt = System.nanoTime(); ButtonSkin.beginAnimation();
-        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 290) / 2;
-        addRenderableOnly(new PanelWidget(x, y, w, 290));
-        damageField = new EditBox(font, x + 22, y + 62, w - 44, 22, Component.literal(UiText.t("Бонус урона")));
-        damageField.setMaxLength(10); damageField.setValue(EditorContext.draft("attr.damage", existingAmount("attack_damage", "10"))); damageField.setResponder(v -> EditorContext.setDraft("attr.damage", v)); addRenderableWidget(damageField);
-        speedField = new EditBox(font, x + 22, y + 102, w - 44, 20, Component.literal(UiText.t("Бонус скорости атаки")));
-        speedField.setMaxLength(10); speedField.setValue(EditorContext.draft("attr.speed", existingAmount("attack_speed", "1"))); speedField.setResponder(v -> EditorContext.setDraft("attr.speed", v)); addRenderableWidget(speedField);
-        movementField = new EditBox(font, x + 22, y + 140, w - 44, 20, Component.literal(UiText.t("Бонус скорости передвижения")));
-        movementField.setMaxLength(10); movementField.setValue(EditorContext.draft("attr.movement", existingAmount("movement_speed", "0.05"))); movementField.setResponder(v -> EditorContext.setDraft("attr.movement", v)); addRenderableWidget(movementField);
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Добавить бонусы")), b -> apply()).bounds(x + 22, y + 174, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать только бонусы мода")), b -> clear()).bounds(x + 22, y + 202, w - 44, 22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 230, w - 44, 20).build());
+        try { selected = Math.max(0, Math.min(OPTIONS.size() - 1, Integer.parseInt(EditorContext.draft("attr.selected", "0")))); }
+        catch (NumberFormatException ignored) { selected = 0; }
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 280) / 2;
+        addRenderableOnly(new PanelWidget(x, y, w, 280));
+        choiceButton = Button.builder(choiceLabel(), b -> {
+            if (minecraft != null) minecraft.setScreen(new CompactPickerScreen(this, UiText.t("Выбрать атрибут"),
+                    OPTIONS.stream().map(AttrOption::name).map(UiText::t).toList(), selected, i -> {
+                        selected = i;
+                        EditorContext.setDraft("attr.selected", Integer.toString(i));
+                        if (choiceButton != null) choiceButton.setMessage(choiceLabel());
+                        loadAmount();
+                    }));
+        }).bounds(x + 22, y + 58, w - 44, 24).build();
+        addRenderableWidget(choiceButton);
+        amountField = new EditBox(font, x + 22, y + 112, w - 44, 22, Component.literal(UiText.t("Значение атрибута")));
+        amountField.setMaxLength(18);
+        amountField.setResponder(v -> { if (!loading) EditorContext.setDraft("attr.value." + OPTIONS.get(selected).id(), v); });
+        addRenderableWidget(amountField);
+        loadAmount();
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить значение")), b -> apply()).bounds(x + 22, y + 148, w - 44, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать изменение этого атрибута")), b -> remove()).bounds(x + 22, y + 176, w - 44, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 204, w - 44, 20).build());
     }
 
-    private String existingAmount(String id, String fallback) {
-        ItemStack stack = EditorContext.stack();
-        ItemAttributeModifiers modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
-        String targetId = "allkotowant:" + id;
+    private Component choiceLabel() { return Component.literal(UiText.t("Атрибут: ") + UiText.t(OPTIONS.get(selected).name()) + "  ›"); }
+
+    private ItemAttributeModifiers baseModifiers(ItemStack stack) {
+        ItemAttributeModifiers explicit = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+        return explicit != null ? explicit : stack.getItem().getDefaultAttributeModifiers();
+    }
+
+    private double sum(ItemAttributeModifiers modifiers, Holder<Attribute> attribute, boolean onlyMod) {
         return modifiers.modifiers().stream()
-                .filter(entry -> entry.modifier().id().toString().equals(targetId))
-                .map(entry -> Double.toString(entry.modifier().amount()))
-                .findFirst().orElse(fallback);
+                .filter(e -> e.attribute().equals(attribute))
+                .filter(e -> !onlyMod || e.modifier().id().getNamespace().equals("allkotowant"))
+                .mapToDouble(e -> e.modifier().amount()).sum();
     }
 
-    private Double parse(EditBox field) {
-        try { double v = Double.parseDouble(field.getValue().trim()); return Double.isFinite(v) && Math.abs(v) <= 1_000_000 ? v : null; }
+    private String formatted(double value) { return String.format(Locale.ROOT, "%+.3f", value); }
+
+    private void loadAmount() {
+        if (amountField == null) return;
+        AttrOption option = OPTIONS.get(selected);
+        String draft = EditorContext.draft("attr.value." + option.id(), "");
+        if (!draft.isEmpty()) { loading = true; amountField.setValue(draft); loading = false; return; }
+        ItemStack stack = EditorContext.stack();
+        double existing = stack.isEmpty() ? 0 : baseModifiers(stack).modifiers().stream()
+                .filter(e -> e.modifier().id().toString().equals("allkotowant:" + option.id()))
+                .mapToDouble(e -> e.modifier().amount()).findFirst().orElse(0.0);
+        loading = true; amountField.setValue(Double.toString(existing)); loading = false;
+        EditorContext.setDraft("attr.value." + option.id(), amountField.getValue());
+    }
+
+    private Double parse() {
+        try { double v = Double.parseDouble(amountField.getValue().trim()); return Double.isFinite(v) && Math.abs(v) <= 1_000_000 ? v : null; }
         catch (NumberFormatException e) { return null; }
     }
 
-    private ItemAttributeModifiers withOurModifiers(ItemAttributeModifiers existing, Double damage, Double speed, Double movement) {
+    private ItemAttributeModifiers replaceOurModifier(ItemAttributeModifiers existing, AttrOption option, Double amount) {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         for (ItemAttributeModifiers.Entry entry : existing.modifiers()) {
-            if (!entry.modifier().id().getNamespace().equals("allkotowant")) {
+            if (!entry.modifier().id().toString().equals("allkotowant:" + option.id()))
                 builder.add(entry.attribute(), entry.modifier(), entry.slot());
-            }
         }
-        if (damage != null) builder.add(Attributes.ATTACK_DAMAGE,
-                new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_damage"), damage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
-        if (speed != null) builder.add(Attributes.ATTACK_SPEED,
-                new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "attack_speed"), speed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
-        if (movement != null) builder.add(Attributes.MOVEMENT_SPEED,
-                new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", "movement_speed"), movement, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        if (amount != null && amount != 0.0) {
+            EquipmentSlotGroup slot = switch (option.id()) {
+                case "armor", "armor_toughness", "knockback_resistance", "max_health", "safe_fall_distance" -> EquipmentSlotGroup.ARMOR;
+                default -> EquipmentSlotGroup.MAINHAND;
+            };
+            builder.add(option.attribute(), new AttributeModifier(Identifier.fromNamespaceAndPath("allkotowant", option.id()), amount, AttributeModifier.Operation.ADD_VALUE), slot);
+        }
         return builder.build();
     }
 
     private void apply() {
         ItemStack stack = EditorContext.stack();
         if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
-        Double damage = parse(damageField), speed = parse(speedField), movement = parse(movementField);
-        if (damage == null || speed == null || movement == null) { status = UiText.t("Введи числа от −1 000 000 до 1 000 000"); return; }
-        ItemAttributeModifiers existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
-        // Repair items edited by older builds that replaced the full component with only our modifiers.
-        if (!existing.modifiers().isEmpty() && existing.modifiers().stream().allMatch(e -> e.modifier().id().getNamespace().equals("allkotowant"))) {
-            stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
-            existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
-        }
-        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, withOurModifiers(existing, damage, speed, movement));
+        Double value = parse();
+        if (value == null) { status = UiText.t("Введи число от −1000000 до 1000000"); return; }
+        ItemAttributeModifiers existing = baseModifiers(stack);
+        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, replaceOurModifier(existing, OPTIONS.get(selected), value));
         status = ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
 
-    private void clear() {
+    private void remove() {
         ItemStack stack = EditorContext.stack();
         if (stack.isEmpty()) { status = UiText.t("Сначала выбери предмет"); return; }
-        ItemAttributeModifiers existing = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
-        boolean hasNonMod = existing.modifiers().stream().anyMatch(e -> !e.modifier().id().getNamespace().equals("allkotowant"));
-        if (!hasNonMod) {
-            // Removing the override lets Minecraft restore the item's own default attributes (e.g. armor).
-            stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
-        } else {
-            stack.set(DataComponents.ATTRIBUTE_MODIFIERS, withOurModifiers(existing, null, null, null));
-        }
-        status = UiText.t("Убраны только бонусы All-Kotoff-Want. Базовые атрибуты восстановлены. ") + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
+        ItemAttributeModifiers existing = baseModifiers(stack);
+        ItemAttributeModifiers updated = replaceOurModifier(existing, OPTIONS.get(selected), null);
+        if (updated.modifiers().isEmpty()) stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+        else stack.set(DataComponents.ATTRIBUTE_MODIFIERS, updated);
+        EditorContext.setDraft("attr.value." + OPTIONS.get(selected).id(), "0");
+        loading = true; amountField.setValue("0"); loading = false;
+        status = UiText.t("Изменение этого атрибута удалено") + ". " + ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
     }
 
     private void back() { if (minecraft != null) minecraft.setScreen(parent); }
+
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
-        EditorContext.renderBackdrop(this, g, mx, my, delta); super.extractRenderState(g, mx, my, delta);
-        long elapsed = Math.max(0L, System.nanoTime() - openedAt); float t = Math.min(1f, elapsed / 190_000_000f), eased = 1f - (float)Math.pow(1f - t, 3);
-        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 290) / 2 + Math.round((1f-eased)*12f);
-        g.text(font, "ALL-KOTOFF-WANT", x+28,y+17,0xFFF4F0FF,false); g.text(font,UiText.t("АТРИБУТЫ  /  04"),x+28,y+30,0xFFB4A9C9,false);
-        g.text(font,UiText.t("БОНУС УРОНА"),x+22,y+49,0xFFB49AFF,false); g.text(font,UiText.t("БОНУС СКОРОСТИ АТАКИ"),x+22,y+89,0xFFB49AFF,false);
-        g.text(font,UiText.t("БОНУС СКОРОСТИ ПЕРЕДВИЖЕНИЯ (ПОКА В РУКЕ)"),x+22,y+127,0xFFB49AFF,false);
-        ButtonSkin.draw(g,font,x+22,y+174,w-44,22,UiText.t("Добавить бонусы"),mx,my);
-        ButtonSkin.draw(g,font,x+22,y+202,w-44,22,UiText.t("Убрать только бонусы мода"),mx,my);
-        ButtonSkin.draw(g,font,x+22,y+230,w-44,20,UiText.t("Назад"),mx,my); g.text(font,status,x+22,y+264,0xFFF4F0FF,false);
+        EditorContext.renderBackdrop(this, g, mx, my, delta);
+        super.extractRenderState(g, mx, my, delta);
+        int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 280) / 2;
+        ItemStack stack = EditorContext.stack();
+        AttrOption option = OPTIONS.get(selected);
+        ItemAttributeModifiers defaults = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : stack.getItem().getDefaultAttributeModifiers();
+        ItemAttributeModifiers current = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : baseModifiers(stack);
+        g.text(font, "ALL-KOTOFF-WANT", x + 22, y + 17, 0xFFF4F0FF, false);
+        g.text(font, UiText.t("АТРИБУТЫ"), x + 22, y + 34, 0xFFB49AFF, false);
+        g.text(font, UiText.t("Стандарт") + ": " + formatted(sum(defaults, option.attribute(), false)), x + 22, y + 88, 0xFFB4A9C9, false);
+        g.text(font, UiText.t("Сейчас на предмете") + ": " + formatted(sum(current, option.attribute(), false)), x + 22, y + 99, 0xFFB4A9C9, false);
+        ButtonSkin.draw(g, font, x + 22, y + 148, w - 44, 22, UiText.t("Применить значение"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 176, w - 44, 22, UiText.t("Убрать изменение этого атрибута"), mx, my);
+        ButtonSkin.draw(g, font, x + 22, y + 204, w - 44, 20, UiText.t("Назад"), mx, my);
+        g.text(font, status, x + 22, y + 244, 0xFFF4F0FF, false);
     }
+
     @Override public void onClose() { back(); }
     @Override public boolean isPauseScreen() { return false; }
 }

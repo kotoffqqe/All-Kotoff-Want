@@ -50,7 +50,7 @@ public final class UiText {
         TEXT.put("В выбранной ячейке нет предмета", new String[]{"В выбранной ячейке нет предмета", "No item in the selected slot", "Kein Gegenstand im ausgewählten Feld"});
         TEXT.put("Имя удалено и отправлено на сервер", new String[]{"Имя удалено и отправлено на сервер", "Name removed and sent to server", "Name entfernt und an den Server gesendet"});
         TEXT.put("Имя изменено локально; для сохранения нужен творческий режим", new String[]{"Имя изменено локально; для сохранения нужен творческий режим", "Name changed locally; Creative mode is required to save", "Name lokal geändert; zum Speichern ist der Kreativmodus nötig"});
-        TEXT.put("РЕДАКТОР ПРЕДМЕТА  /  01", new String[]{"РЕДАКТОР ПРЕДМЕТА  /  01", "ITEM EDITOR / 01", "GEGENSTANDS-EDITOR / 01"});
+        TEXT.put("РЕДАКТОР ПРЕДМЕТА", new String[]{"РЕДАКТОР ПРЕДМЕТА", "ITEM EDITOR", "GEGENSTANDS-EDITOR"});
         TEXT.put("ИМЯ МОБА", new String[]{"ИМЯ МОБА", "ENTITY NAME", "KREATURENNAME"});
         TEXT.put("РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ", new String[]{"РЕДАКТИРУЕТСЯ ВЫБРАННЫЙ ПРЕДМЕТ", "EDITING SELECTED ITEM", "AUSGEWÄHLTER GEGENSTAND WIRD BEARBEITET"});
         TEXT.put("R  •  ОТКРЫТЬ РЕДАКТОР", new String[]{"R  •  ОТКРЫТЬ РЕДАКТОР", "R • OPEN EDITOR", "R • EDITOR ÖFFNEN"});
@@ -63,7 +63,7 @@ public final class UiText {
         TEXT.put("Сначала выбери предмет", new String[]{"Сначала выбери предмет", "Select an item first", "Wähle zuerst einen Gegenstand"});
         TEXT.put("Введи числа от −1 000 000 до 1 000 000", new String[]{"Введи числа от −1 000 000 до 1 000 000", "Enter numbers from −1,000,000 to 1,000,000", "Gib Zahlen von −1.000.000 bis 1.000.000 ein"});
         TEXT.put("Убраны только бонусы All-Kotoff-Want. Базовые атрибуты восстановлены. ", new String[]{"Убраны только бонусы All-Kotoff-Want. Базовые атрибуты восстановлены. ", "Only All-Kotoff-Want bonuses were removed. Base attributes were restored. ", "Nur All-Kotoff-Want-Boni wurden entfernt. Basisattribute wurden wiederhergestellt. "});
-        TEXT.put("АТРИБУТЫ  /  04", new String[]{"АТРИБУТЫ  /  04", "ATTRIBUTES / 04", "ATTRIBUTE / 04"});
+        TEXT.put("АТРИБУТЫ", new String[]{"АТРИБУТЫ", "ATTRIBUTES", "ATTRIBUTE"});
         TEXT.put("БОНУС УРОНА", new String[]{"БОНУС УРОНА", "DAMAGE BONUS", "SCHADENSBONUS"});
         TEXT.put("БОНУС СКОРОСТИ АТАКИ", new String[]{"БОНУС СКОРОСТИ АТАКИ", "ATTACK SPEED BONUS", "ANGRIFFSGESCHWINDIGKEITSBONUS"});
         TEXT.put("Выбери зачарование в списке", new String[]{"Выбери зачарование в списке", "Choose an enchantment from the list", "Wähle eine Verzauberung aus der Liste"});
@@ -77,7 +77,7 @@ public final class UiText {
         TEXT.put("От 1 до 32767", new String[]{"От 1 до 32767", "From 1 to 32767", "Von 1 bis 32767"});
         TEXT.put("Применить зачарование", new String[]{"Применить зачарование", "Apply enchantment", "Verzauberung anwenden"});
         TEXT.put("Убрать это зачарование", new String[]{"Убрать это зачарование", "Remove this enchantment", "Diese Verzauberung entfernen"});
-        TEXT.put("ЗАЧАРОВАНИЯ  /  03", new String[]{"ЗАЧАРОВАНИЯ  /  03", "ENCHANTMENTS / 03", "VERZAUBERUNGEN / 03"});
+        TEXT.put("ЗАЧАРОВАНИЯ", new String[]{"ЗАЧАРОВАНИЯ", "ENCHANTMENTS", "VERZAUBERUNGEN"});
         TEXT.put("НАЖИМАЙ НА СПИСОК, ЧТОБЫ ВЫБРАТЬ", new String[]{"НАЖИМАЙ НА СПИСОК, ЧТОБЫ ВЫБРАТЬ", "CLICK THE LIST TO SELECT", "ZUM AUSWÄHLEN AUF DIE LISTE KLICKEN"});
         TEXT.put("УРОВЕНЬ (1–32767)", new String[]{"УРОВЕНЬ (1–32767)", "LEVEL (1–32767)", "STUFE (1–32767)"});
         TEXT.put("На сервере нужны права на команды", new String[]{"На сервере нужны права на команды", "Server command permissions are required", "Server-Befehlsrechte sind erforderlich"});
@@ -100,7 +100,7 @@ public final class UiText {
         TEXT.put("Тип моба: ", new String[]{"Тип моба: ", "Entity type: ", "Kreaturentyp: "});
         TEXT.put("Выбери корректного моба", new String[]{"Выбери корректного моба", "Choose a valid entity", "Wähle eine gültige Kreatur"});
         TEXT.put("Команда отправлена. Изменится ближайший моб выбранного типа; нужны права", new String[]{"Команда отправлена. Изменится ближайший моб выбранного типа; нужны права", "Command sent. The nearest entity of this type will change; permissions required", "Befehl gesendet. Die nächste Kreatur dieses Typs wird geändert; Rechte erforderlich"});
-        TEXT.put("НАСТРОЙКИ МОБА  /  05", new String[]{"НАСТРОЙКИ МОБА  /  05", "ENTITY SETTINGS / 05", "KREATUREN-EINSTELLUNGEN / 05"});
+        TEXT.put("НАСТРОЙКИ МОБА", new String[]{"НАСТРОЙКИ МОБА", "ENTITY SETTINGS", "KREATUREN-EINSTELLUNGEN"});
         TEXT.put("ВЫБЕРИ ТИП МОБА", new String[]{"ВЫБЕРИ ТИП МОБА", "CHOOSE ENTITY TYPE", "KREATURENTYP WÄHLEN"});
         TEXT.put("Выбери нижнего моба и пассажира сверху", new String[]{"Выбери нижнего моба и пассажира сверху", "Choose the bottom entity and the passenger above", "Wähle die untere Kreatur und den Passagier darüber"});
         TEXT.put("Посадка моба на моба", new String[]{"Посадка моба на моба", "Mount one entity on another", "Eine Kreatur auf eine andere setzen"});
@@ -108,7 +108,7 @@ public final class UiText {
         TEXT.put("Нижний моб: ", new String[]{"Нижний моб: ", "Vehicle: ", "Träger: "});
         TEXT.put("Пассажир сверху: ", new String[]{"Пассажир сверху: ", "Passenger: ", "Passagier: "});
         TEXT.put("Команда отправлена; на сервере нужны права на команды", new String[]{"Команда отправлена; на сервере нужны права на команды", "Command sent; server command permissions required", "Befehl gesendet; Server-Befehlsrechte erforderlich"});
-        TEXT.put("ПОСАДКА МОБОВ  /  06", new String[]{"ПОСАДКА МОБОВ  /  06", "ENTITY MOUNTING / 06", "KREATUREN AUFEINANDERSETZEN / 06"});
+        TEXT.put("ПОСАДКА МОБОВ", new String[]{"ПОСАДКА МОБОВ", "ENTITY MOUNTING", "KREATUREN AUFEINANDERSETZEN"});
         TEXT.put("НАЖИМАЙ НА КНОПКИ, ЧТОБЫ ВЫБРАТЬ", new String[]{"НАЖИМАЙ НА КНОПКИ, ЧТОБЫ ВЫБРАТЬ", "CLICK BUTTONS TO SELECT", "ZUM AUSWÄHLEN AUF SCHALTFLÄCHEN KLICKEN"});
         TEXT.put("Наведи прицел на спавнер", new String[]{"Наведи прицел на спавнер", "Aim at a spawner", "Ziele auf einen Spawner"});
         TEXT.put("Задержка (тики)", new String[]{"Задержка (тики)", "Delay (ticks)", "Verzögerung (Ticks)"});
@@ -122,7 +122,7 @@ public final class UiText {
         TEXT.put("Под прицелом не спавнер. Наведи на клетку со спавнером", new String[]{"Под прицелом не спавнер. Наведи на клетку со спавнером", "The targeted block is not a spawner. Aim at a spawner block", "Der anvisierte Block ist kein Spawner. Ziele auf einen Spawner-Block"});
         TEXT.put("Проверь числа: мин. задержка не больше макс.", new String[]{"Проверь числа: мин. задержка не больше макс.", "Check values: minimum delay must not exceed maximum", "Prüfe die Werte: Die Mindestverzögerung darf nicht größer als die maximale sein"});
         TEXT.put("Команда отправлена. Нужны права оператора/команд", new String[]{"Команда отправлена. Нужны права оператора/команд", "Command sent. Operator/command permissions required", "Befehl gesendet. Operator-/Befehlsrechte erforderlich"});
-        TEXT.put("НАСТРОЙКА СПАВНЕРА  /  07", new String[]{"НАСТРОЙКА СПАВНЕРА  /  07", "SPAWNER SETTINGS / 07", "SPAWNER-EINSTELLUNGEN / 07"});
+        TEXT.put("НАСТРОЙКА СПАВНЕРА", new String[]{"НАСТРОЙКА СПАВНЕРА", "SPAWNER SETTINGS", "SPAWNER-EINSTELLUNGEN"});
         TEXT.put("ВЫБЕРИ МОБА (НАЖИМАЙ ДЛЯ ПЕРЕКЛЮЧЕНИЯ)", new String[]{"ВЫБЕРИ МОБА (НАЖИМАЙ ДЛЯ ПЕРЕКЛЮЧЕНИЯ)", "CHOOSE ENTITY (CLICK TO CYCLE)", "KREATURE WÄHLEN (KLICKEN ZUM WECHSELN)"});
         TEXT.put("Разделяй строки символом |", new String[]{"Разделяй строки символом |", "Separate lines with |", "Trenne Zeilen mit |"});
         TEXT.put("Описание предмета", new String[]{"Описание предмета", "Item lore", "Gegenstandsbeschreibung"});
@@ -132,7 +132,7 @@ public final class UiText {
         TEXT.put("Описание очищено и отправлено на сервер", new String[]{"Описание очищено и отправлено на сервер", "Lore cleared and sent to server", "Beschreibung gelöscht und an Server gesendet"});
         TEXT.put("Описание очищено локально; для сохранения нужен творческий режим", new String[]{"Описание очищено локально; для сохранения нужен творческий режим", "Lore cleared locally; Creative mode is required to save", "Beschreibung lokal gelöscht; zum Speichern ist der Kreativmodus nötig"});
         TEXT.put("Строк в описании: ", new String[]{"Строк в описании: ", "Lore lines: ", "Beschreibungszeilen: "});
-        TEXT.put("РЕДАКТОР ОПИСАНИЯ  /  02", new String[]{"РЕДАКТОР ОПИСАНИЯ  /  02", "LORE EDITOR / 02", "BESCHREIBUNGS-EDITOR / 02"});
+        TEXT.put("РЕДАКТОР ОПИСАНИЯ", new String[]{"РЕДАКТОР ОПИСАНИЯ", "LORE EDITOR", "BESCHREIBUNGS-EDITOR"});
         TEXT.put("ТЕКСТ ОПИСАНИЯ", new String[]{"ТЕКСТ ОПИСАНИЯ", "LORE TEXT", "BESCHREIBUNGSTEXT"});
         TEXT.put("Зомби", new String[]{"Зомби", "Zombie", "Zombie"});
         TEXT.put("Скелет", new String[]{"Скелет", "Skeleton", "Skelett"});
@@ -246,8 +246,66 @@ public final class UiText {
         TEXT.put("Моб: ", new String[]{"Моб: ", "Entity: ", "Kreatur: "});
         TEXT.put("Изменения отправлены на сервер (творческий режим)", new String[]{"Изменения отправлены на сервер (творческий режим)", "Changes sent to server (Creative mode)", "Änderungen an den Server gesendet (Kreativmodus)"});
         TEXT.put("Изменено только локально; для сохранения нужен творческий режим или поддержка сервера", new String[]{"Изменено только локально; для сохранения нужен творческий режим или поддержка сервера", "Changed locally only; Creative mode or server support is required to save", "Nur lokal geändert; zum Speichern sind Kreativmodus oder Serverunterstützung nötig"});
+        TEXT.put("Количество", new String[]{"Количество", "Count", "Anzahl"});
+        TEXT.put("Применить", new String[]{"Применить", "Apply", "Anwenden"});
+        TEXT.put("Цвет брони", new String[]{"Цвет брони", "Armor color", "Rüstungsfarbe"});
+        TEXT.put("Цвет кожаной брони", new String[]{"Цвет кожаной брони", "Leather armor color", "Leder-Rüstungsfarbe"});
+        TEXT.put("ЦВЕТ КОЖАНОЙ БРОНИ", new String[]{"ЦВЕТ КОЖАНОЙ БРОНИ", "LEATHER ARMOR COLOR", "LEDER-RÜSTUNGSFARBE"});
+        TEXT.put("Введи HEX-цвет, например #AA33FF", new String[]{"Введи HEX-цвет, например #AA33FF", "Enter a HEX color, e.g. #AA33FF", "HEX-Farbe eingeben, z. B. #AA33FF"});
+        TEXT.put("Применить цвет", new String[]{"Применить цвет", "Apply color", "Farbe anwenden"});
+        TEXT.put("Сбросить цвет", new String[]{"Сбросить цвет", "Reset color", "Farbe zurücksetzen"});
+        TEXT.put("Сейчас", new String[]{"Сейчас", "Current", "Aktuell"});
+        TEXT.put("Количество должно быть от 1 до 99", new String[]{"Количество должно быть от 1 до 99", "Count must be from 1 to 99", "Anzahl muss zwischen 1 und 99 liegen"});
+        TEXT.put("Введи целое количество от 1 до 99", new String[]{"Введи целое количество от 1 до 99", "Enter a whole count from 1 to 99", "Ganze Anzahl von 1 bis 99 eingeben"});
+        TEXT.put("Выбери кожаную броню или другой окрашиваемый предмет", new String[]{"Выбери кожаную броню или другой окрашиваемый предмет", "Select leather armor or another dyeable item", "Leder-Rüstung oder einen anderen färbbaren Gegenstand wählen"});
     }
-    private UiText() {}
+        TEXT.put("Текст и описание", new String[]{"Текст и описание", "Text & lore", "Text und Beschreibung"});
+        TEXT.put("Текст и описание: ", new String[]{"Текст и описание: ", "Text & lore: ", "Text und Beschreibung: "});
+        TEXT.put("Применить текст", new String[]{"Применить текст", "Apply name", "Text anwenden"});
+        TEXT.put("Очистить текст и описание", new String[]{"Очистить текст и описание", "Clear name & lore", "Text und Beschreibung löschen"});
+        TEXT.put("Имя без принудительного верхнего регистра", new String[]{"Имя без принудительного верхнего регистра", "Name keeps its letter case", "Groß-/Kleinschreibung bleibt erhalten"});
+        TEXT.put("ТЕКСТ И ОПИСАНИЕ", new String[]{"ТЕКСТ И ОПИСАНИЕ", "TEXT & LORE", "TEXT & BESCHREIBUNG"});
+        TEXT.put("НАЗВАНИЕ", new String[]{"НАЗВАНИЕ", "NAME", "NAME"});
+        TEXT.put("ОПИСАНИЕ · разделитель строк: |", new String[]{"ОПИСАНИЕ · разделитель строк: |", "LORE · line separator: |", "BESCHREIBUNG · Zeilentrenner: |"});
+        TEXT.put("Количество должно быть от 1 до 9999999", new String[]{"Количество должно быть от 1 до 9999999", "Count must be between 1 and 9999999", "Anzahl muss zwischen 1 und 9999999 liegen"});
+        TEXT.put("Введи целое количество от 1 до 9999999", new String[]{"Введи целое количество от 1 до 9999999", "Enter a whole number from 1 to 9999999", "Gib eine ganze Zahl von 1 bis 9999999 ein"});
+
+            TEXT.put("Выбрать атрибут", new String[]{"Выбрать атрибут", "Choose attribute", "Attribut auswählen"});
+        TEXT.put("Значение атрибута", new String[]{"Значение атрибута", "Attribute value", "Attributwert"});
+        TEXT.put("Применить значение", new String[]{"Применить значение", "Apply value", "Wert anwenden"});
+        TEXT.put("Убрать изменение этого атрибута", new String[]{"Убрать изменение этого атрибута", "Remove this attribute override", "Diese Attributänderung entfernen"});
+        TEXT.put("Стандарт", new String[]{"Стандарт", "Default", "Standard"});
+        TEXT.put("Сейчас на предмете", new String[]{"Сейчас на предмете", "Current item value", "Aktueller Gegenstandswert"});
+        TEXT.put("Изменение этого атрибута удалено", new String[]{"Изменение этого атрибута удалено", "This attribute override was removed", "Diese Attributänderung wurde entfernt"});
+        TEXT.put("Введи число от −1000000 до 1000000", new String[]{"Введи число от −1000000 до 1000000", "Enter a number from −1000000 to 1000000", "Gib eine Zahl von −1000000 bis 1000000 ein"});
+        TEXT.put("Урон атаки", new String[]{"Урон атаки", "Attack damage", "Angriffsschaden"});
+        TEXT.put("Скорость атаки", new String[]{"Скорость атаки", "Attack speed", "Angriffsgeschwindigkeit"});
+        TEXT.put("Отбрасывание атаки", new String[]{"Отбрасывание атаки", "Attack knockback", "Angriffs-Rückstoß"});
+        TEXT.put("Броня", new String[]{"Броня", "Armor", "Rüstung"});
+        TEXT.put("Твёрдость брони", new String[]{"Твёрдость брони", "Armor toughness", "Rüstungshärte"});
+        TEXT.put("Сопротивление отбрасыванию", new String[]{"Сопротивление отбрасыванию", "Knockback resistance", "Rückstoßresistenz"});
+        TEXT.put("Максимальное здоровье", new String[]{"Максимальное здоровье", "Maximum health", "Maximale Gesundheit"});
+        TEXT.put("Скорость передвижения", new String[]{"Скорость передвижения", "Movement speed", "Bewegungsgeschwindigkeit"});
+        TEXT.put("Скорость полёта", new String[]{"Скорость полёта", "Flying speed", "Fluggeschwindigkeit"});
+        TEXT.put("Дальность обнаружения", new String[]{"Дальность обнаружения", "Follow range", "Verfolgungsreichweite"});
+        TEXT.put("Удача", new String[]{"Удача", "Luck", "Glück"});
+        TEXT.put("Сила прыжка", new String[]{"Сила прыжка", "Jump strength", "Sprungkraft"});
+        TEXT.put("Скорость разрушения блоков", new String[]{"Скорость разрушения блоков", "Block breaking speed", "Blockabbaugeschwindigkeit"});
+        TEXT.put("Дальность взаимодействия с блоками", new String[]{"Дальность взаимодействия с блоками", "Block interaction range", "Blockinteraktionsreichweite"});
+        TEXT.put("Дальность взаимодействия с сущностями", new String[]{"Дальность взаимодействия с сущностями", "Entity interaction range", "Entitätsinteraktionsreichweite"});
+        TEXT.put("Гравитация", new String[]{"Гравитация", "Gravity", "Schwerkraft"});
+        TEXT.put("Безопасная высота падения", new String[]{"Безопасная высота падения", "Safe fall distance", "Sichere Fallhöhe"});
+        TEXT.put("Высота шага", new String[]{"Высота шага", "Step height", "Schritthöhe"});
+        TEXT.put("Скорость в приседе", new String[]{"Скорость в приседе", "Sneaking speed", "Schleichgeschwindigkeit"});
+        TEXT.put("Эффективность движения в воде", new String[]{"Эффективность движения в воде", "Water movement efficiency", "Wasserbewegungseffizienz"});
+        TEXT.put("Эффективность передвижения", new String[]{"Эффективность передвижения", "Movement efficiency", "Bewegungseffizienz"});
+        TEXT.put("Эффективность добычи", new String[]{"Эффективность добычи", "Mining efficiency", "Abbaueffizienz"});
+        TEXT.put("Масштаб сущности", new String[]{"Масштаб сущности", "Entity scale", "Entitätsskalierung"});
+        TEXT.put("Максимальное поглощение", new String[]{"Максимальное поглощение", "Maximum absorption", "Maximale Absorption"});
+        TEXT.put("Множитель урона от падения", new String[]{"Множитель урона от падения", "Fall damage multiplier", "Fallschaden-Multiplikator"});
+        TEXT.put("Сопротивление отбрасыванию взрывом", new String[]{"Сопротивление отбрасыванию взрывом", "Explosion knockback resistance", "Explosions-Rückstoßresistenz"});
+        TEXT.put("Бонус кислорода", new String[]{"Бонус кислорода", "Oxygen bonus", "Sauerstoffbonus"});
+private UiText() {}
     public static String t(String russian) {
         String[] values = TEXT.get(russian);
         return values == null ? russian : values[language.ordinal()];

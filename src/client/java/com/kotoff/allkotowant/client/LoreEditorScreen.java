@@ -105,7 +105,7 @@ public final class LoreEditorScreen extends Screen {
         ButtonSkin.draw(graphics, font, x + 30 + bw, y + 160, bw, 22, UiText.t("Очистить описание"), mouseX, mouseY);
         ButtonSkin.draw(graphics, font, x + 22, y + 188, w - 44, 20, UiText.t("Назад"), mouseX, mouseY);
         graphics.text(font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
-        graphics.text(font, UiText.t("РЕДАКТОР ОПИСАНИЯ  /  02"), x + 28, y + 30, MUTED, false);
+        graphics.text(font, UiText.t("РЕДАКТОР ОПИСАНИЯ"), x + 28, y + 30, MUTED, false);
         graphics.text(font, UiText.t("ТЕКСТ ОПИСАНИЯ"), x + 22, y + 49, 0xFFB49AFF, false);
         graphics.text(font, status, x + 22, y + 264, TEXT, false);
     }

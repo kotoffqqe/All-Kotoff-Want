@@ -44,7 +44,7 @@ public final class PassengerEditorScreen extends Screen {
         EditorContext.renderBackdrop(this,g,mx,my,delta);super.extractRenderState(g,mx,my,delta);
         int w=Math.min(420,width-24),x=(width-w)/2,y=(height-220)/2;
         long elapsed=Math.max(0L,System.nanoTime()-openedAt);float t=Math.min(1f,elapsed/190_000_000f),eased=1f-(float)Math.pow(1f-t,3);y+=Math.round((1f-eased)*10f);
-        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false);g.text(font,UiText.t("ПОСАДКА МОБОВ  /  06"),x+28,y+31,0xFFB4A9C9,false);
+        g.text(font,"ALL-KOTOFF-WANT",x+28,y+17,0xFFF4F0FF,false);g.text(font,UiText.t("ПОСАДКА МОБОВ"),x+28,y+31,0xFFB4A9C9,false);
         g.text(font,UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСКИ"),x+22,y+49,0xFFB49AFF,false);
         ButtonSkin.draw(g,font,x+22,y+62,w-44,22,UiText.t("Нижний моб: ")+UiText.t(MOBS[vehicleIndex].name())+"  ›",mx,my);
         ButtonSkin.draw(g,font,x+22,y+108,w-44,22,UiText.t("Пассажир сверху: ")+UiText.t(MOBS[passengerIndex].name())+"  ›",mx,my);

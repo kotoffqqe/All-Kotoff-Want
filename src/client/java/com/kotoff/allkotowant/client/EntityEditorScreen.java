@@ -110,7 +110,7 @@ public final class EntityEditorScreen extends Screen {
         float t = Math.min(1f, elapsed / 190_000_000f), eased = 1f - (float)Math.pow(1f - t, 3);
         y += Math.round((1f - eased) * 10f);
         g.text(font, "ALL-KOTOFF-WANT", x + 28, y + 16, 0xFFF4F0FF, false);
-        g.text(font, UiText.t("НАСТРОЙКИ МОБА  /  05"), x + 28, y + 30, 0xFFB4A9C9, false);
+        g.text(font, UiText.t("НАСТРОЙКИ МОБА"), x + 28, y + 30, 0xFFB4A9C9, false);
         g.text(font, UiText.t("НАЖМИ, ЧТОБЫ ОТКРЫТЬ СПИСОК"), x + 22, y + 44, 0xFFB49AFF, false);
         ButtonSkin.draw(g, font, x + 22, y + 55, w - 44, 20, UiText.t("Тип моба: ") + UiText.t(MOB_OPTIONS[mobIndex].name()) + "  ›", mx, my);
         g.text(font, UiText.t("ИМЯ МОБА"), x + 22, y + 88, 0xFFB49AFF, false);

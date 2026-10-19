@@ -1,8 +1,6 @@
 package com.kotoff.allkotowant.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
@@ -11,13 +9,13 @@ import java.util.Map;
 
 /** Shared target stack and inventory backdrop for every editor page. */
 final class EditorContext {
-    private static final Identifier MENU_ART = Identifier.fromNamespaceAndPath("allkotowant", "textures/gui/death_note_bg.png");
     private static ItemStack target = ItemStack.EMPTY;
     private static int menuSlot = -1;
     private static boolean hasTarget;
     private static Screen backdrop;
     private static ItemStack draftStack;
     private static int draftSlot = Integer.MIN_VALUE;
+    private static int originalCount = 1;
     private static String nameDraft;
     private static String loreDraft;
     private static final Map<String, String> drafts = new HashMap<>();
@@ -27,7 +25,7 @@ final class EditorContext {
     static void select(ItemStack stack, int slot, Screen background) {
         ItemStack next = stack == null ? ItemStack.EMPTY : stack;
         boolean sameTarget = draftStack != null && draftSlot == slot && !draftStack.isEmpty() && !next.isEmpty() && draftStack.getItem() == next.getItem();
-        if (!sameTarget) { nameDraft = null; loreDraft = null; drafts.clear(); }
+        if (!sameTarget) { nameDraft = null; loreDraft = null; drafts.clear(); originalCount = Math.max(1, next.getCount()); }
         draftStack = next.copy();
         draftSlot = slot;
         target = next;
@@ -43,6 +41,7 @@ final class EditorContext {
     }
 
     static int slot() { return menuSlot; }
+    static int originalCount() { return originalCount; }
 
     static String nameDraft() { return nameDraft; }
     static void nameDraft(String value) { nameDraft = value; }
@@ -65,9 +64,6 @@ final class EditorContext {
         if (background != null && background != current) {
             background.extractRenderState(graphics, mouseX, mouseY, delta);
         }
-        // Semi-transparent custom Death Note-inspired artwork is shared by every editor page.
-        graphics.blit(RenderPipelines.GUI_TEXTURED, MENU_ART,
-                0, 0, 0.0f, 0.0f, current.width, current.height, 1600, 900);
     }
 
     static void clear() {

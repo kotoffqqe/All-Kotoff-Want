@@ -62,7 +62,7 @@ The main editor now includes a language button that cycles Russian â†’ English â
 
 
 ## v0.3.8
-- Added a built-in dark anime-fantasy background inspired by the user's Death Note / Creation of Adam prompt, shared across editor tabs.
+- The custom anime background was removed; editor tabs now use the previous inventory/game backdrop without the pasted-on art overlay.
 - Added a reset action for custom name, lore, enchantments, stored enchantments, and attribute modifiers.
 
 ## v0.3.9
@@ -72,5 +72,22 @@ The main editor now includes a language button that cycles Russian â†’ English â
 - Attribute editor preloads existing All-Kotoff-Want modifier values instead of always starting from defaults.
 - Main editor displays the selected item's icon and current display name.
 - Keeps the user's original text casing; italic formatting changes style only.
-- The bundled background asset is included in `src/main/resources/assets/allkotowant/textures/gui/death_note_bg.png`.
 - Source archive only: compilation has not been verified in this environment.
+
+
+## v0.4.0 changes
+- Added HEX color editing for dyeable leather armor and reset support.
+- Added editable item count up to 9,999,999; the stack max-size component is raised before setting count, so normally non-stackable items can be made into oversized stacks locally. Server acceptance depends on server validation.
+- Added a combined compact name-and-lore editor tab.
+- Reworked attribute editing into a picker covering 28 common combat, armor, movement, mining, interaction-range, health, gravity, and utility attributes. It shows the item's default value alongside its current value and removes only the selected All-Kotoff-Want override.
+- Removed the numbered `/ 01`, `/ 02` etc. headings.
+- Removed the custom background overlay and asset; the previous backdrop is restored.
+
+
+## v0.4.1 changes
+- Removed the pasted-on Death Note background and restored the prior screen backdrop.
+- Added the combined Text & Lore tab.
+- Increased the count editor range to 1â€“9,999,999, raising the stack's max-size component before applying the count.
+- Replaced the three hard-coded attribute fields with a selectable attribute editor and default/current value readouts.
+- Removed numbered page suffixes from headings.
+- Source archive only; compilation and in-game behavior still require CI verification.

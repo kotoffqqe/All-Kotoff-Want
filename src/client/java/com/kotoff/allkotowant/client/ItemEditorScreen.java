@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.ItemTags;
 
 /** Main All-Kotoff-Want item workshop. */
 public final class ItemEditorScreen extends Screen {
@@ -14,7 +15,7 @@ public final class ItemEditorScreen extends Screen {
     private static final int TEXT = 0xFFF4F0FF;
     private static final int MUTED = 0xFFB4A9C9;
 
-    private EditBox nameField;
+    private EditBox countField;
     private long openedAt;
     private String status = UiText.t("Наведи на ячейку инвентаря и нажми R");
     private final net.minecraft.client.gui.screens.Screen inventoryBackdrop;
@@ -33,8 +34,8 @@ public final class ItemEditorScreen extends Screen {
         int panelWidth = Math.min(430, this.width - 24);
         int left = (this.width - panelWidth) / 2;
 
-        int panelTop = (this.height - 330) / 2;
-        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 330));
+        int panelTop = (this.height - 290) / 2;
+        addRenderableOnly(new PanelWidget(left, panelTop, panelWidth, 290));
         addRenderableWidget(Button.builder(Component.literal(UiText.languageLabel()), b -> {
             UiText.nextLanguage();
             if (minecraft != null) minecraft.setScreen(new ItemEditorScreen(Component.literal("All-Kotoff-Want"), inventoryBackdrop));
@@ -42,75 +43,66 @@ public final class ItemEditorScreen extends Screen {
         int fieldWidth = panelWidth - 44;
 
         ItemStack stack = currentStack();
-        String existing = stack.get(DataComponents.CUSTOM_NAME) == null
-                ? "" : stack.get(DataComponents.CUSTOM_NAME).getString();
-        nameField = new EditBox(this.font, left + 22, panelTop + 76, fieldWidth, 22,
-                Component.literal(UiText.t("Пользовательское название предмета")));
-        nameField.setMaxLength(128);
-        String draft = EditorContext.nameDraft();
-        nameField.setValue(draft != null ? draft : existing);
-        nameField.setResponder(EditorContext::nameDraft);
-        nameField.setHint(Component.literal(UiText.t("Например: Разрушитель пустоты")));
-        addRenderableWidget(nameField);
-        String[][] format = {{UiText.t("Красн."),"&c"},{UiText.t("Зел."),"&a"},{UiText.t("Голуб."),"&b"},{UiText.t("Золото"),"&6"},{UiText.t("Жирн."),"&l"},{UiText.t("Курсив"),"&o"},{UiText.t("Подч."),"&n"},{UiText.t("Зачерк."),"&m"},{UiText.t("Магия"),"&k"},{UiText.t("Сброс"),"&r"}};
-        int fmtGap=4, fmtW=(fieldWidth-fmtGap*4)/5;
-        for(int i=0;i<format.length;i++) {
-            final String code=format[i][1]; int col=i%5,row=i/5;
-            addRenderableWidget(Button.builder(Component.literal(format[i][0]),b->nameField.insertText(code))
-                .bounds(left+22+col*(fmtW+fmtGap),panelTop+101+row*20,fmtW,18).build());
-        }
+        int countX = left + 22;
+        countField = new EditBox(this.font, countX, panelTop + 76, 70, 22, Component.literal(UiText.t("Количество")));
+        countField.setMaxLength(7);
+        countField.setValue(EditorContext.draft("item.count", Integer.toString(Math.max(1, stack.getCount()))));
+        countField.setResponder(v -> EditorContext.setDraft("item.count", v));
+        countField.setHint(Component.literal("1"));
+        addRenderableWidget(countField);
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить")), b -> applyCount())
+                .bounds(countX + 76, panelTop + 76, 82, 22).build());
 
-        int buttonY = panelTop + 148;
+
+
+        int buttonY = panelTop + 112;
         int gap = 8;
         int buttonWidth = (fieldWidth - gap) / 2;
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить имя")), b -> applyName())
-                .bounds(left + 22, buttonY, buttonWidth, 22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить имя")), b -> resetName())
-                .bounds(left + 22 + buttonWidth + gap, buttonY, buttonWidth, 22).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Описание")), b -> {
-                    if (minecraft != null) minecraft.setScreen(new LoreEditorScreen(this));
-                }).bounds(left + 22, buttonY + 30, buttonWidth, 22).build());
+        addRenderableWidget(Button.builder(Component.literal(UiText.t("Текст и описание")), b -> {
+                    if (minecraft != null) minecraft.setScreen(new TextEditorScreen(this));
+                }).bounds(left + 22, buttonY, buttonWidth, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Зачарования")), b -> {
                     if (minecraft != null) minecraft.setScreen(new EnchantmentEditorScreen(this));
-                }).bounds(left + 22 + buttonWidth + gap, buttonY + 30, buttonWidth, 22).build());
+                }).bounds(left + 22 + buttonWidth + gap, buttonY, buttonWidth, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Атрибуты")), b -> {
                     if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(this));
-                }).bounds(left + 22, buttonY + 58, buttonWidth, 20).build());
-        addRenderableWidget(Button.builder(Component.literal(UiText.t("Настройки моба")), b -> {
-                    if (minecraft != null) minecraft.setScreen(new EntityEditorScreen(this));
-                }).bounds(left + 22 + buttonWidth + gap, buttonY + 58, buttonWidth, 20).build());
+                }).bounds(left + 22, buttonY + 28, buttonWidth, 20).build());
+        if (stack.is(ItemTags.DYEABLE)) {
+            addRenderableWidget(Button.builder(Component.literal(UiText.t("Цвет брони")), b -> {
+                        if (minecraft != null) minecraft.setScreen(new DyeEditorScreen(this));
+                    }).bounds(left + 22 + buttonWidth + gap, buttonY + 28, buttonWidth, 20).build());
+        } else {
+            addRenderableWidget(Button.builder(Component.literal(UiText.t("Настройки моба")), b -> {
+                        if (minecraft != null) minecraft.setScreen(new EntityEditorScreen(this));
+                    }).bounds(left + 22 + buttonWidth + gap, buttonY + 28, buttonWidth, 20).build());
+        }
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Настройки спавнера")), b -> {
                     if (minecraft != null) minecraft.setScreen(new SpawnerEditorScreen(this));
-                }).bounds(left + 22, buttonY + 84, buttonWidth, 20).build());
+                }).bounds(left + 22, buttonY + 54, buttonWidth, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Закрыть")), b -> onClose())
-                .bounds(left + 22 + buttonWidth + gap, buttonY + 84, buttonWidth, 20).build());
+                .bounds(left + 22 + buttonWidth + gap, buttonY + 54, buttonWidth, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить всё до заводских")), b -> resetAll())
-                .bounds(left + 22, panelTop + 258, fieldWidth, 20).build());
+                .bounds(left + 22, panelTop + 218, fieldWidth, 20).build());
     }
 
     private ItemStack currentStack() {
         return EditorContext.stack();
     }
 
-    private void applyName() {
+    private void applyCount() {
         ItemStack stack = currentStack();
-        if (stack.isEmpty()) {
-            status = UiText.t("В выбранной ячейке нет предмета");
-            return;
+        if (stack.isEmpty()) { status = UiText.t("В выбранной ячейке нет предмета"); return; }
+        try {
+            int count = Integer.parseInt(countField.getValue().trim());
+            if (count < 1 || count > 9_999_999) { status = UiText.t("Количество должно быть от 1 до 9999999"); return; }
+            // Raise this stack's own max size so non-stackable items can hold 52/64 units too.
+            stack.set(DataComponents.MAX_STACK_SIZE, Math.max(64, count));
+            stack.setCount(count);
+            EditorContext.setDraft("item.count", Integer.toString(count));
+            status = ItemSync.resultMessage(ItemSync.syncIfCreative(stack));
+        } catch (NumberFormatException e) {
+            status = UiText.t("Введи целое количество от 1 до 9999999");
         }
-        String value = nameField.getValue().trim();
-        if (value.isEmpty()) stack.remove(DataComponents.CUSTOM_NAME);
-        else stack.set(DataComponents.CUSTOM_NAME, StyledText.parse(value));
-        boolean synced = ItemSync.syncIfCreative(stack);
-        status = value.isEmpty()
-                ? (synced ? UiText.t("Имя удалено и отправлено на сервер") : UiText.t("Имя изменено локально; для сохранения нужен творческий режим"))
-                : ItemSync.resultMessage(synced);
-    }
-
-    private void resetName() {
-        nameField.setValue("");
-        EditorContext.nameDraft("");
-        applyName();
     }
 
     private void resetAll() {
@@ -121,8 +113,12 @@ public final class ItemEditorScreen extends Screen {
         stack.remove(DataComponents.ENCHANTMENTS);
         stack.remove(DataComponents.STORED_ENCHANTMENTS);
         stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
-        nameField.setValue("");
+        stack.remove(DataComponents.MAX_STACK_SIZE);
+        stack.remove(DataComponents.DYED_COLOR);
+        stack.setCount(EditorContext.originalCount());
+        countField.setValue(Integer.toString(EditorContext.originalCount()));
         EditorContext.clearDrafts();
+        EditorContext.setDraft("item.count", Integer.toString(EditorContext.originalCount()));
         EditorContext.nameDraft("");
         EditorContext.loreDraft("");
         boolean synced = ItemSync.syncIfCreative(stack);
@@ -137,36 +133,34 @@ public final class ItemEditorScreen extends Screen {
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
         float eased = 1.0f - (float) Math.pow(1.0f - t, 3.0);
         int panelWidth = Math.min(430, this.width - 24);
-        int panelHeight = 330;
+        int panelHeight = 290;
         int x = (this.width - panelWidth) / 2;
         int targetY = (this.height - panelHeight) / 2;
         int y = targetY + Math.round((1.0f - eased) * 12.0f);
 
-        int by = targetY + 148;
+        int by = targetY + 112;
         int fw = panelWidth - 44;
         int bw = (fw - 8) / 2;
         ButtonSkin.draw(graphics, this.font, x + panelWidth - 132, targetY + 14, 110, 20, UiText.languageLabel(), mouseX, mouseY);
-        String[][] format = {{UiText.t("Красн."),"&c"},{UiText.t("Зел."),"&a"},{UiText.t("Голуб."),"&b"},{UiText.t("Золото"),"&6"},{UiText.t("Жирн."),"&l"},{UiText.t("Курсив"),"&o"},{UiText.t("Подч."),"&n"},{UiText.t("Зачерк."),"&m"},{UiText.t("Магия"),"&k"},{UiText.t("Сброс"),"&r"}};
-        int fmtGap=4, fmtW=(fw-fmtGap*4)/5;
-        for(int i=0;i<format.length;i++){int col=i%5,row=i/5;ButtonSkin.draw(graphics,this.font,x+22+col*(fmtW+fmtGap),targetY+101+row*20,fmtW,18,format[i][0],mouseX,mouseY);}
-        ButtonSkin.draw(graphics, this.font, x + 22, by, bw, 22, UiText.t("Применить имя"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by, bw, 22, UiText.t("Сбросить имя"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, by + 30, bw, 22, UiText.t("Описание"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 30, bw, 22, UiText.t("Зачарования"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, by + 58, bw, 20, UiText.t("Атрибуты"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 58, bw, 20, UiText.t("Настройки моба"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, by + 84, bw, 20, UiText.t("Настройки спавнера"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 84, bw, 20, UiText.t("Закрыть"), mouseX, mouseY);
-        ButtonSkin.draw(graphics, this.font, x + 22, targetY + 258, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);
+        int countX = x + 22;
+        ButtonSkin.draw(graphics, this.font, countX + 76, targetY + 76, 82, 22, UiText.t("Применить"), mouseX, mouseY);
+        graphics.text(this.font, UiText.t("Количество"), countX, targetY + 61, PURPLE_BRIGHT, false);
+        ButtonSkin.draw(graphics, this.font, x + 22, by, bw, 22, UiText.t("Текст и описание"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by, bw, 22, UiText.t("Зачарования"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, by + 28, bw, 20, UiText.t("Атрибуты"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 28, bw, 20,
+                currentStack().is(ItemTags.DYEABLE) ? UiText.t("Цвет брони") : UiText.t("Настройки моба"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, by + 54, bw, 20, UiText.t("Настройки спавнера"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 54, bw, 20, UiText.t("Закрыть"), mouseX, mouseY);
+        ButtonSkin.draw(graphics, this.font, x + 22, targetY + 218, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);
         graphics.text(this.font, "ALL-KOTOFF-WANT", x + 28, y + 17, TEXT, false);
-        graphics.text(this.font, UiText.t("Редактор предмета  /  01"), x + 28, y + 30, MUTED, false);
-        graphics.text(this.font, UiText.t("Название предмета"), x + 22, y + 61, PURPLE_BRIGHT, false);
+        graphics.text(this.font, UiText.t("Редактор предмета"), x + 28, y + 30, MUTED, false);
         ItemStack selected = currentStack();
         String selectedLabel = selected.isEmpty() ? UiText.t("Предмет не выбран") : selected.getHoverName().getString();
-        if (!selected.isEmpty()) graphics.item(selected, x + 22, y + 278);
-        graphics.text(this.font, selectedLabel, x + (selected.isEmpty() ? 22 : 44), y + 286, MUTED, false);
-        graphics.text(this.font, status, x + 22, y + 300, TEXT, false);
-        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 314, MUTED, false);
+        if (!selected.isEmpty()) graphics.item(selected, x + 22, y + 42);
+        graphics.text(this.font, selectedLabel, x + (selected.isEmpty() ? 22 : 44), y + 50, MUTED, false);
+        graphics.text(this.font, status, x + 22, y + 260, TEXT, false);
+        graphics.text(this.font, UiText.t("R  •  ОТКРЫТЬ РЕДАКТОР"), x + 22, y + 274, MUTED, false);
     }
 
     @Override
