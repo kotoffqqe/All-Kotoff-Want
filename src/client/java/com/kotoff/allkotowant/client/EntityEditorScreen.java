@@ -49,6 +49,7 @@ public final class EntityEditorScreen extends Screen {
         effectLevel = field(x + 22, y + 286, 100, "Уровень эффекта", "entity.effectLevel", "1");
         addRenderableWidget(Button.builder(Component.literal("Создать моба"), b -> summon()).bounds(x + 130, y + 286, w - 152, 22).build());
         addRenderableWidget(Button.builder(Component.literal("Назад"), b -> back()).bounds(x + 22, y + 324, w - 44, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private EditBox field(int x, int y, int w, String hint, String key, String fallback) {

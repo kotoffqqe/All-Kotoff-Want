@@ -38,6 +38,7 @@ public final class DyeEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить цвет")), b -> apply()).bounds(x + 22, y + 104, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить цвет")), b -> reset()).bounds(x + 22, y + 132, (w - 50) / 2, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 28 + (w - 50) / 2, y + 132, (w - 50) / 2, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private static boolean isLeatherDyeable(ItemStack stack) {

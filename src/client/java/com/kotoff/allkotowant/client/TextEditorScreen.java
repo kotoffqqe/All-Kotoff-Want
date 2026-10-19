@@ -74,6 +74,7 @@ public final class TextEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить описание")), b -> applyLore()).bounds(x + 30 + half, y + 202, half, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Очистить текст и описание")), b -> clear()).bounds(x + 22, y + 230, w - 44, 20).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 254, w - 44, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private void insertCode(String code) {

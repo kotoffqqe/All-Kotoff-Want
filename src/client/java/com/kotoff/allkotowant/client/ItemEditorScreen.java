@@ -81,6 +81,7 @@ public final class ItemEditorScreen extends Screen {
                 }).bounds(left + 22, buttonY + 54, fieldWidth, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Сбросить всё до заводских")), b -> resetAll())
                 .bounds(left + 22, panelTop + 244, fieldWidth, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private ItemStack currentStack() {
@@ -143,7 +144,7 @@ public final class ItemEditorScreen extends Screen {
         float t = Math.min(1.0f, elapsed / 190_000_000.0f);
         float eased = 1.0f - (float) Math.pow(1.0f - t, 3.0);
         int panelWidth = Math.min(430, this.width - 24);
-        int panelHeight = 290;
+        int panelHeight = 310;
         int x = (this.width - panelWidth) / 2;
         int targetY = (this.height - panelHeight) / 2;
         int y = targetY + Math.round((1.0f - eased) * 12.0f);

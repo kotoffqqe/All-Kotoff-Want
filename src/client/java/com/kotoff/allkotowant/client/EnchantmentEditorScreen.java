@@ -91,6 +91,7 @@ public final class EnchantmentEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить зачарование")), b -> apply()).bounds(x+22,y+149,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать это зачарование")), b -> remove()).bounds(x+22,y+177,w-44,22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x+22,y+205,w-44,20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
     private Component choiceLabel() { return Component.literal(UiText.t("Выбор: ") + UiText.t(OPTIONS[selected].name()) + "  ›"); }
     private void loadSelectedLevel() {

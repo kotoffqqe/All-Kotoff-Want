@@ -57,6 +57,7 @@ public final class LoreEditorScreen extends Screen {
                 .bounds(x + 30 + bw, top + 160, bw, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back())
                 .bounds(x + 22, top + 188, w - 44, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private ItemStack held() {

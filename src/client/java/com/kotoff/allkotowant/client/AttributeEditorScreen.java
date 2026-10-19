@@ -84,6 +84,7 @@ public final class AttributeEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Применить значение")), b -> apply()).bounds(x + 22, y + 148, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Убрать изменение этого атрибута")), b -> remove()).bounds(x + 22, y + 176, w - 44, 22).build());
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 22, y + 204, w - 44, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private Component choiceLabel() { return Component.literal(UiText.t("Атрибут: ") + UiText.t(OPTIONS.get(selected).name()) + "  ›"); }

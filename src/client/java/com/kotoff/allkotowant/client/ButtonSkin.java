@@ -2,11 +2,18 @@ package com.kotoff.allkotowant.client;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 
 /** Restrained, low-contrast skin painted over real clickable button hitboxes. */
 final class ButtonSkin {
     private ButtonSkin() {}
     static void beginAnimation() {}
+    /** Keep the real widget hitboxes/actions, but render buttons only once using this skin. */
+    static void hideVanillaButtons(Screen screen) {
+        for (var child : screen.children()) {
+            if (child instanceof net.minecraft.client.gui.components.Button button) button.setAlpha(0.0f);
+        }
+    }
     static void draw(GuiGraphicsExtractor g,Font font,int x,int y,int w,int h,String label,int mouseX,int mouseY) {
         boolean hovered=mouseX>=x&&mouseX<x+w&&mouseY>=y&&mouseY<y+h;
         int bg=hovered?0xFF343640:0xFF24262D;

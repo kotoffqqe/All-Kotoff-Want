@@ -47,6 +47,7 @@ public final class SavedItemsScreen extends Screen {
                 .bounds(x + 58, y + 292, 30, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Назад"), b -> back())
                 .bounds(x + w - 112, y + 292, 90, 20).build());
+            ButtonSkin.hideVanillaButtons(this);
     }
 
     private void rebuild() { if (minecraft != null) minecraft.setScreen(new SavedItemsScreen(parentWithPage())); }
