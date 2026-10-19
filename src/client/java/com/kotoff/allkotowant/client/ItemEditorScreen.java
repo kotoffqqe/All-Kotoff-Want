@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 /** Main All-Kotoff-Want item workshop. */
 public final class ItemEditorScreen extends Screen {
@@ -67,7 +67,7 @@ public final class ItemEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Атрибуты")), b -> {
                     if (minecraft != null) minecraft.setScreen(new AttributeEditorScreen(this));
                 }).bounds(left + 22, buttonY + 28, buttonWidth, 20).build());
-        if (stack.getItem() instanceof DyeableLeatherItem) {
+        if (isLeatherDyeable(stack)) {
             addRenderableWidget(Button.builder(Component.literal(UiText.t("Цвет брони")), b -> {
                         if (minecraft != null) minecraft.setScreen(new DyeEditorScreen(this));
                     }).bounds(left + 22 + buttonWidth + gap, buttonY + 28, buttonWidth, 20).build());
@@ -87,6 +87,12 @@ public final class ItemEditorScreen extends Screen {
 
     private ItemStack currentStack() {
         return EditorContext.stack();
+    }
+
+    private static boolean isLeatherDyeable(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        return path.startsWith("leather_");
     }
 
     private void applyCount() {
@@ -149,7 +155,7 @@ public final class ItemEditorScreen extends Screen {
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by, bw, 22, UiText.t("Зачарования"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, by + 28, bw, 20, UiText.t("Атрибуты"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 28, bw, 20,
-                currentStack().getItem() instanceof DyeableLeatherItem ? UiText.t("Цвет брони") : UiText.t("Настройки моба"), mouseX, mouseY);
+                isLeatherDyeable(currentStack()) ? UiText.t("Цвет брони") : UiText.t("Настройки моба"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, by + 54, bw, 20, UiText.t("Настройки спавнера"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22 + bw + 8, by + 54, bw, 20, UiText.t("Закрыть"), mouseX, mouseY);
         ButtonSkin.draw(graphics, this.font, x + 22, targetY + 218, fw, 20, UiText.t("Сбросить всё до заводских"), mouseX, mouseY);

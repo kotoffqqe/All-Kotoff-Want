@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 
@@ -40,9 +40,15 @@ public final class DyeEditorScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal(UiText.t("Назад")), b -> back()).bounds(x + 28 + (w - 50) / 2, y + 132, (w - 50) / 2, 20).build());
     }
 
+    private static boolean isLeatherDyeable(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        return path.startsWith("leather_");
+    }
+
     private void apply() {
         ItemStack stack = EditorContext.stack();
-        if (stack.isEmpty() || !(stack.getItem() instanceof DyeableLeatherItem)) { status = UiText.t("Выбери кожаную броню или другой окрашиваемый предмет"); return; }
+        if (stack.isEmpty() || !isLeatherDyeable(stack)) { status = UiText.t("Выбери кожаную броню или другой окрашиваемый предмет"); return; }
         String raw = hexField.getValue().trim().replace("#", "");
         try {
             if (raw.length() != 6) throw new NumberFormatException();
