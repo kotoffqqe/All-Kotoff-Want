@@ -2,6 +2,7 @@ package com.kotoff.allkotowant.client;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -50,8 +51,11 @@ final class CompactPickerScreen extends Screen {
         g.text(font,(first+1)+"–"+Math.min(first+rows,options.size())+" / "+options.size()+"     "+UiText.t("Esc — назад"),x+16,y+h-18,0xFF9A9DAA,false);
     }
 
-    @Override public boolean mouseClicked(double mx,double my,int button) {
-        if(button!=0) return super.mouseClicked(mx,my,button);
+    @Override public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x();
+        double my = event.y();
+        int button = event.button();
+        if(button!=0) return super.mouseClicked(event, doubleClick);
         int x=left(),y=top(),w=panelW(),rows=Math.min(VISIBLE,options.size());
         if(mx>=x+10&&mx<x+w-10&&my>=y+48&&my<y+48+rows*ROW_H) {
             int i=first+(int)((my-(y+48))/ROW_H);
