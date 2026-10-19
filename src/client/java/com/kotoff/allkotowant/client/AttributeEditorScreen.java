@@ -90,7 +90,7 @@ public final class AttributeEditorScreen extends Screen {
 
     private ItemAttributeModifiers baseModifiers(ItemStack stack) {
         ItemAttributeModifiers explicit = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
-        return explicit != null ? explicit : stack.getItem().getDefaultAttributeModifiers();
+        return explicit != null ? explicit : stack.getItem().components().getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
     }
 
     private double sum(ItemAttributeModifiers modifiers, Holder<Attribute> attribute, boolean onlyMod) {
@@ -166,7 +166,7 @@ public final class AttributeEditorScreen extends Screen {
         int w = Math.min(430, width - 24), x = (width - w) / 2, y = (height - 280) / 2;
         ItemStack stack = EditorContext.stack();
         AttrOption option = OPTIONS.get(selected);
-        ItemAttributeModifiers defaults = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : stack.getItem().getDefaultAttributeModifiers();
+        ItemAttributeModifiers defaults = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : stack.getItem().components().getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
         ItemAttributeModifiers current = stack.isEmpty() ? ItemAttributeModifiers.EMPTY : baseModifiers(stack);
         g.text(font, "ALL-KOTOFF-WANT", x + 22, y + 17, 0xFFF4F0FF, false);
         g.text(font, UiText.t("АТРИБУТЫ"), x + 22, y + 34, 0xFFB49AFF, false);

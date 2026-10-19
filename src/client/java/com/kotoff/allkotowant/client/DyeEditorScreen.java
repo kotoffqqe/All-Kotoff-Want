@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 
@@ -42,7 +42,7 @@ public final class DyeEditorScreen extends Screen {
 
     private void apply() {
         ItemStack stack = EditorContext.stack();
-        if (stack.isEmpty() || !stack.is(ItemTags.DYEABLE)) { status = UiText.t("Выбери кожаную броню или другой окрашиваемый предмет"); return; }
+        if (stack.isEmpty() || !(stack.getItem() instanceof DyeableLeatherItem)) { status = UiText.t("Выбери кожаную броню или другой окрашиваемый предмет"); return; }
         String raw = hexField.getValue().trim().replace("#", "");
         try {
             if (raw.length() != 6) throw new NumberFormatException();
