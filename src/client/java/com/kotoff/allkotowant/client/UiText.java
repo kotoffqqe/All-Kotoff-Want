@@ -258,7 +258,6 @@ public final class UiText {
         TEXT.put("Количество должно быть от 1 до 99", new String[]{"Количество должно быть от 1 до 99", "Count must be from 1 to 99", "Anzahl muss zwischen 1 und 99 liegen"});
         TEXT.put("Введи целое количество от 1 до 99", new String[]{"Введи целое количество от 1 до 99", "Enter a whole count from 1 to 99", "Ganze Anzahl von 1 bis 99 eingeben"});
         TEXT.put("Выбери кожаную броню или другой окрашиваемый предмет", new String[]{"Выбери кожаную броню или другой окрашиваемый предмет", "Select leather armor or another dyeable item", "Leder-Rüstung oder einen anderen färbbaren Gegenstand wählen"});
-    }
         TEXT.put("Текст и описание", new String[]{"Текст и описание", "Text & lore", "Text und Beschreibung"});
         TEXT.put("Текст и описание: ", new String[]{"Текст и описание: ", "Text & lore: ", "Text und Beschreibung: "});
         TEXT.put("Применить текст", new String[]{"Применить текст", "Apply name", "Text anwenden"});
@@ -305,7 +304,9 @@ public final class UiText {
         TEXT.put("Множитель урона от падения", new String[]{"Множитель урона от падения", "Fall damage multiplier", "Fallschaden-Multiplikator"});
         TEXT.put("Сопротивление отбрасыванию взрывом", new String[]{"Сопротивление отбрасыванию взрывом", "Explosion knockback resistance", "Explosions-Rückstoßresistenz"});
         TEXT.put("Бонус кислорода", new String[]{"Бонус кислорода", "Oxygen bonus", "Sauerstoffbonus"});
-private UiText() {}
+    }
+
+    private UiText() {}
     public static String t(String russian) {
         String[] values = TEXT.get(russian);
         return values == null ? russian : values[language.ordinal()];
