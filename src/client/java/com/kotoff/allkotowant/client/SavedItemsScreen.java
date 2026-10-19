@@ -50,7 +50,7 @@ public final class SavedItemsScreen extends Screen {
     }
 
     private void rebuild() { if (minecraft != null) minecraft.setScreen(new SavedItemsScreen(parentWithPage())); }
-    private Screen parentWithPage() {
+    private SavedItemsScreen parentWithPage() {
         SavedItemsScreen copy = new SavedItemsScreen(parent);
         copy.page = page;
         copy.status = status;
